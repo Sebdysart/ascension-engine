@@ -1,0 +1,12 @@
+node_modules/
+*.mp4
+*.mov
+input/gold/*.*
+library/raw/*.*
+library/clips/*.*
+library/assets/**/*
+style-profiles/*.json
+!style-profiles/template*.json
+data/analytics.db
+__pycache__/
+.DS_Store
