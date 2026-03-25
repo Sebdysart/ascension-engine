@@ -1,6 +1,7 @@
 {
-  "version": "2.0",
-  "last_updated": "2026-03-25T00:00:00Z",
+  "version": "2.3",
+  "last_updated": "2026-03-25T08:00:00Z",
+  "notes": "5 gold videos analyzed. New: warm_ambient grade + social_dynamics archetype from @unc_iiris 332.8K. Highest performer in library.",
   "bandit": {
     "exploit_weight": 0.7,
     "explore_weight": 0.3,
@@ -13,61 +14,168 @@
     "climax_sec": 0.8
   },
   "color_grade": {
-    "active": "teal_orange",
+    "active": "dark_cinema",
     "options": {
+      "dark_cinema": {
+        "filter": "brightness(0.75) contrast(1.35) saturate(0.85) sepia(0.15)",
+        "description": "Near-black bg, warm isolated skin tones. Top performer: @roge.editz 285.9K",
+        "best_for": ["mog_edit", "style_maxxing"],
+        "overlay_recommended": false
+      },
+      "desaturated_bw": {
+        "filter": "saturate(0.15) contrast(1.25) brightness(0.95)",
+        "description": "Near-monochrome. Top performer: @black.pill.city podcast clips, high save rate",
+        "best_for": ["frame_maxxing", "analysis_clip"],
+        "overlay_recommended": false
+      },
+      "warm_ambient": {
+        "filter": "saturate(1.1) sepia(0.2) brightness(0.85) contrast(1.2) hue-rotate(-5deg)",
+        "description": "Party/venue lighting — warm skin under purple/pink ambient. #1 performer: @unc_iiris 332.8K. IRL social clips.",
+        "best_for": ["social_dynamics", "jester_contrast", "mog_edit"],
+        "overlay_recommended": false
+      },
       "teal_orange": {
         "filter": "saturate(1.3) hue-rotate(-10deg) contrast(1.15)",
-        "description": "High contrast warm/cool split"
+        "description": "High contrast warm/cool split. Use for transformation reveals.",
+        "best_for": ["glow_up", "transformation_reveal"],
+        "overlay_recommended": true
       },
       "cold_blue": {
         "filter": "saturate(0.9) hue-rotate(20deg) brightness(0.95) contrast(1.1)",
-        "description": "Cool desaturated look"
+        "description": "Cool desaturated. Skin/frame analysis content.",
+        "best_for": ["skin_maxxing", "frame_maxxing"],
+        "overlay_recommended": false
       },
       "warm_gold": {
         "filter": "saturate(1.2) sepia(0.3) brightness(1.05)",
-        "description": "Warm cinematic gold"
+        "description": "Warm cinematic gold.",
+        "best_for": ["glow_up", "style_maxxing"],
+        "overlay_recommended": true
       },
-      "desaturated": {
-        "filter": "saturate(0.6) contrast(1.2) brightness(1.0)",
-        "description": "Muted editorial"
+      "natural": {
+        "filter": "saturate(1.05) contrast(1.05) brightness(1.0)",
+        "description": "Minimal grade. Street interview / reaction format. @bp.pilled 102.8K",
+        "best_for": ["provocation", "street_interview"],
+        "overlay_recommended": false
       }
     }
   },
   "typography": {
-    "font_family": "Impact, Arial Black, sans-serif",
-    "font_style": "bold_glow",
-    "casing": "UPPERCASE",
-    "max_chars_per_line": 18,
-    "glow_color": "rgba(255,255,255,0.8)",
-    "glow_blur": "6px",
-    "stroke_color": "#000000",
-    "stroke_width": "3px",
-    "position": "bottom-third",
-    "animation": "punch_in"
+    "styles": {
+      "impact_glow": {
+        "font_family": "Impact, Arial Black, sans-serif",
+        "font_style": "bold",
+        "casing": "UPPERCASE",
+        "max_chars_per_line": 18,
+        "glow_color": "rgba(255,255,255,0.8)",
+        "glow_blur": "6px",
+        "stroke_color": "#000000",
+        "stroke_width": "3px",
+        "animation": "punch_in",
+        "use_for": ["glow_up", "transformation_reveal", "text_hook"]
+      },
+      "minimal_serif": {
+        "font_family": "Georgia, 'Times New Roman', serif",
+        "font_style": "normal",
+        "casing": "UPPERCASE",
+        "max_chars_per_line": 12,
+        "glow_color": "none",
+        "stroke_color": "none",
+        "animation": "fade_in",
+        "use_for": ["mog_edit", "comparison", "concept"]
+      },
+      "none": {
+        "description": "No text overlay. Dominant pattern across ALL top performers (4/5 videos). Default for mog_edit, social_dynamics, podcast_clip, street_interview.",
+        "use_for": ["mog_edit", "analysis_clip", "street_interview", "podcast_clip", "social_dynamics", "jester_contrast"]
+      },
+      "lyric_sync": {
+        "font_family": "Helvetica Neue, Arial, sans-serif",
+        "font_weight": "300",
+        "casing": "lowercase",
+        "prefix": "*",
+        "color": "rgba(255,255,255,0.85)",
+        "stroke": "none",
+        "glow": "none",
+        "animation": "fade_sync_to_beat",
+        "position": "center_frame",
+        "use_for": ["mog_edit", "cinematic_edit"]
+      },
+      "ironic_quote": {
+        "font_family": "Helvetica Neue, Arial, sans-serif",
+        "font_weight": "400",
+        "casing": "lowercase",
+        "wrapper": "quotes",
+        "color": "rgba(255,255,255,0.9)",
+        "stroke": "none",
+        "glow": "none",
+        "animation": "fade_in",
+        "position": "lower_center",
+        "use_for": ["meme_edit", "ironic_commentary"]
+      }
+    },
+    "active_style": "none",
+    "position": "bottom-third"
   },
   "music": {
-    "genre_priority": ["phonk", "hyperpop", "drill", "trap"],
+    "genre_priority": ["phonk", "hyperpop", "drill", "trap", "atmospheric"],
     "bpm_range": [140, 165],
+    "slow_bpm_range": [80, 120],
     "beat_cut_alignment": true,
     "music_volume": 0.75,
-    "vo_volume": 1.0
+    "vo_volume": 1.0,
+    "note": "Original sounds also valid — @unc_iiris used custom original sound on 332.8K video. Don't over-index on trending audio."
   },
   "hook_types": [
+    "mog_edit_silent",
     "before_after_zoom",
-    "text_punch",
     "mogging_comparison",
     "transformation_reveal",
-    "stats_overlay"
+    "text_punch",
+    "stats_overlay",
+    "provocation_reaction",
+    "podcast_clip",
+    "ironic_quote_meme",
+    "jester_contrast_irl"
   ],
-  "active_hook_type": "before_after_zoom",
+  "active_hook_type": "mog_edit_silent",
   "archetypes": {
-    "active": "glow_up",
-    "options": ["glow_up", "frame_maxxing", "skin_maxxing", "style_maxxing"]
+    "active": "mog_edit",
+    "options": [
+      "mog_edit",
+      "glow_up",
+      "frame_maxxing",
+      "skin_maxxing",
+      "style_maxxing",
+      "provocation",
+      "meme_edit",
+      "social_dynamics",
+      "jester_contrast"
+    ],
+    "descriptions": {
+      "mog_edit": "Cinematic edit showcasing physical dominance. Dark grade, face closeups, no text. @roge.editz 285.9K",
+      "social_dynamics": "IRL footage showing real-world male status/behavior patterns. Warm ambient lighting, party/social settings, zero text. @unc_iiris 332.8K — CURRENT TOP PERFORMER",
+      "jester_contrast": "Sub-type of social_dynamics. Shows attractive guy in jester/low-status behavior. Caption is single ironic label + ellipsis ('jestermaxxer...'). Creates debate = algorithm fuel.",
+      "provocation": "Street interview / debate bait. Short provocative claim drives comments. @bp.pilled 102.8K",
+      "meme_edit": "Ironic quote format ('just lower cortisol bro'). Saveable/shareable. @morphedmanlet 288.5K"
+    }
+  },
+  "caption_strategy": {
+    "formula": "[1-3 words or emoji] | #bp #[niche_tag] #fyp #[secondary]",
+    "examples": [
+      "obviously 😌 | #bp #mog #edit",
+      "5'9 kings wya #bp #blackpil #fyp #lookism",
+      "@Clavicular #clavicular #bp #ascend #looksmax #fyp",
+      "jestermaxxer... #looks #looksmax #mog #mogged #friendzoned #fyp #foryou #edit"
+    ],
+    "max_words_before_tags": 3,
+    "emoji_encouraged": true,
+    "ellipsis_technique": "Trailing '...' after single concept ('jestermaxxer...') creates ambiguity and invites interpretation — confirmed high save/share driver"
   },
   "cta": {
     "text": "Discipline = results. Drop your glow-up progress below.",
     "duration_frames": 45,
-    "font_size": "2.2rem"
+    "font_size": "2.2rem",
+    "note": "CTA optional for mog_edit format — may reduce authenticity"
   },
   "platform": {
     "primary": "tiktok",
@@ -80,6 +188,109 @@
   "performance_targets": {
     "avg_watch_pct_min": 0.45,
     "ctr_thumbnail_min": 0.06,
-    "hook_retention_3s_min": 0.80
-  }
+    "hook_retention_3s_min": 0.8
+  },
+  "gold_insights": {
+    "universal_rules": [
+      "Zero text overlays = default. 4/5 top performers have no text.",
+      "Caption: 1-3 words MAX before hashtags. Irony or ambiguity > description.",
+      "Dark or warm-ambient grades outperform bright grades consistently.",
+      "Original sounds viable — don't force trending audio.",
+      "Save rate >10% = reference/meme content = algorithm multiplier."
+    ],
+    "save_rate_champions": [
+      {"account": "unc_iiris", "save_rate": "11.84%", "archetype": "jester_contrast"},
+      {"account": "morphedmanlet", "save_rate": "11.82%", "archetype": "mog_edit"},
+      {"account": "black.pill.city", "save_rate": "9.25%", "archetype": "frame_maxxing"}
+    ],
+    "top_performer": {
+      "account": "unc_iiris",
+      "likes": "332.8K",
+      "archetype": "jester_contrast",
+      "color_grade": "warm_ambient",
+      "text": "none",
+      "caption_style": "single_ironic_label_ellipsis"
+    }
+  },
+  "gold_reference_library": [
+    {
+      "video_id": "7600958206642326806",
+      "account": "black.pill.city",
+      "title": "Exploring the Clavicular Dark Triad Concepts",
+      "likes": "37K",
+      "saves": "3425",
+      "shares": "2178",
+      "save_rate_pct": 9.25,
+      "color_grade": "desaturated_bw",
+      "format": "podcast_clip",
+      "archetype": "frame_maxxing",
+      "text_overlays": false,
+      "caption": "@Clavicular #clavicular #bp #ascend #looksmax #fyp",
+      "key_insight": "9.2% save rate = reference content. Desaturated B&W + podcast format = high bookmarks."
+    },
+    {
+      "video_id": "7580194747986283790",
+      "account": "bp.pilled",
+      "title": "5'9 kings wya",
+      "likes": "102.8K",
+      "saves": "9406",
+      "shares": "4804",
+      "save_rate_pct": 9.15,
+      "color_grade": "natural",
+      "format": "street_interview",
+      "archetype": "provocation",
+      "text_overlays": false,
+      "caption": "5'9 kings wya #bp #blackpil #fyp #lookism",
+      "key_insight": "2.2% comment ratio = debate content = algorithm fuel. Short provocative caption drives comments."
+    },
+    {
+      "video_id": "7588525512478166294",
+      "account": "roge.editz",
+      "title": "Marlon mog edit",
+      "likes": "285.9K",
+      "saves": "14900",
+      "shares": "7051",
+      "save_rate_pct": 5.21,
+      "color_grade": "dark_cinema",
+      "format": "mog_edit",
+      "archetype": "mog_edit",
+      "text_overlays": false,
+      "caption": "obviously 😌 | #bp #marlon #edit #mog",
+      "key_insight": "Highest ceiling pure mog edit. No text, 1-word caption. Dark grade + face closeup = 285.9K."
+    },
+    {
+      "video_id": "7540813336661740855",
+      "account": "morphedmanlet",
+      "title": "Just make a tiktok bro",
+      "likes": "288.5K",
+      "saves": "34100",
+      "shares": "18800",
+      "save_rate_pct": 11.82,
+      "color_grade": "dark_cinema",
+      "format": "mog_edit_lyric_sync",
+      "archetype": "mog_edit",
+      "text_overlays": true,
+      "text_style": "lyric_sync",
+      "caption": "Just make a tiktok bro #bpedit",
+      "key_insight": "11.8% save rate. Lyric sync text (*pretty boy makes) center frame. Ironic quote meme: 'just be X bro' — gets saved as meme template."
+    },
+    {
+      "video_id": "7537476213275757846",
+      "account": "unc_iiris",
+      "title": "jestermaxxer...",
+      "likes": "332.8K",
+      "comments": "1530",
+      "saves": "39400",
+      "shares": "21000",
+      "save_rate_pct": 11.84,
+      "share_rate_pct": 6.31,
+      "color_grade": "warm_ambient",
+      "format": "irl_social_clip",
+      "archetype": "jester_contrast",
+      "text_overlays": false,
+      "music": "original sound - iblameiris⭐️ - unc_iiris (custom original)",
+      "caption": "jestermaxxer... #looks #looksmax #mog #mogged #friendzoned #fyp #foryou #edit",
+      "key_insight": "#1 PERFORMER IN LIBRARY. 332.8K likes. IRL party footage, zero text, warm-ambient grade. Ironic single-word caption with ellipsis. Social dynamics archetype = debate + saves. Original sound works fine — no trending audio needed."
+    }
+  ]
 }
