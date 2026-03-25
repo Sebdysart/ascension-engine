@@ -1,7 +1,7 @@
 {
-  "version": "2.7",
-  "last_updated": "2026-03-25T12:00:00Z",
-  "notes": "9 gold videos. target_audience_reaction archetype from @haifluke 325.7K \u2014 NEW highest share rate (8.35%). Night_car grade + \"lol\" caption pattern locked.",
+  "version": "2.8",
+  "last_updated": "2026-03-25T13:00:00Z",
+  "notes": "10 gold videos. selfie_mog archetype from @bp_masterx 388.5K \u2014 NEW highest save rate (12.22%). natural_indoor grade + song-title caption pattern locked.",
   "bandit": {
     "exploit_weight": 0.7,
     "explore_weight": 0.3,
@@ -108,6 +108,17 @@
         ],
         "overlay_recommended": false,
         "note": "Authentic selfie aesthetic. No heavy grading needed \u2014 the nighttime ambient IS the grade."
+      },
+      "natural_indoor": {
+        "filter": "brightness(0.95) contrast(1.08) saturate(1.0)",
+        "description": "Warm home/indoor ambient. Face well-lit, natural skin tones, domestic bg. @bp_masterx 388.5K",
+        "best_for": [
+          "selfie_mog",
+          "mog_edit",
+          "attraction_goal"
+        ],
+        "overlay_recommended": false,
+        "note": "Authenticity grade \u2014 domestic setting makes elite looks feel accessible. Highest save rate (12.22%) = this grade gets bookmarked."
       }
     }
   },
@@ -260,7 +271,8 @@
     "female_beauty_luxury",
     "bp_rating_reveal",
     "unpopular_opinion_reveal",
-    "target_audience_selfie"
+    "target_audience_selfie",
+    "raw_selfie_face"
   ],
   "active_hook_type": "mog_edit_silent",
   "archetypes": {
@@ -278,7 +290,8 @@
       "attraction_goal",
       "bp_rating",
       "ironic_provocation",
-      "target_audience_reaction"
+      "target_audience_reaction",
+      "selfie_mog"
     ],
     "descriptions": {
       "mog_edit": "Cinematic edit showcasing male physical dominance. Dark grade, face closeups, no text. @roge.editz 285.9K",
@@ -289,7 +302,8 @@
       "provocation": "Street interview / debate bait. Short provocative claim drives comments. @bp.pilled 102.8K",
       "meme_edit": "Ironic quote format. Saveable/shareable. @morphedmanlet 288.5K",
       "ironic_provocation": "Show subject + display provocative claim that ironically applies to or contradicts them. Unpopular opinion framing. Subtitle-style text. Equal save + share rates = debate + saves. @bp.editz04 259.7K",
-      "target_audience_reaction": "Attractive girl self-identifying as the aspirational target for looksmax audience. Ironic self-awareness (\"lol\", \"brutal\"). Raw selfie format, no text, night/car setting. #targetaudience #bpsongs tags. @haifluke 325.7K \u2014 HIGHEST SHARE RATE (8.35%)"
+      "target_audience_reaction": "Attractive girl self-identifying as the aspirational target for looksmax audience. Ironic self-awareness (\"lol\", \"brutal\"). Raw selfie format, no text, night/car setting. #targetaudience #bpsongs tags. @haifluke 325.7K \u2014 HIGHEST SHARE RATE (8.35%)",
+      "selfie_mog": "Raw selfie close-up of objectively high-PSL male face. No text, no cinematic grade \u2014 just the face in natural light. Song title in caption creates lyric-sync feel. Watermark present. @bp_masterx 388.5K \u2014 NEW HIGHEST SAVE RATE (12.22%)"
     }
   },
   "caption_strategy": {
@@ -302,14 +316,16 @@
       "Holyy \ud83e\ude79 // @Sam Dezz // #bpedit #edit #mog #samdezz #fyp",
       "first bp edit \ud83d\ude2e #bp #lookism #looksmax #bpedit #cone #fyp",
       "bp edit/blonde girl/#bpedit #edit #bp #fyp",
-      "lol #bp #brutal #targetaudience #fyp #bpsongs #looksmax #edit"
+      "lol #bp #brutal #targetaudience #fyp #bpsongs #looksmax #edit",
+      "Let me take you dancing bp edit #bp #fyp #edit #viral #xyzbca"
     ],
     "max_words_before_tags": 3,
     "emoji_encouraged": true,
     "ellipsis_technique": "Trailing '...' after single concept ('jestermaxxer...') = ambiguity = high save/share",
     "editor_credit": "Crediting editor (@Sam Dezz) drives cross-account shares",
     "reaction_emoji": "Single surprised emoji (\ud83d\ude2e) before tags on bp_rating format signals authentic reaction",
-    "single_ironic_prefix": "Single lowercase ironic word before all tags (\"lol\", \"jestermaxxer...\", \"obviously\") = highest-performing caption pattern across multiple videos"
+    "single_ironic_prefix": "Single lowercase ironic word before all tags (\"lol\", \"jestermaxxer...\", \"obviously\") = highest-performing caption pattern across multiple videos",
+    "song_title_pattern": "[song title/lyric] + \"bp edit\" + #bp #fyp #edit #viral \u2014 song name AS caption hook, no other description needed. Confirmed on @bp_masterx 388.5K."
   },
   "watermark": {
     "recommended": true,
@@ -349,9 +365,16 @@
       "Controversy ceiling (bp_rating, provocation) drives comments + shares. Aspiration ceiling (attraction_goal) drives saves + likes.",
       "Single lowercase ironic word before tags (\"lol\", \"obviously\", \"jestermaxxer...\") = consistent pattern across top share performers.",
       "#bpsongs + #targetaudience tags signal community membership and surface content to core BP audience.",
-      "Authentic selfie/raw format (CapCut, night car) can match or exceed polished edits on share rate."
+      "Authentic selfie/raw format (CapCut, night car) can match or exceed polished edits on share rate.",
+      "Song title in caption (\"Let me take you dancing bp edit\") = lyric-sync energy without text overlays.",
+      "Natural indoor grade on elite face = highest save rate format \u2014 domestic setting makes top looks feel aspirational but grounded."
     ],
     "save_rate_champions": [
+      {
+        "account": "bp_masterx",
+        "save_rate": "12.22%",
+        "archetype": "selfie_mog"
+      },
       {
         "account": "unc_iiris",
         "save_rate": "11.84%",
@@ -361,6 +384,11 @@
         "account": "morphedmanlet",
         "save_rate": "11.82%",
         "archetype": "mog_edit"
+      },
+      {
+        "account": "haifluke",
+        "save_rate": "11.11%",
+        "archetype": "target_audience_reaction"
       },
       {
         "account": "bp4ever.ae",
@@ -448,6 +476,11 @@
         "archetype": "target_audience_reaction",
         "top_likes": "325.7K",
         "account": "haifluke"
+      },
+      {
+        "archetype": "selfie_mog",
+        "top_likes": "388.5K",
+        "account": "bp_masterx"
       }
     ]
   },
@@ -616,6 +649,27 @@
       "subject": "Attractive young woman, night car interior, parking lot ambient lighting",
       "caption": "lol #bp #brutal #targetaudience #fyp #viral #bpsongs #looksmax #edit #fyp\u30b7",
       "key_insight": "HIGHEST SHARE RATE in library (8.35%). Single \"lol\" before all tags = peak ironic caption. #targetaudience + #bpsongs = community self-identification. Raw CapCut selfie, no text, night_car grade. Authentic format outperforms polished edits on share metric."
+    },
+    {
+      "video_id": "7589676463071268118",
+      "account": "bp_masterx",
+      "title": "Let me take you dancing bp edit",
+      "likes": "388500",
+      "comments": "3037",
+      "saves": "47500",
+      "shares": "31000",
+      "save_rate_pct": 12.22,
+      "share_rate_pct": 7.98,
+      "comment_rate_pct": 0.78,
+      "color_grade": "natural_indoor",
+      "format": "selfie_mog",
+      "archetype": "selfie_mog",
+      "text_overlays": false,
+      "watermark": "bp_masterx (bottom center, small)",
+      "music": "Let me take you dancing (referenced in caption)",
+      "subject": "Extremely attractive male \u2014 dark wavy hair, blue hunter eyes, sharp jaw, natural home kitchen bg",
+      "caption": "Let me take you dancing bp edit #bp #fyp #edit #viral #xyzbca",
+      "key_insight": "NEW HIGHEST SAVE RATE (12.22%). Song title AS caption = lyric-sync feel without text overlay. Natural indoor grade = authentic + bookmarkable. Raw selfie of elite-PSL face. Account @bp_masterx consistently hits 200-400K across multiple videos with same formula."
     }
   ]
 }
