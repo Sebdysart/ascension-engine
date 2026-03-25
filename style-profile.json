@@ -1,7 +1,7 @@
 {
-  "version": "2.4",
-  "last_updated": "2026-03-25T09:00:00Z",
-  "notes": "6 gold videos analyzed. NEW #1: @saffyro_ 726.6K — attraction_goal archetype (female beauty + luxury context). Natural grade, no text, emoji caption.",
+  "version": "2.5",
+  "last_updated": "2026-03-25T10:00:00Z",
+  "notes": "7 gold videos analyzed. NEW: bp_rating archetype from @bp4ever.ae 643.3K — highest share rate (7.56%) in library. Text overlay confirmed valid for rating/reveal formats.",
   "bandit": {
     "exploit_weight": 0.7,
     "explore_weight": 0.3,
@@ -36,8 +36,8 @@
       },
       "natural": {
         "filter": "saturate(1.05) contrast(1.05) brightness(1.0)",
-        "description": "Minimal grade. Daylight, natural skin tones. @saffyro_ 726.6K (TOP) + @bp.pilled 102.8K",
-        "best_for": ["attraction_goal", "provocation", "street_interview", "luxury_context"],
+        "description": "Minimal grade. Daylight, natural tones. @saffyro_ 726.6K (PEAK) + @bp4ever.ae 643.3K + @bp.pilled 102.8K",
+        "best_for": ["attraction_goal", "bp_rating", "provocation", "street_interview", "luxury_context"],
         "overlay_recommended": false
       },
       "teal_orange": {
@@ -74,6 +74,19 @@
         "animation": "punch_in",
         "use_for": ["glow_up", "transformation_reveal", "text_hook"]
       },
+      "bp_reveal": {
+        "font_family": "Impact, Arial Black, sans-serif",
+        "font_style": "bold",
+        "casing": "UPPERCASE",
+        "color": "#FFFFFF",
+        "stroke": "none",
+        "glow": "none",
+        "font_size": "large",
+        "position": "left_aligned",
+        "animation": "word_reveal_sync",
+        "use_for": ["bp_rating", "psl_reveal", "lookism_commentary"],
+        "note": "Bold white Impact, left-aligned. No stroke or glow. Used by @bp4ever.ae 643.3K — text IS the hook for rating/reveal formats."
+      },
       "minimal_serif": {
         "font_family": "Georgia, 'Times New Roman', serif",
         "font_style": "normal",
@@ -85,7 +98,7 @@
         "use_for": ["mog_edit", "comparison", "concept"]
       },
       "none": {
-        "description": "No text overlay. Dominant pattern — 5/6 top performers have zero text. DEFAULT for all archetypes unless explicitly noted.",
+        "description": "No text overlay. Dominant pattern — 5/7 top performers have zero text. DEFAULT for mog_edit, social_dynamics, attraction_goal formats.",
         "use_for": ["mog_edit", "analysis_clip", "street_interview", "podcast_clip", "social_dynamics", "jester_contrast", "attraction_goal"]
       },
       "lyric_sync": {
@@ -123,7 +136,7 @@
     "beat_cut_alignment": true,
     "music_volume": 0.75,
     "vo_volume": 1.0,
-    "note": "Original sounds valid — @unc_iiris used custom original on 332.8K. @saffyro_ used 'Holyy' track on 726.6K. Trending emotional/atmospheric tracks work for attraction_goal format."
+    "note": "Original sounds valid across multiple top performers. @bp4ever.ae uses own original sound. Trending audio not required."
   },
   "hook_types": [
     "mog_edit_silent",
@@ -136,7 +149,8 @@
     "podcast_clip",
     "ironic_quote_meme",
     "jester_contrast_irl",
-    "female_beauty_luxury"
+    "female_beauty_luxury",
+    "bp_rating_reveal"
   ],
   "active_hook_type": "mog_edit_silent",
   "archetypes": {
@@ -151,13 +165,15 @@
       "meme_edit",
       "social_dynamics",
       "jester_contrast",
-      "attraction_goal"
+      "attraction_goal",
+      "bp_rating"
     ],
     "descriptions": {
       "mog_edit": "Cinematic edit showcasing male physical dominance. Dark grade, face closeups, no text. @roge.editz 285.9K",
       "social_dynamics": "IRL footage showing real-world male status/behavior patterns. Warm ambient lighting, party/social settings. @unc_iiris 332.8K",
       "jester_contrast": "Sub-type of social_dynamics. Attractive guy in low-status behavior. Caption: single ironic label + ellipsis.",
-      "attraction_goal": "Beautiful female subject in aspirational/luxury context. Serves as motivation for male looksmax audience — 'what you're working toward.' Natural grade, extreme close-up face, luxury prop (car, setting). @saffyro_ 726.6K — ALL-TIME TOP PERFORMER",
+      "attraction_goal": "Beautiful female subject in aspirational/luxury context. Motivation for male looksmax audience. Natural grade, zero text. @saffyro_ 726.6K — OVERALL TOP",
+      "bp_rating": "Close-up of real person's face being BP/PSL rated. Bold white text reveal as hook. Controversy = highest share rate. Natural bright grade. Watermark branding. @bp4ever.ae 643.3K — HIGHEST SHARE RATE (7.56%)",
       "provocation": "Street interview / debate bait. Short provocative claim drives comments. @bp.pilled 102.8K",
       "meme_edit": "Ironic quote format. Saveable/shareable. @morphedmanlet 288.5K"
     }
@@ -169,12 +185,20 @@
       "5'9 kings wya #bp #blackpil #fyp #lookism",
       "@Clavicular #clavicular #bp #ascend #looksmax #fyp",
       "jestermaxxer... #looks #looksmax #mog #mogged #friendzoned #fyp",
-      "Holyy 🩹 // @Sam Dezz // #bpedit #edit #mog #samdezz #fyp"
+      "Holyy 🩹 // @Sam Dezz // #bpedit #edit #mog #samdezz #fyp",
+      "first bp edit 😮 #bp #lookism #looksmax #bpedit #cone #fyp"
     ],
     "max_words_before_tags": 3,
     "emoji_encouraged": true,
-    "ellipsis_technique": "Trailing '...' after single concept ('jestermaxxer...') creates ambiguity — high save/share driver",
-    "editor_credit": "Crediting original editor (@Sam Dezz) signals quality and drives cross-account shares"
+    "ellipsis_technique": "Trailing '...' after single concept ('jestermaxxer...') = ambiguity = high save/share",
+    "editor_credit": "Crediting editor (@Sam Dezz) drives cross-account shares",
+    "reaction_emoji": "Single surprised emoji (😮) before tags on bp_rating format signals authentic reaction"
+  },
+  "watermark": {
+    "recommended": true,
+    "style": "account handle in caps, top center or top right",
+    "example": "BP4EVER.AE",
+    "note": "Branded watermark confirmed on 643.3K video. Builds brand recognition while allowing content to circulate."
   },
   "cta": {
     "text": "Discipline = results. Drop your glow-up progress below.",
@@ -197,19 +221,27 @@
   },
   "gold_insights": {
     "universal_rules": [
-      "Zero text overlays = default. 5/6 top performers have no text.",
+      "Zero text = default for mog_edit, attraction_goal, social_dynamics. 5/7 top performers have no text.",
+      "EXCEPTION: Bold white Impact text IS the hook for bp_rating/reveal formats — 643.3K validated.",
       "Caption: 1-3 words + emoji MAX before hashtags. Ambiguity or irony > description.",
-      "Natural and dark grades dominate — bright/oversaturated = low performer.",
-      "Save rate >8% = saveable/reference content = algorithm multiplier.",
-      "Female beauty in luxury context is the #1 ceiling (726.6K). Male looksmax audience responds to aspiration.",
-      "Editor credits in caption drive cross-account discovery and shares.",
-      "Original sounds work — don't force trending audio."
+      "Natural and dark grades dominate. Bright/oversaturated = low performer.",
+      "Save rate >8% = saveable content = algorithm multiplier.",
+      "Share rate >5% = controversy or aspiration content getting spread.",
+      "Original sounds work — don't force trending audio.",
+      "Watermark branding validates across high-performing accounts (bp4ever.ae, BP4EVER.AE style).",
+      "Controversy ceiling (bp_rating, provocation) drives comments + shares. Aspiration ceiling (attraction_goal) drives saves + likes."
     ],
     "save_rate_champions": [
       {"account": "unc_iiris", "save_rate": "11.84%", "archetype": "jester_contrast"},
       {"account": "morphedmanlet", "save_rate": "11.82%", "archetype": "mog_edit"},
-      {"account": "saffyro_", "save_rate": "8.46%", "archetype": "attraction_goal"},
-      {"account": "black.pill.city", "save_rate": "9.25%", "archetype": "frame_maxxing"}
+      {"account": "bp4ever.ae", "save_rate": "10.49%", "archetype": "bp_rating"},
+      {"account": "black.pill.city", "save_rate": "9.25%", "archetype": "frame_maxxing"},
+      {"account": "saffyro_", "save_rate": "8.46%", "archetype": "attraction_goal"}
+    ],
+    "share_rate_champions": [
+      {"account": "bp4ever.ae", "share_rate": "7.56%", "archetype": "bp_rating"},
+      {"account": "unc_iiris", "share_rate": "6.31%", "archetype": "jester_contrast"},
+      {"account": "saffyro_", "share_rate": "5.11%", "archetype": "attraction_goal"}
     ],
     "top_performer": {
       "account": "saffyro_",
@@ -217,11 +249,11 @@
       "archetype": "attraction_goal",
       "color_grade": "natural",
       "text": "none",
-      "caption_style": "emoji + editor_credit + niche_tags",
-      "context": "luxury vehicle (Ferrari-style red interior)"
+      "caption_style": "emoji + editor_credit + niche_tags"
     },
     "archetype_ceiling_ranking": [
       {"archetype": "attraction_goal", "top_likes": "726.6K", "account": "saffyro_"},
+      {"archetype": "bp_rating", "top_likes": "643.3K", "account": "bp4ever.ae"},
       {"archetype": "jester_contrast", "top_likes": "332.8K", "account": "unc_iiris"},
       {"archetype": "mog_edit", "top_likes": "288.5K", "account": "morphedmanlet"},
       {"archetype": "provocation", "top_likes": "102.8K", "account": "bp.pilled"},
@@ -272,7 +304,7 @@
       "archetype": "mog_edit",
       "text_overlays": false,
       "caption": "obviously 😌 | #bp #marlon #edit #mog",
-      "key_insight": "Pure cinematic mog edit ceiling. No text, 1-word caption, dark grade + face closeup."
+      "key_insight": "Pure cinematic mog edit. No text, 1-word caption, dark grade + face closeup."
     },
     {
       "video_id": "7540813336661740855",
@@ -288,7 +320,7 @@
       "text_overlays": true,
       "text_style": "lyric_sync",
       "caption": "Just make a tiktok bro #bpedit",
-      "key_insight": "11.8% save rate. Lyric sync (*pretty boy makes) + ironic quote meme template. Highest save rate in male-subject library."
+      "key_insight": "11.8% save rate. Lyric sync text center frame. Ironic quote meme template format."
     },
     {
       "video_id": "7537476213275757846",
@@ -306,7 +338,7 @@
       "text_overlays": false,
       "music": "original sound - iblameiris⭐️ - unc_iiris (custom)",
       "caption": "jestermaxxer... #looks #looksmax #mog #mogged #friendzoned #fyp #foryou #edit",
-      "key_insight": "IRL party footage. Ironic label + ellipsis caption. Original sound works. Social dynamics debate = algorithm fuel."
+      "key_insight": "IRL party footage. Ironic label + ellipsis caption. Original sound. Social dynamics debate = algorithm fuel."
     },
     {
       "video_id": "7608533082261474582",
@@ -323,10 +355,33 @@
       "format": "female_beauty_luxury",
       "archetype": "attraction_goal",
       "text_overlays": false,
-      "music": "Holyy (emotional/atmospheric track)",
-      "context": "Extreme close-up female face, luxury red sports car interior (Ferrari-style), blue sky background",
+      "music": "Holyy (emotional/atmospheric)",
+      "context": "Extreme close-up female face, luxury red sports car interior, blue sky",
       "caption": "Holyy 🩹 // @Sam Dezz // #bpedit #edit #mog #samdezz #fyp",
-      "key_insight": "ALL-TIME #1 in library at 726.6K. Female beauty in luxury context = highest ceiling for male looksmax audience. Natural grade, zero text, emoji + editor credit caption. Atmospheric music. This archetype (attraction_goal) outperforms all male-subject archetypes."
+      "key_insight": "ALL-TIME #1 at 726.6K. Female beauty in luxury context = highest ceiling for looksmax audience. Natural grade, zero text, emoji + editor credit."
+    },
+    {
+      "video_id": "7542208986699844869",
+      "account": "bp4ever.ae",
+      "title": "first bp edit",
+      "likes": "643300",
+      "comments": "7931",
+      "saves": "67500",
+      "shares": "48600",
+      "save_rate_pct": 10.49,
+      "share_rate_pct": 7.56,
+      "comment_rate_pct": 1.23,
+      "color_grade": "natural",
+      "format": "bp_rating_reveal",
+      "archetype": "bp_rating",
+      "text_overlays": true,
+      "text_style": "bp_reveal",
+      "text_content": "WE (partial word reveal, left-aligned, bold white Impact)",
+      "watermark": "BP4EVER.AE (top center)",
+      "music": "original sound - bp4ever.ae (custom)",
+      "subject": "Close-up of average-looking female face, outdoor daylight",
+      "caption": "first bp edit 😮 #bp #lookism #looksmax #bpedit #cone #fyp",
+      "key_insight": "HIGHEST SHARE RATE in library (7.56%). Bold text IS the hook here — reveals a word/rating as video plays. Controversy + rating = shares. 10.49% save rate. Natural bright grade. Custom watermark branding."
     }
   ]
 }
