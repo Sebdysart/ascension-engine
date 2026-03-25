@@ -1,7 +1,7 @@
 {
-  "version": "2.6",
-  "last_updated": "2026-03-25T11:00:00Z",
-  "notes": "8 gold videos analyzed. ironic_provocation archetype + unpopular_opinion text style from @bp.editz04 259.7K. Self-referential irony = debate = equal save+share rates.",
+  "version": "2.7",
+  "last_updated": "2026-03-25T12:00:00Z",
+  "notes": "9 gold videos. target_audience_reaction archetype from @haifluke 325.7K \u2014 NEW highest share rate (8.35%). Night_car grade + \"lol\" caption pattern locked.",
   "bandit": {
     "exploit_weight": 0.7,
     "explore_weight": 0.3,
@@ -96,6 +96,18 @@
         ],
         "overlay_recommended": true,
         "note": "Slightly brighter than dark_cinema. Used for real-person reaction/provocation content."
+      },
+      "night_car": {
+        "filter": "brightness(0.82) contrast(1.2) saturate(0.95) warmth(1.1)",
+        "description": "Night car interior \u2014 face lit by ambient parking lot/street light. Dark bg, warm natural skin. @haifluke 325.7K",
+        "best_for": [
+          "target_audience_reaction",
+          "social_dynamics",
+          "jester_contrast",
+          "ironic_provocation"
+        ],
+        "overlay_recommended": false,
+        "note": "Authentic selfie aesthetic. No heavy grading needed \u2014 the nighttime ambient IS the grade."
       }
     }
   },
@@ -247,7 +259,8 @@
     "jester_contrast_irl",
     "female_beauty_luxury",
     "bp_rating_reveal",
-    "unpopular_opinion_reveal"
+    "unpopular_opinion_reveal",
+    "target_audience_selfie"
   ],
   "active_hook_type": "mog_edit_silent",
   "archetypes": {
@@ -264,7 +277,8 @@
       "jester_contrast",
       "attraction_goal",
       "bp_rating",
-      "ironic_provocation"
+      "ironic_provocation",
+      "target_audience_reaction"
     ],
     "descriptions": {
       "mog_edit": "Cinematic edit showcasing male physical dominance. Dark grade, face closeups, no text. @roge.editz 285.9K",
@@ -274,7 +288,8 @@
       "bp_rating": "Close-up of real person's face being BP/PSL rated. Bold white text reveal as hook. Controversy = highest share rate. Natural bright grade. Watermark branding. @bp4ever.ae 643.3K \u2014 HIGHEST SHARE RATE (7.56%)",
       "provocation": "Street interview / debate bait. Short provocative claim drives comments. @bp.pilled 102.8K",
       "meme_edit": "Ironic quote format. Saveable/shareable. @morphedmanlet 288.5K",
-      "ironic_provocation": "Show subject + display provocative claim that ironically applies to or contradicts them. Unpopular opinion framing. Subtitle-style text. Equal save + share rates = debate + saves. @bp.editz04 259.7K"
+      "ironic_provocation": "Show subject + display provocative claim that ironically applies to or contradicts them. Unpopular opinion framing. Subtitle-style text. Equal save + share rates = debate + saves. @bp.editz04 259.7K",
+      "target_audience_reaction": "Attractive girl self-identifying as the aspirational target for looksmax audience. Ironic self-awareness (\"lol\", \"brutal\"). Raw selfie format, no text, night/car setting. #targetaudience #bpsongs tags. @haifluke 325.7K \u2014 HIGHEST SHARE RATE (8.35%)"
     }
   },
   "caption_strategy": {
@@ -286,13 +301,15 @@
       "jestermaxxer... #looks #looksmax #mog #mogged #friendzoned #fyp",
       "Holyy \ud83e\ude79 // @Sam Dezz // #bpedit #edit #mog #samdezz #fyp",
       "first bp edit \ud83d\ude2e #bp #lookism #looksmax #bpedit #cone #fyp",
-      "bp edit/blonde girl/#bpedit #edit #bp #fyp"
+      "bp edit/blonde girl/#bpedit #edit #bp #fyp",
+      "lol #bp #brutal #targetaudience #fyp #bpsongs #looksmax #edit"
     ],
     "max_words_before_tags": 3,
     "emoji_encouraged": true,
     "ellipsis_technique": "Trailing '...' after single concept ('jestermaxxer...') = ambiguity = high save/share",
     "editor_credit": "Crediting editor (@Sam Dezz) drives cross-account shares",
-    "reaction_emoji": "Single surprised emoji (\ud83d\ude2e) before tags on bp_rating format signals authentic reaction"
+    "reaction_emoji": "Single surprised emoji (\ud83d\ude2e) before tags on bp_rating format signals authentic reaction",
+    "single_ironic_prefix": "Single lowercase ironic word before all tags (\"lol\", \"jestermaxxer...\", \"obviously\") = highest-performing caption pattern across multiple videos"
   },
   "watermark": {
     "recommended": true,
@@ -329,7 +346,10 @@
       "Share rate >5% = controversy or aspiration content getting spread.",
       "Original sounds work \u2014 don't force trending audio.",
       "Watermark branding validates across high-performing accounts (bp4ever.ae, BP4EVER.AE style).",
-      "Controversy ceiling (bp_rating, provocation) drives comments + shares. Aspiration ceiling (attraction_goal) drives saves + likes."
+      "Controversy ceiling (bp_rating, provocation) drives comments + shares. Aspiration ceiling (attraction_goal) drives saves + likes.",
+      "Single lowercase ironic word before tags (\"lol\", \"obviously\", \"jestermaxxer...\") = consistent pattern across top share performers.",
+      "#bpsongs + #targetaudience tags signal community membership and surface content to core BP audience.",
+      "Authentic selfie/raw format (CapCut, night car) can match or exceed polished edits on share rate."
     ],
     "save_rate_champions": [
       {
@@ -359,6 +379,11 @@
       }
     ],
     "share_rate_champions": [
+      {
+        "account": "haifluke",
+        "share_rate": "8.35%",
+        "archetype": "target_audience_reaction"
+      },
       {
         "account": "bp4ever.ae",
         "share_rate": "7.56%",
@@ -418,6 +443,11 @@
         "archetype": "ironic_provocation",
         "top_likes": "259.7K",
         "account": "bp.editz04"
+      },
+      {
+        "archetype": "target_audience_reaction",
+        "top_likes": "325.7K",
+        "account": "haifluke"
       }
     ]
   },
@@ -565,6 +595,27 @@
       "music": "N/A",
       "caption": "bp edit/blonde girl/#bpedit #edit #bp #fyp",
       "key_insight": "Self-referential irony = subject IS a blonde + text says blondes aren't pretty. Equal save+share rates (5.9%/5.6%) = classic debate content. Subtitle-style centered white text (not Impact). Dark indoor grade. 259.7K."
+    },
+    {
+      "video_id": "7618372975192018189",
+      "account": "haifluke",
+      "title": "target audience lol",
+      "likes": "325700",
+      "comments": "1298",
+      "saves": "36200",
+      "shares": "27200",
+      "save_rate_pct": 11.11,
+      "share_rate_pct": 8.35,
+      "comment_rate_pct": 0.4,
+      "color_grade": "night_car",
+      "format": "target_audience_selfie",
+      "archetype": "target_audience_reaction",
+      "text_overlays": false,
+      "editor": "CapCut",
+      "music": "N/A (#bpsongs tagged)",
+      "subject": "Attractive young woman, night car interior, parking lot ambient lighting",
+      "caption": "lol #bp #brutal #targetaudience #fyp #viral #bpsongs #looksmax #edit #fyp\u30b7",
+      "key_insight": "HIGHEST SHARE RATE in library (8.35%). Single \"lol\" before all tags = peak ironic caption. #targetaudience + #bpsongs = community self-identification. Raw CapCut selfie, no text, night_car grade. Authentic format outperforms polished edits on share metric."
     }
   ]
 }
