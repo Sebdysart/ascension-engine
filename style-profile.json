@@ -1,7 +1,7 @@
 {
-  "version": "2.3",
-  "last_updated": "2026-03-25T08:00:00Z",
-  "notes": "5 gold videos analyzed. New: warm_ambient grade + social_dynamics archetype from @unc_iiris 332.8K. Highest performer in library.",
+  "version": "2.4",
+  "last_updated": "2026-03-25T09:00:00Z",
+  "notes": "6 gold videos analyzed. NEW #1: @saffyro_ 726.6K — attraction_goal archetype (female beauty + luxury context). Natural grade, no text, emoji caption.",
   "bandit": {
     "exploit_weight": 0.7,
     "explore_weight": 0.3,
@@ -18,20 +18,26 @@
     "options": {
       "dark_cinema": {
         "filter": "brightness(0.75) contrast(1.35) saturate(0.85) sepia(0.15)",
-        "description": "Near-black bg, warm isolated skin tones. Top performer: @roge.editz 285.9K",
+        "description": "Near-black bg, warm isolated skin tones. @roge.editz 285.9K + @morphedmanlet 288.5K",
         "best_for": ["mog_edit", "style_maxxing"],
         "overlay_recommended": false
       },
       "desaturated_bw": {
         "filter": "saturate(0.15) contrast(1.25) brightness(0.95)",
-        "description": "Near-monochrome. Top performer: @black.pill.city podcast clips, high save rate",
+        "description": "Near-monochrome. @black.pill.city podcast clips, high save rate",
         "best_for": ["frame_maxxing", "analysis_clip"],
         "overlay_recommended": false
       },
       "warm_ambient": {
         "filter": "saturate(1.1) sepia(0.2) brightness(0.85) contrast(1.2) hue-rotate(-5deg)",
-        "description": "Party/venue lighting — warm skin under purple/pink ambient. #1 performer: @unc_iiris 332.8K. IRL social clips.",
+        "description": "Party/venue lighting — warm skin under purple/pink ambient. @unc_iiris 332.8K",
         "best_for": ["social_dynamics", "jester_contrast", "mog_edit"],
+        "overlay_recommended": false
+      },
+      "natural": {
+        "filter": "saturate(1.05) contrast(1.05) brightness(1.0)",
+        "description": "Minimal grade. Daylight, natural skin tones. @saffyro_ 726.6K (TOP) + @bp.pilled 102.8K",
+        "best_for": ["attraction_goal", "provocation", "street_interview", "luxury_context"],
         "overlay_recommended": false
       },
       "teal_orange": {
@@ -51,12 +57,6 @@
         "description": "Warm cinematic gold.",
         "best_for": ["glow_up", "style_maxxing"],
         "overlay_recommended": true
-      },
-      "natural": {
-        "filter": "saturate(1.05) contrast(1.05) brightness(1.0)",
-        "description": "Minimal grade. Street interview / reaction format. @bp.pilled 102.8K",
-        "best_for": ["provocation", "street_interview"],
-        "overlay_recommended": false
       }
     }
   },
@@ -85,8 +85,8 @@
         "use_for": ["mog_edit", "comparison", "concept"]
       },
       "none": {
-        "description": "No text overlay. Dominant pattern across ALL top performers (4/5 videos). Default for mog_edit, social_dynamics, podcast_clip, street_interview.",
-        "use_for": ["mog_edit", "analysis_clip", "street_interview", "podcast_clip", "social_dynamics", "jester_contrast"]
+        "description": "No text overlay. Dominant pattern — 5/6 top performers have zero text. DEFAULT for all archetypes unless explicitly noted.",
+        "use_for": ["mog_edit", "analysis_clip", "street_interview", "podcast_clip", "social_dynamics", "jester_contrast", "attraction_goal"]
       },
       "lyric_sync": {
         "font_family": "Helvetica Neue, Arial, sans-serif",
@@ -123,7 +123,7 @@
     "beat_cut_alignment": true,
     "music_volume": 0.75,
     "vo_volume": 1.0,
-    "note": "Original sounds also valid — @unc_iiris used custom original sound on 332.8K video. Don't over-index on trending audio."
+    "note": "Original sounds valid — @unc_iiris used custom original on 332.8K. @saffyro_ used 'Holyy' track on 726.6K. Trending emotional/atmospheric tracks work for attraction_goal format."
   },
   "hook_types": [
     "mog_edit_silent",
@@ -135,7 +135,8 @@
     "provocation_reaction",
     "podcast_clip",
     "ironic_quote_meme",
-    "jester_contrast_irl"
+    "jester_contrast_irl",
+    "female_beauty_luxury"
   ],
   "active_hook_type": "mog_edit_silent",
   "archetypes": {
@@ -149,33 +150,37 @@
       "provocation",
       "meme_edit",
       "social_dynamics",
-      "jester_contrast"
+      "jester_contrast",
+      "attraction_goal"
     ],
     "descriptions": {
-      "mog_edit": "Cinematic edit showcasing physical dominance. Dark grade, face closeups, no text. @roge.editz 285.9K",
-      "social_dynamics": "IRL footage showing real-world male status/behavior patterns. Warm ambient lighting, party/social settings, zero text. @unc_iiris 332.8K — CURRENT TOP PERFORMER",
-      "jester_contrast": "Sub-type of social_dynamics. Shows attractive guy in jester/low-status behavior. Caption is single ironic label + ellipsis ('jestermaxxer...'). Creates debate = algorithm fuel.",
+      "mog_edit": "Cinematic edit showcasing male physical dominance. Dark grade, face closeups, no text. @roge.editz 285.9K",
+      "social_dynamics": "IRL footage showing real-world male status/behavior patterns. Warm ambient lighting, party/social settings. @unc_iiris 332.8K",
+      "jester_contrast": "Sub-type of social_dynamics. Attractive guy in low-status behavior. Caption: single ironic label + ellipsis.",
+      "attraction_goal": "Beautiful female subject in aspirational/luxury context. Serves as motivation for male looksmax audience — 'what you're working toward.' Natural grade, extreme close-up face, luxury prop (car, setting). @saffyro_ 726.6K — ALL-TIME TOP PERFORMER",
       "provocation": "Street interview / debate bait. Short provocative claim drives comments. @bp.pilled 102.8K",
-      "meme_edit": "Ironic quote format ('just lower cortisol bro'). Saveable/shareable. @morphedmanlet 288.5K"
+      "meme_edit": "Ironic quote format. Saveable/shareable. @morphedmanlet 288.5K"
     }
   },
   "caption_strategy": {
-    "formula": "[1-3 words or emoji] | #bp #[niche_tag] #fyp #[secondary]",
+    "formula": "[emoji or 1-3 words] // [@editor_credit if applicable] // #bp #[niche_tag] #fyp",
     "examples": [
       "obviously 😌 | #bp #mog #edit",
       "5'9 kings wya #bp #blackpil #fyp #lookism",
       "@Clavicular #clavicular #bp #ascend #looksmax #fyp",
-      "jestermaxxer... #looks #looksmax #mog #mogged #friendzoned #fyp #foryou #edit"
+      "jestermaxxer... #looks #looksmax #mog #mogged #friendzoned #fyp",
+      "Holyy 🩹 // @Sam Dezz // #bpedit #edit #mog #samdezz #fyp"
     ],
     "max_words_before_tags": 3,
     "emoji_encouraged": true,
-    "ellipsis_technique": "Trailing '...' after single concept ('jestermaxxer...') creates ambiguity and invites interpretation — confirmed high save/share driver"
+    "ellipsis_technique": "Trailing '...' after single concept ('jestermaxxer...') creates ambiguity — high save/share driver",
+    "editor_credit": "Crediting original editor (@Sam Dezz) signals quality and drives cross-account shares"
   },
   "cta": {
     "text": "Discipline = results. Drop your glow-up progress below.",
     "duration_frames": 45,
     "font_size": "2.2rem",
-    "note": "CTA optional for mog_edit format — may reduce authenticity"
+    "note": "CTA optional for mog_edit / attraction_goal — may reduce authenticity"
   },
   "platform": {
     "primary": "tiktok",
@@ -192,25 +197,36 @@
   },
   "gold_insights": {
     "universal_rules": [
-      "Zero text overlays = default. 4/5 top performers have no text.",
-      "Caption: 1-3 words MAX before hashtags. Irony or ambiguity > description.",
-      "Dark or warm-ambient grades outperform bright grades consistently.",
-      "Original sounds viable — don't force trending audio.",
-      "Save rate >10% = reference/meme content = algorithm multiplier."
+      "Zero text overlays = default. 5/6 top performers have no text.",
+      "Caption: 1-3 words + emoji MAX before hashtags. Ambiguity or irony > description.",
+      "Natural and dark grades dominate — bright/oversaturated = low performer.",
+      "Save rate >8% = saveable/reference content = algorithm multiplier.",
+      "Female beauty in luxury context is the #1 ceiling (726.6K). Male looksmax audience responds to aspiration.",
+      "Editor credits in caption drive cross-account discovery and shares.",
+      "Original sounds work — don't force trending audio."
     ],
     "save_rate_champions": [
       {"account": "unc_iiris", "save_rate": "11.84%", "archetype": "jester_contrast"},
       {"account": "morphedmanlet", "save_rate": "11.82%", "archetype": "mog_edit"},
+      {"account": "saffyro_", "save_rate": "8.46%", "archetype": "attraction_goal"},
       {"account": "black.pill.city", "save_rate": "9.25%", "archetype": "frame_maxxing"}
     ],
     "top_performer": {
-      "account": "unc_iiris",
-      "likes": "332.8K",
-      "archetype": "jester_contrast",
-      "color_grade": "warm_ambient",
+      "account": "saffyro_",
+      "likes": "726.6K",
+      "archetype": "attraction_goal",
+      "color_grade": "natural",
       "text": "none",
-      "caption_style": "single_ironic_label_ellipsis"
-    }
+      "caption_style": "emoji + editor_credit + niche_tags",
+      "context": "luxury vehicle (Ferrari-style red interior)"
+    },
+    "archetype_ceiling_ranking": [
+      {"archetype": "attraction_goal", "top_likes": "726.6K", "account": "saffyro_"},
+      {"archetype": "jester_contrast", "top_likes": "332.8K", "account": "unc_iiris"},
+      {"archetype": "mog_edit", "top_likes": "288.5K", "account": "morphedmanlet"},
+      {"archetype": "provocation", "top_likes": "102.8K", "account": "bp.pilled"},
+      {"archetype": "frame_maxxing", "top_likes": "37K", "account": "black.pill.city"}
+    ]
   },
   "gold_reference_library": [
     {
@@ -226,7 +242,7 @@
       "archetype": "frame_maxxing",
       "text_overlays": false,
       "caption": "@Clavicular #clavicular #bp #ascend #looksmax #fyp",
-      "key_insight": "9.2% save rate = reference content. Desaturated B&W + podcast format = high bookmarks."
+      "key_insight": "9.2% save rate. Desaturated B&W + podcast format = high bookmarks."
     },
     {
       "video_id": "7580194747986283790",
@@ -241,7 +257,7 @@
       "archetype": "provocation",
       "text_overlays": false,
       "caption": "5'9 kings wya #bp #blackpil #fyp #lookism",
-      "key_insight": "2.2% comment ratio = debate content = algorithm fuel. Short provocative caption drives comments."
+      "key_insight": "2.2% comment ratio = debate content = algorithm fuel."
     },
     {
       "video_id": "7588525512478166294",
@@ -256,7 +272,7 @@
       "archetype": "mog_edit",
       "text_overlays": false,
       "caption": "obviously 😌 | #bp #marlon #edit #mog",
-      "key_insight": "Highest ceiling pure mog edit. No text, 1-word caption. Dark grade + face closeup = 285.9K."
+      "key_insight": "Pure cinematic mog edit ceiling. No text, 1-word caption, dark grade + face closeup."
     },
     {
       "video_id": "7540813336661740855",
@@ -272,7 +288,7 @@
       "text_overlays": true,
       "text_style": "lyric_sync",
       "caption": "Just make a tiktok bro #bpedit",
-      "key_insight": "11.8% save rate. Lyric sync text (*pretty boy makes) center frame. Ironic quote meme: 'just be X bro' — gets saved as meme template."
+      "key_insight": "11.8% save rate. Lyric sync (*pretty boy makes) + ironic quote meme template. Highest save rate in male-subject library."
     },
     {
       "video_id": "7537476213275757846",
@@ -288,9 +304,29 @@
       "format": "irl_social_clip",
       "archetype": "jester_contrast",
       "text_overlays": false,
-      "music": "original sound - iblameiris⭐️ - unc_iiris (custom original)",
+      "music": "original sound - iblameiris⭐️ - unc_iiris (custom)",
       "caption": "jestermaxxer... #looks #looksmax #mog #mogged #friendzoned #fyp #foryou #edit",
-      "key_insight": "#1 PERFORMER IN LIBRARY. 332.8K likes. IRL party footage, zero text, warm-ambient grade. Ironic single-word caption with ellipsis. Social dynamics archetype = debate + saves. Original sound works fine — no trending audio needed."
+      "key_insight": "IRL party footage. Ironic label + ellipsis caption. Original sound works. Social dynamics debate = algorithm fuel."
+    },
+    {
+      "video_id": "7608533082261474582",
+      "account": "saffyro_",
+      "editor_credit": "Sam Dezz",
+      "title": "Holyy 🩹",
+      "likes": "726600",
+      "comments": "2887",
+      "saves": "61500",
+      "shares": "37100",
+      "save_rate_pct": 8.46,
+      "share_rate_pct": 5.11,
+      "color_grade": "natural",
+      "format": "female_beauty_luxury",
+      "archetype": "attraction_goal",
+      "text_overlays": false,
+      "music": "Holyy (emotional/atmospheric track)",
+      "context": "Extreme close-up female face, luxury red sports car interior (Ferrari-style), blue sky background",
+      "caption": "Holyy 🩹 // @Sam Dezz // #bpedit #edit #mog #samdezz #fyp",
+      "key_insight": "ALL-TIME #1 in library at 726.6K. Female beauty in luxury context = highest ceiling for male looksmax audience. Natural grade, zero text, emoji + editor credit caption. Atmospheric music. This archetype (attraction_goal) outperforms all male-subject archetypes."
     }
   ]
 }
