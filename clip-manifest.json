@@ -377,8 +377,60 @@
       "tags": [],
       "rank": 0.5,
       "ingest_timestamp": "2026-03-26T05:26:13.274694+00:00"
+    },
+    {
+      "clip_id": "jordangamercool23_7620683405667208468_ef8138ef_scene000",
+      "source_video_id": "jordangamercool23_7620683405667208468_ef8138ef",
+      "scene_index": 0,
+      "start_sec": 0.0,
+      "end_sec": 3.0,
+      "duration_sec": 3.0,
+      "file": "library/clips/jordangamercool23_7620683405667208468_ef8138ef_scene000.mp4",
+      "thumbnail": "library/assets/thumbnails/jordangamercool23_7620683405667208468_ef8138ef_scene000.jpg",
+      "tags": [],
+      "rank": 0.5,
+      "ingest_timestamp": "2026-03-26T05:26:19.044241+00:00"
+    },
+    {
+      "clip_id": "jordangamercool23_7620683405667208468_ef8138ef_scene001",
+      "source_video_id": "jordangamercool23_7620683405667208468_ef8138ef",
+      "scene_index": 1,
+      "start_sec": 3.0,
+      "end_sec": 6.0,
+      "duration_sec": 3.0,
+      "file": "library/clips/jordangamercool23_7620683405667208468_ef8138ef_scene001.mp4",
+      "thumbnail": "library/assets/thumbnails/jordangamercool23_7620683405667208468_ef8138ef_scene001.jpg",
+      "tags": [],
+      "rank": 0.5,
+      "ingest_timestamp": "2026-03-26T05:26:19.986148+00:00"
+    },
+    {
+      "clip_id": "jordangamercool23_7620683405667208468_ef8138ef_scene002",
+      "source_video_id": "jordangamercool23_7620683405667208468_ef8138ef",
+      "scene_index": 2,
+      "start_sec": 6.0,
+      "end_sec": 9.0,
+      "duration_sec": 3.0,
+      "file": "library/clips/jordangamercool23_7620683405667208468_ef8138ef_scene002.mp4",
+      "thumbnail": "library/assets/thumbnails/jordangamercool23_7620683405667208468_ef8138ef_scene002.jpg",
+      "tags": [],
+      "rank": 0.5,
+      "ingest_timestamp": "2026-03-26T05:26:21.075350+00:00"
+    },
+    {
+      "clip_id": "jordangamercool23_7620683405667208468_ef8138ef_scene003",
+      "source_video_id": "jordangamercool23_7620683405667208468_ef8138ef",
+      "scene_index": 3,
+      "start_sec": 9.0,
+      "end_sec": 14.778,
+      "duration_sec": 5.778,
+      "file": "library/clips/jordangamercool23_7620683405667208468_ef8138ef_scene003.mp4",
+      "thumbnail": "library/assets/thumbnails/jordangamercool23_7620683405667208468_ef8138ef_scene003.jpg",
+      "tags": [],
+      "rank": 0.5,
+      "ingest_timestamp": "2026-03-26T05:26:22.929534+00:00"
     }
   ],
-  "last_updated": "2026-03-26T05:26:13.275938+00:00",
-  "total_clips": 29
+  "last_updated": "2026-03-26T05:26:22.930238+00:00",
+  "total_clips": 33
 }
