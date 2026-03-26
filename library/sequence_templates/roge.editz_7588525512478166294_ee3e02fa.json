@@ -1,0 +1,220 @@
+{
+  "vid_id": "roge.editz_7588525512478166294_ee3e02fa",
+  "generated_at": "2026-03-26T22:06:20.251306+00:00",
+  "total_clips": 8,
+  "total_duration_sec": 24.334,
+  "bpm": 92,
+  "avg_cut_length_sec": 3.0,
+  "beat_alignment": "loose",
+  "color_grade": "Desaturated",
+  "hook_pacing_sec": [
+    0,
+    6.0
+  ],
+  "clip_order": [
+    {
+      "index": 0,
+      "clip_id": "roge.editz_7588525512478166294_ee3e02fa_scene000",
+      "start_sec": 0.0,
+      "end_sec": 3.0,
+      "duration_sec": 3.0,
+      "tags": [
+        "face_closeup_push",
+        "text_overlay_heavy",
+        "talking_head_direct",
+        "dark_cinema_mood",
+        "motivational_narrative",
+        "color_text_accent",
+        "gaming_chair_setup",
+        "christmas_tree_lights",
+        "rgb_lighting_festive",
+        "text_overlay_dialogue",
+        "face_closeup_direct",
+        "grayscale_filter"
+      ],
+      "beat_anchor_sec": null,
+      "transition_type": "cut",
+      "rank": 0.5
+    },
+    {
+      "index": 1,
+      "clip_id": "roge.editz_7588525512478166294_ee3e02fa_scene001",
+      "start_sec": 3.0,
+      "end_sec": 6.0,
+      "duration_sec": 3.0,
+      "tags": [
+        "face_closeup_push",
+        "text_overlay_heavy",
+        "talking_head_direct",
+        "dark_cinema_mood",
+        "motivational_narrative",
+        "color_text_accent",
+        "gaming_chair_setup",
+        "christmas_tree_lights",
+        "rgb_lighting_festive",
+        "text_overlay_dialogue",
+        "face_closeup_direct",
+        "grayscale_filter"
+      ],
+      "beat_anchor_sec": 3.135,
+      "transition_type": "cut",
+      "rank": 0.5
+    },
+    {
+      "index": 2,
+      "clip_id": "roge.editz_7588525512478166294_ee3e02fa_scene002",
+      "start_sec": 6.0,
+      "end_sec": 9.0,
+      "duration_sec": 3.0,
+      "tags": [
+        "face_closeup_push",
+        "text_overlay_heavy",
+        "talking_head_direct",
+        "dark_cinema_mood",
+        "motivational_narrative",
+        "color_text_accent",
+        "gaming_chair_setup",
+        "christmas_tree_lights",
+        "rgb_lighting_festive",
+        "text_overlay_dialogue",
+        "face_closeup_direct",
+        "grayscale_filter"
+      ],
+      "beat_anchor_sec": 5.735,
+      "transition_type": "cut",
+      "rank": 0.5
+    },
+    {
+      "index": 3,
+      "clip_id": "roge.editz_7588525512478166294_ee3e02fa_scene003",
+      "start_sec": 9.0,
+      "end_sec": 12.0,
+      "duration_sec": 3.0,
+      "tags": [
+        "face_closeup_push",
+        "text_overlay_heavy",
+        "talking_head_direct",
+        "dark_cinema_mood",
+        "motivational_narrative",
+        "color_text_accent",
+        "gaming_chair_setup",
+        "christmas_tree_lights",
+        "rgb_lighting_festive",
+        "text_overlay_dialogue",
+        "face_closeup_direct",
+        "grayscale_filter"
+      ],
+      "beat_anchor_sec": 8.986,
+      "transition_type": "cut",
+      "rank": 0.5
+    },
+    {
+      "index": 4,
+      "clip_id": "roge.editz_7588525512478166294_ee3e02fa_scene004",
+      "start_sec": 12.0,
+      "end_sec": 15.0,
+      "duration_sec": 3.0,
+      "tags": [
+        "face_closeup_push",
+        "text_overlay_heavy",
+        "talking_head_direct",
+        "dark_cinema_mood",
+        "motivational_narrative",
+        "color_text_accent",
+        "gaming_chair_setup",
+        "christmas_tree_lights",
+        "rgb_lighting_festive",
+        "text_overlay_dialogue",
+        "face_closeup_direct",
+        "grayscale_filter"
+      ],
+      "beat_anchor_sec": 12.237,
+      "transition_type": "cut",
+      "rank": 0.5
+    },
+    {
+      "index": 5,
+      "clip_id": "roge.editz_7588525512478166294_ee3e02fa_scene005",
+      "start_sec": 15.0,
+      "end_sec": 18.0,
+      "duration_sec": 3.0,
+      "tags": [
+        "face_closeup_push",
+        "text_overlay_heavy",
+        "talking_head_direct",
+        "dark_cinema_mood",
+        "motivational_narrative",
+        "color_text_accent",
+        "gaming_chair_setup",
+        "christmas_tree_lights",
+        "rgb_lighting_festive",
+        "text_overlay_dialogue",
+        "face_closeup_direct",
+        "grayscale_filter"
+      ],
+      "beat_anchor_sec": 14.814,
+      "transition_type": "cut",
+      "rank": 0.5
+    },
+    {
+      "index": 6,
+      "clip_id": "roge.editz_7588525512478166294_ee3e02fa_scene006",
+      "start_sec": 18.0,
+      "end_sec": 21.0,
+      "duration_sec": 3.0,
+      "tags": [
+        "face_closeup_push",
+        "text_overlay_heavy",
+        "talking_head_direct",
+        "dark_cinema_mood",
+        "motivational_narrative",
+        "color_text_accent",
+        "gaming_chair_setup",
+        "christmas_tree_lights",
+        "rgb_lighting_festive",
+        "text_overlay_dialogue",
+        "face_closeup_direct",
+        "grayscale_filter"
+      ],
+      "beat_anchor_sec": 18.065,
+      "transition_type": "cut",
+      "rank": 0.5
+    },
+    {
+      "index": 7,
+      "clip_id": "roge.editz_7588525512478166294_ee3e02fa_scene007",
+      "start_sec": 21.0,
+      "end_sec": 24.334,
+      "duration_sec": 3.334,
+      "tags": [
+        "face_closeup_push",
+        "text_overlay_heavy",
+        "talking_head_direct",
+        "dark_cinema_mood",
+        "motivational_narrative",
+        "color_text_accent",
+        "gaming_chair_setup",
+        "christmas_tree_lights",
+        "rgb_lighting_festive",
+        "text_overlay_dialogue",
+        "face_closeup_direct",
+        "grayscale_filter"
+      ],
+      "beat_anchor_sec": 21.316,
+      "transition_type": "cut",
+      "rank": 0.5
+    }
+  ],
+  "beat_drop_points_sec": [
+    14.141,
+    14.164,
+    14.187,
+    14.211,
+    14.234
+  ],
+  "transition_summary": {
+    "hard_cut": 0,
+    "cut": 8,
+    "hold": 0
+  }
+}

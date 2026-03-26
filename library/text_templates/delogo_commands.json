@@ -204,5 +204,120 @@
       }
     ],
     "generated_at": "2026-03-26T22:04:10.199444+00:00"
+  },
+  "roge.editz_7588525512478166294_ee3e02fa": {
+    "delogo_filters": [],
+    "ffmpeg_filter_chain": null,
+    "frame_details": [
+      {
+        "frame": "every1s_0001.jpg",
+        "hits": [
+          {
+            "text": "SOMETHING THAT",
+            "type": "caption",
+            "confidence": 0.981,
+            "delogo": "delogo=x=132:y=986:w=604:h=72"
+          }
+        ]
+      },
+      {
+        "frame": "every1s_0003.jpg",
+        "hits": [
+          {
+            "text": "\"'VE NEVER",
+            "type": "caption",
+            "confidence": 0.547,
+            "delogo": "delogo=x=95:y=981:w=394:h=79"
+          }
+        ]
+      },
+      {
+        "frame": "every1s_0005.jpg",
+        "hits": [
+          {
+            "text": "THAT |",
+            "type": "caption",
+            "confidence": 0.746,
+            "delogo": "delogo=x=422:y=1018:w=236:h=72"
+          }
+        ]
+      },
+      {
+        "frame": "every1s_0007.jpg",
+        "hits": [
+          {
+            "text": "OR",
+            "type": "caption",
+            "confidence": 0.996,
+            "delogo": "delogo=x=118:y=988:w=114:h=72"
+          }
+        ]
+      },
+      {
+        "frame": "every1s_0009.jpg",
+        "hits": [
+          {
+            "text": "THEY",
+            "type": "caption",
+            "confidence": 0.912,
+            "delogo": "delogo=x=148:y=956:w=194:h=70"
+          },
+          {
+            "text": "WEI",
+            "type": "caption",
+            "confidence": 0.416,
+            "delogo": "delogo=x=342:y=956:w=140:h=70"
+          }
+        ]
+      },
+      {
+        "frame": "every1s_0011.jpg",
+        "hits": [
+          {
+            "text": "THEY",
+            "type": "caption",
+            "confidence": 0.968,
+            "delogo": "delogo=x=147:y=954:w=192:h=72"
+          },
+          {
+            "text": "WERE TRYING To",
+            "type": "caption",
+            "confidence": 0.515,
+            "delogo": "delogo=x=341:y=954:w=575:h=72"
+          },
+          {
+            "text": "SAY",
+            "type": "caption",
+            "confidence": 0.999,
+            "delogo": "delogo=x=151:y=1019:w=150:h=70"
+          }
+        ]
+      },
+      {
+        "frame": "every1s_0013.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0015.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0017.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0019.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0021.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0023.jpg",
+        "hits": []
+      }
+    ],
+    "generated_at": "2026-03-26T22:05:21.902443+00:00"
   }
 }

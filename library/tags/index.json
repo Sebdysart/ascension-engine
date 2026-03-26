@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "last_updated": "2026-03-26T22:04:52.029171+00:00",
+  "last_updated": "2026-03-26T22:06:20.254008+00:00",
   "tags": {
     "face_closeup": [],
     "gym_lift": [],
@@ -27,7 +27,15 @@
       "gold_bpedits145_bp_edit_7d84bfee_scene003",
       "gold_bpedits145_bp_edit_7d84bfee_scene004",
       "gold_bpedits145_bp_edit_7d84bfee_scene005",
-      "gold_bpedits145_bp_edit_7d84bfee_scene006"
+      "gold_bpedits145_bp_edit_7d84bfee_scene006",
+      "roge.editz_7588525512478166294_ee3e02fa_scene000",
+      "roge.editz_7588525512478166294_ee3e02fa_scene001",
+      "roge.editz_7588525512478166294_ee3e02fa_scene002",
+      "roge.editz_7588525512478166294_ee3e02fa_scene003",
+      "roge.editz_7588525512478166294_ee3e02fa_scene004",
+      "roge.editz_7588525512478166294_ee3e02fa_scene005",
+      "roge.editz_7588525512478166294_ee3e02fa_scene006",
+      "roge.editz_7588525512478166294_ee3e02fa_scene007"
     ],
     "talking_head_direct": [
       "gold_bpedits145_bp_edit_7d84bfee_scene000",
@@ -36,7 +44,15 @@
       "gold_bpedits145_bp_edit_7d84bfee_scene003",
       "gold_bpedits145_bp_edit_7d84bfee_scene004",
       "gold_bpedits145_bp_edit_7d84bfee_scene005",
-      "gold_bpedits145_bp_edit_7d84bfee_scene006"
+      "gold_bpedits145_bp_edit_7d84bfee_scene006",
+      "roge.editz_7588525512478166294_ee3e02fa_scene000",
+      "roge.editz_7588525512478166294_ee3e02fa_scene001",
+      "roge.editz_7588525512478166294_ee3e02fa_scene002",
+      "roge.editz_7588525512478166294_ee3e02fa_scene003",
+      "roge.editz_7588525512478166294_ee3e02fa_scene004",
+      "roge.editz_7588525512478166294_ee3e02fa_scene005",
+      "roge.editz_7588525512478166294_ee3e02fa_scene006",
+      "roge.editz_7588525512478166294_ee3e02fa_scene007"
     ],
     "street_walk": [
       "gold_bpedits145_bp_edit_7d84bfee_scene000",
@@ -81,7 +97,15 @@
       "gold_bpedits145_bp_edit_7d84bfee_scene003",
       "gold_bpedits145_bp_edit_7d84bfee_scene004",
       "gold_bpedits145_bp_edit_7d84bfee_scene005",
-      "gold_bpedits145_bp_edit_7d84bfee_scene006"
+      "gold_bpedits145_bp_edit_7d84bfee_scene006",
+      "roge.editz_7588525512478166294_ee3e02fa_scene000",
+      "roge.editz_7588525512478166294_ee3e02fa_scene001",
+      "roge.editz_7588525512478166294_ee3e02fa_scene002",
+      "roge.editz_7588525512478166294_ee3e02fa_scene003",
+      "roge.editz_7588525512478166294_ee3e02fa_scene004",
+      "roge.editz_7588525512478166294_ee3e02fa_scene005",
+      "roge.editz_7588525512478166294_ee3e02fa_scene006",
+      "roge.editz_7588525512478166294_ee3e02fa_scene007"
     ],
     "street_walk_outdoor": [
       "gold_bpedits145_bp_edit_7d84bfee_scene000",
@@ -99,7 +123,95 @@
       "gold_bpedits145_bp_edit_7d84bfee_scene003",
       "gold_bpedits145_bp_edit_7d84bfee_scene004",
       "gold_bpedits145_bp_edit_7d84bfee_scene005",
-      "gold_bpedits145_bp_edit_7d84bfee_scene006"
+      "gold_bpedits145_bp_edit_7d84bfee_scene006",
+      "roge.editz_7588525512478166294_ee3e02fa_scene000",
+      "roge.editz_7588525512478166294_ee3e02fa_scene001",
+      "roge.editz_7588525512478166294_ee3e02fa_scene002",
+      "roge.editz_7588525512478166294_ee3e02fa_scene003",
+      "roge.editz_7588525512478166294_ee3e02fa_scene004",
+      "roge.editz_7588525512478166294_ee3e02fa_scene005",
+      "roge.editz_7588525512478166294_ee3e02fa_scene006",
+      "roge.editz_7588525512478166294_ee3e02fa_scene007"
+    ],
+    "motivational_narrative": [
+      "roge.editz_7588525512478166294_ee3e02fa_scene000",
+      "roge.editz_7588525512478166294_ee3e02fa_scene001",
+      "roge.editz_7588525512478166294_ee3e02fa_scene002",
+      "roge.editz_7588525512478166294_ee3e02fa_scene003",
+      "roge.editz_7588525512478166294_ee3e02fa_scene004",
+      "roge.editz_7588525512478166294_ee3e02fa_scene005",
+      "roge.editz_7588525512478166294_ee3e02fa_scene006",
+      "roge.editz_7588525512478166294_ee3e02fa_scene007"
+    ],
+    "color_text_accent": [
+      "roge.editz_7588525512478166294_ee3e02fa_scene000",
+      "roge.editz_7588525512478166294_ee3e02fa_scene001",
+      "roge.editz_7588525512478166294_ee3e02fa_scene002",
+      "roge.editz_7588525512478166294_ee3e02fa_scene003",
+      "roge.editz_7588525512478166294_ee3e02fa_scene004",
+      "roge.editz_7588525512478166294_ee3e02fa_scene005",
+      "roge.editz_7588525512478166294_ee3e02fa_scene006",
+      "roge.editz_7588525512478166294_ee3e02fa_scene007"
+    ],
+    "gaming_chair_setup": [
+      "roge.editz_7588525512478166294_ee3e02fa_scene000",
+      "roge.editz_7588525512478166294_ee3e02fa_scene001",
+      "roge.editz_7588525512478166294_ee3e02fa_scene002",
+      "roge.editz_7588525512478166294_ee3e02fa_scene003",
+      "roge.editz_7588525512478166294_ee3e02fa_scene004",
+      "roge.editz_7588525512478166294_ee3e02fa_scene005",
+      "roge.editz_7588525512478166294_ee3e02fa_scene006",
+      "roge.editz_7588525512478166294_ee3e02fa_scene007"
+    ],
+    "christmas_tree_lights": [
+      "roge.editz_7588525512478166294_ee3e02fa_scene000",
+      "roge.editz_7588525512478166294_ee3e02fa_scene001",
+      "roge.editz_7588525512478166294_ee3e02fa_scene002",
+      "roge.editz_7588525512478166294_ee3e02fa_scene003",
+      "roge.editz_7588525512478166294_ee3e02fa_scene004",
+      "roge.editz_7588525512478166294_ee3e02fa_scene005",
+      "roge.editz_7588525512478166294_ee3e02fa_scene006",
+      "roge.editz_7588525512478166294_ee3e02fa_scene007"
+    ],
+    "rgb_lighting_festive": [
+      "roge.editz_7588525512478166294_ee3e02fa_scene000",
+      "roge.editz_7588525512478166294_ee3e02fa_scene001",
+      "roge.editz_7588525512478166294_ee3e02fa_scene002",
+      "roge.editz_7588525512478166294_ee3e02fa_scene003",
+      "roge.editz_7588525512478166294_ee3e02fa_scene004",
+      "roge.editz_7588525512478166294_ee3e02fa_scene005",
+      "roge.editz_7588525512478166294_ee3e02fa_scene006",
+      "roge.editz_7588525512478166294_ee3e02fa_scene007"
+    ],
+    "text_overlay_dialogue": [
+      "roge.editz_7588525512478166294_ee3e02fa_scene000",
+      "roge.editz_7588525512478166294_ee3e02fa_scene001",
+      "roge.editz_7588525512478166294_ee3e02fa_scene002",
+      "roge.editz_7588525512478166294_ee3e02fa_scene003",
+      "roge.editz_7588525512478166294_ee3e02fa_scene004",
+      "roge.editz_7588525512478166294_ee3e02fa_scene005",
+      "roge.editz_7588525512478166294_ee3e02fa_scene006",
+      "roge.editz_7588525512478166294_ee3e02fa_scene007"
+    ],
+    "face_closeup_direct": [
+      "roge.editz_7588525512478166294_ee3e02fa_scene000",
+      "roge.editz_7588525512478166294_ee3e02fa_scene001",
+      "roge.editz_7588525512478166294_ee3e02fa_scene002",
+      "roge.editz_7588525512478166294_ee3e02fa_scene003",
+      "roge.editz_7588525512478166294_ee3e02fa_scene004",
+      "roge.editz_7588525512478166294_ee3e02fa_scene005",
+      "roge.editz_7588525512478166294_ee3e02fa_scene006",
+      "roge.editz_7588525512478166294_ee3e02fa_scene007"
+    ],
+    "grayscale_filter": [
+      "roge.editz_7588525512478166294_ee3e02fa_scene000",
+      "roge.editz_7588525512478166294_ee3e02fa_scene001",
+      "roge.editz_7588525512478166294_ee3e02fa_scene002",
+      "roge.editz_7588525512478166294_ee3e02fa_scene003",
+      "roge.editz_7588525512478166294_ee3e02fa_scene004",
+      "roge.editz_7588525512478166294_ee3e02fa_scene005",
+      "roge.editz_7588525512478166294_ee3e02fa_scene006",
+      "roge.editz_7588525512478166294_ee3e02fa_scene007"
     ]
   }
 }
