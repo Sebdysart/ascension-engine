@@ -1,0 +1,7 @@
+scenedetect[opencv]
+librosa
+imagehash
+watchdog
+Pillow
+numpy
+scikit-image
