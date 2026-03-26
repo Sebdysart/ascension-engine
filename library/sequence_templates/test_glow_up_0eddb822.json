@@ -1,0 +1,66 @@
+{
+  "vid_id": "test_glow_up_0eddb822",
+  "generated_at": "2026-03-26T12:01:45.463826+00:00",
+  "total_clips": 4,
+  "total_duration_sec": 12.0,
+  "bpm": 0,
+  "avg_cut_length_sec": 3.0,
+  "beat_alignment": "unknown",
+  "color_grade": "unknown",
+  "hook_pacing_sec": [
+    0,
+    6.0
+  ],
+  "clip_order": [
+    {
+      "index": 0,
+      "clip_id": "test_glow_up_0eddb822_scene000",
+      "start_sec": 0.0,
+      "end_sec": 3.0,
+      "duration_sec": 3.0,
+      "tags": [],
+      "beat_anchor_sec": null,
+      "transition_type": "cut",
+      "rank": 0.5
+    },
+    {
+      "index": 1,
+      "clip_id": "test_glow_up_0eddb822_scene001",
+      "start_sec": 3.0,
+      "end_sec": 6.0,
+      "duration_sec": 3.0,
+      "tags": [],
+      "beat_anchor_sec": null,
+      "transition_type": "cut",
+      "rank": 0.5
+    },
+    {
+      "index": 2,
+      "clip_id": "test_glow_up_0eddb822_scene002",
+      "start_sec": 6.0,
+      "end_sec": 9.0,
+      "duration_sec": 3.0,
+      "tags": [],
+      "beat_anchor_sec": null,
+      "transition_type": "cut",
+      "rank": 0.5
+    },
+    {
+      "index": 3,
+      "clip_id": "test_glow_up_0eddb822_scene003",
+      "start_sec": 9.0,
+      "end_sec": 12.0,
+      "duration_sec": 3.0,
+      "tags": [],
+      "beat_anchor_sec": null,
+      "transition_type": "cut",
+      "rank": 0.5
+    }
+  ],
+  "beat_drop_points_sec": [],
+  "transition_summary": {
+    "hard_cut": 0,
+    "cut": 4,
+    "hold": 0
+  }
+}

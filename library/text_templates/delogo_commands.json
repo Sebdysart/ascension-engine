@@ -1,0 +1,57 @@
+{
+  "test_glow_up_0eddb822": {
+    "delogo_filters": [],
+    "ffmpeg_filter_chain": null,
+    "frame_details": [
+      {
+        "frame": "every1s_0001.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0002.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0003.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0004.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0005.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0006.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0007.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0008.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0009.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0010.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0011.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0012.jpg",
+        "hits": []
+      }
+    ],
+    "generated_at": "2026-03-26T12:01:36.965565+00:00"
+  }
+}
