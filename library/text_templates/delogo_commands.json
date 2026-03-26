@@ -579,5 +579,108 @@
       }
     ],
     "generated_at": "2026-03-26T22:06:52.228226+00:00"
+  },
+  "gold_etxereal0_cookie_king_03146501": {
+    "delogo_filters": [],
+    "ffmpeg_filter_chain": null,
+    "frame_details": [
+      {
+        "frame": "every1s_0001.jpg",
+        "hits": [
+          {
+            "text": "you decided to ascend:",
+            "type": "caption",
+            "confidence": 0.826,
+            "delogo": "delogo=x=196:y=502:w=619:h=84"
+          }
+        ]
+      },
+      {
+        "frame": "every1s_0004.jpg",
+        "hits": [
+          {
+            "text": "decided to ascend:",
+            "type": "caption",
+            "confidence": 0.723,
+            "delogo": "delogo=x=308:y=499:w=508:h=83"
+          },
+          {
+            "text": "you",
+            "type": "caption",
+            "confidence": 0.996,
+            "delogo": "delogo=x=198:y=503:w=125:h=83"
+          }
+        ]
+      },
+      {
+        "frame": "every1s_0007.jpg",
+        "hits": [
+          {
+            "text": "you decided t0 ascend:",
+            "type": "caption",
+            "confidence": 0.773,
+            "delogo": "delogo=x=198:y=502:w=617:h=82"
+          }
+        ]
+      },
+      {
+        "frame": "every1s_0010.jpg",
+        "hits": [
+          {
+            "text": "you decided tO ascend",
+            "type": "caption",
+            "confidence": 0.418,
+            "delogo": "delogo=x=198:y=500:w=617:h=84"
+          }
+        ]
+      },
+      {
+        "frame": "every1s_0013.jpg",
+        "hits": [
+          {
+            "text": "03722AA;",
+            "type": "caption",
+            "confidence": 0.436,
+            "delogo": "delogo=x=314:y=852:w=399:h=144"
+          }
+        ]
+      },
+      {
+        "frame": "every1s_0016.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0019.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0022.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0025.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0028.jpg",
+        "hits": []
+      },
+      {
+        "frame": "scene_0002_6.00s.jpg",
+        "hits": [
+          {
+            "text": "you decided to ascend:",
+            "type": "caption",
+            "confidence": 0.668,
+            "delogo": "delogo=x=198:y=502:w=616:h=80"
+          }
+        ]
+      },
+      {
+        "frame": "scene_0005_15.00s.jpg",
+        "hits": []
+      }
+    ],
+    "generated_at": "2026-03-26T22:14:38.165426+00:00"
   }
 }

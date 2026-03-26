@@ -1,0 +1,208 @@
+{
+  "vid_id": "gold_etxereal0_cookie_king_03146501",
+  "generated_at": "2026-03-26T22:15:30.692573+00:00",
+  "total_clips": 9,
+  "total_duration_sec": 28.45,
+  "bpm": 136,
+  "avg_cut_length_sec": 3.0,
+  "beat_alignment": "loose",
+  "color_grade": "WarmGold",
+  "hook_pacing_sec": [
+    0,
+    6.0
+  ],
+  "clip_order": [
+    {
+      "index": 0,
+      "clip_id": "gold_etxereal0_cookie_king_03146501_scene000",
+      "start_sec": 0.0,
+      "end_sec": 3.0,
+      "duration_sec": 3.0,
+      "tags": [
+        "talking_head_direct",
+        "text_overlay_heavy",
+        "face_closeup_push",
+        "grooming_ritual",
+        "mirror_selfie",
+        "transformation_narrative",
+        "dark_cinema_mood",
+        "meme_aesthetic"
+      ],
+      "beat_anchor_sec": null,
+      "transition_type": "cut",
+      "rank": 0.5
+    },
+    {
+      "index": 1,
+      "clip_id": "gold_etxereal0_cookie_king_03146501_scene001",
+      "start_sec": 3.0,
+      "end_sec": 6.0,
+      "duration_sec": 3.0,
+      "tags": [
+        "talking_head_direct",
+        "text_overlay_heavy",
+        "face_closeup_push",
+        "grooming_ritual",
+        "mirror_selfie",
+        "transformation_narrative",
+        "dark_cinema_mood",
+        "meme_aesthetic"
+      ],
+      "beat_anchor_sec": null,
+      "transition_type": "cut",
+      "rank": 0.5
+    },
+    {
+      "index": 2,
+      "clip_id": "gold_etxereal0_cookie_king_03146501_scene002",
+      "start_sec": 6.0,
+      "end_sec": 9.0,
+      "duration_sec": 3.0,
+      "tags": [
+        "talking_head_direct",
+        "text_overlay_heavy",
+        "face_closeup_push",
+        "grooming_ritual",
+        "mirror_selfie",
+        "transformation_narrative",
+        "dark_cinema_mood",
+        "meme_aesthetic"
+      ],
+      "beat_anchor_sec": null,
+      "transition_type": "cut",
+      "rank": 0.5
+    },
+    {
+      "index": 3,
+      "clip_id": "gold_etxereal0_cookie_king_03146501_scene003",
+      "start_sec": 9.0,
+      "end_sec": 12.0,
+      "duration_sec": 3.0,
+      "tags": [
+        "talking_head_direct",
+        "text_overlay_heavy",
+        "face_closeup_push",
+        "grooming_ritual",
+        "mirror_selfie",
+        "transformation_narrative",
+        "dark_cinema_mood",
+        "meme_aesthetic"
+      ],
+      "beat_anchor_sec": 8.87,
+      "transition_type": "cut",
+      "rank": 0.5
+    },
+    {
+      "index": 4,
+      "clip_id": "gold_etxereal0_cookie_king_03146501_scene004",
+      "start_sec": 12.0,
+      "end_sec": 15.0,
+      "duration_sec": 3.0,
+      "tags": [
+        "talking_head_direct",
+        "text_overlay_heavy",
+        "face_closeup_push",
+        "grooming_ritual",
+        "mirror_selfie",
+        "transformation_narrative",
+        "dark_cinema_mood",
+        "meme_aesthetic"
+      ],
+      "beat_anchor_sec": 12.098,
+      "transition_type": "cut",
+      "rank": 0.5
+    },
+    {
+      "index": 5,
+      "clip_id": "gold_etxereal0_cookie_king_03146501_scene005",
+      "start_sec": 15.0,
+      "end_sec": 18.0,
+      "duration_sec": 3.0,
+      "tags": [
+        "talking_head_direct",
+        "text_overlay_heavy",
+        "face_closeup_push",
+        "grooming_ritual",
+        "mirror_selfie",
+        "transformation_narrative",
+        "dark_cinema_mood",
+        "meme_aesthetic"
+      ],
+      "beat_anchor_sec": 14.791,
+      "transition_type": "cut",
+      "rank": 0.5
+    },
+    {
+      "index": 6,
+      "clip_id": "gold_etxereal0_cookie_king_03146501_scene006",
+      "start_sec": 18.0,
+      "end_sec": 21.0,
+      "duration_sec": 3.0,
+      "tags": [
+        "talking_head_direct",
+        "text_overlay_heavy",
+        "face_closeup_push",
+        "grooming_ritual",
+        "mirror_selfie",
+        "transformation_narrative",
+        "dark_cinema_mood",
+        "meme_aesthetic"
+      ],
+      "beat_anchor_sec": 18.042,
+      "transition_type": "cut",
+      "rank": 0.5
+    },
+    {
+      "index": 7,
+      "clip_id": "gold_etxereal0_cookie_king_03146501_scene007",
+      "start_sec": 21.0,
+      "end_sec": 24.0,
+      "duration_sec": 3.0,
+      "tags": [
+        "talking_head_direct",
+        "text_overlay_heavy",
+        "face_closeup_push",
+        "grooming_ritual",
+        "mirror_selfie",
+        "transformation_narrative",
+        "dark_cinema_mood",
+        "meme_aesthetic"
+      ],
+      "beat_anchor_sec": 20.805,
+      "transition_type": "cut",
+      "rank": 0.5
+    },
+    {
+      "index": 8,
+      "clip_id": "gold_etxereal0_cookie_king_03146501_scene008",
+      "start_sec": 24.0,
+      "end_sec": 28.45,
+      "duration_sec": 4.45,
+      "tags": [
+        "talking_head_direct",
+        "text_overlay_heavy",
+        "face_closeup_push",
+        "grooming_ritual",
+        "mirror_selfie",
+        "transformation_narrative",
+        "dark_cinema_mood",
+        "meme_aesthetic"
+      ],
+      "beat_anchor_sec": 24.056,
+      "transition_type": "hold",
+      "rank": 0.5
+    }
+  ],
+  "beat_drop_points_sec": [
+    14.768,
+    14.791,
+    14.814,
+    14.838,
+    14.861
+  ],
+  "transition_summary": {
+    "hard_cut": 0,
+    "cut": 8,
+    "hold": 1
+  }
+}
