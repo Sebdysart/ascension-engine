@@ -1,0 +1,30 @@
+{
+  "name": "ascension-engine",
+  "version": "2.1.0",
+  "description": "AI-powered short-form video production system for male self-improvement content",
+  "private": true,
+  "scripts": {
+    "studio": "remotion studio",
+    "render": "remotion render",
+    "lint": "eslint . --ext .ts,.tsx",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc",
+    "test": "echo 'No test framework configured yet'"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "^4.0.0",
+    "@remotion/cli": "^4.0.0",
+    "@remotion/player": "^4.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.0",
+    "@types/react": "^18.3.0",
+    "@types/node": "^22.0.0",
+    "eslint": "^8.57.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "ts-node": "^10.9.2"
+  }
+}
