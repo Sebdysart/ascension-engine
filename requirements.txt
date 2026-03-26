@@ -1,0 +1,25 @@
+# Ascension Engine — Python dependencies
+# Install everything in one step: bash scripts/setup.sh
+# Or manually: pip install -r requirements.txt
+
+# ── Core video processing ──────────────────────────────────────────────────
+scenedetect[opencv]     # frame-accurate scene detection (replaces 3s fallback)
+opencv-python           # cv2 — video I/O, frame extraction, color analysis
+
+# ── Audio analysis ─────────────────────────────────────────────────────────
+librosa                 # BPM detection, beat tracking
+numpy                   # required by librosa + color analysis
+
+# ── Vision / image utilities ───────────────────────────────────────────────
+Pillow                  # PIL — frame dimensions, image I/O
+imagehash               # perceptual hashing for duplicate frame detection
+easyocr                 # text detection in keyframes (text_processor.py)
+
+# ── File watching ──────────────────────────────────────────────────────────
+watchdog                # filesystem watcher for ingest hot-folder mode
+
+# ── Claude CLI / API ───────────────────────────────────────────────────────
+# Vision tagging (vision_tagger.py) uses the `claude` CLI — no API key needed.
+# The anthropic SDK is kept for any direct API usage elsewhere in the project.
+anthropic               # Anthropic Python SDK
+python-dotenv           # .env loading for optional config overrides
