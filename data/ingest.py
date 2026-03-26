@@ -25,6 +25,28 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
+# ── New pipeline modules ─────────────────────────────────────────────────────
+# Imported lazily inside functions so the core pipeline works even if these
+# modules have missing optional deps (easyocr, anthropic, etc.).
+
+def _import_vision_tagger():
+    try:
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        from vision_tagger import tag_clips_for_video
+        return tag_clips_for_video
+    except Exception as e:
+        log.warning("vision_tagger unavailable: %s", e)
+        return None
+
+def _import_text_processor():
+    try:
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        from text_processor import process_text_for_video
+        return process_text_for_video
+    except Exception as e:
+        log.warning("text_processor unavailable: %s", e)
+        return None
+
 # ── Optional dependencies ────────────────────────────────────────────────────
 try:
     import librosa
@@ -49,6 +71,7 @@ except ImportError:
 
 # ── Paths ─────────────────────────────────────────────────────────────────────
 ROOT = Path(__file__).resolve().parent.parent
+SEQUENCE_TEMPLATES_DIR = ROOT / "library" / "sequence_templates"
 GOLD_DIR = Path.home() / "Ascension-Engine" / "input" / "gold"
 LIBRARY_DIR = ROOT / "library"
 CLIPS_DIR = LIBRARY_DIR / "clips"
@@ -488,6 +511,82 @@ def print_summary(vid_id: str, clips: list[dict], profile: dict, duration: float
     print(f"  Peak Moments  : {profile['audio']['peak_moments_sec'][:5]}")
     print("═" * 60 + "\n")
 
+# ── Sequence Template Writer ──────────────────────────────────────────────────
+
+def write_sequence_template(
+    vid_id: str,
+    clips: list[dict],
+    scene_times: list[float],
+    audio_data: dict,
+    profile: dict,
+    dry_run: bool = False,
+) -> None:
+    """
+    Write a structured sequence template to library/sequence_templates/<vid_id>.json.
+    Captures clip order, durations, beat alignment points, and transition types.
+    """
+    beat_times = audio_data.get("beat_times", [])
+
+    def _transition_type(clip: dict) -> str:
+        """Classify transition based on clip duration."""
+        d = clip.get("duration_sec", 2.0)
+        if d < 1.2:
+            return "hard_cut"
+        if d > 3.5:
+            return "hold"
+        return "cut"
+
+    def _nearest_beat(t: float) -> float | None:
+        if not beat_times:
+            return None
+        nearest = min(beat_times, key=lambda b: abs(b - t))
+        return round(nearest, 3) if abs(nearest - t) < 0.5 else None
+
+    clip_order = []
+    for i, clip in enumerate(clips):
+        start = clip.get("start_sec", 0.0)
+        entry = {
+            "index": i,
+            "clip_id": clip["clip_id"],
+            "start_sec": start,
+            "end_sec": clip.get("end_sec", start + clip.get("duration_sec", 0)),
+            "duration_sec": clip.get("duration_sec", 0),
+            "tags": clip.get("tags", []),
+            "beat_anchor_sec": _nearest_beat(start),
+            "transition_type": _transition_type(clip),
+            "rank": clip.get("rank", 0.5),
+        }
+        clip_order.append(entry)
+
+    template = {
+        "vid_id": vid_id,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "total_clips": len(clips),
+        "total_duration_sec": clips[-1]["end_sec"] if clips else 0,
+        "bpm": audio_data.get("bpm", 0),
+        "avg_cut_length_sec": profile.get("cut_rhythm", {}).get("avg_cut_length_sec", 0),
+        "beat_alignment": profile.get("audio", {}).get("beat_cut_alignment", "unknown"),
+        "color_grade": profile.get("visuals", {}).get("color_grade", "unknown"),
+        "hook_pacing_sec": profile.get("cut_rhythm", {}).get("hook_pacing_sec", [0, 3]),
+        "clip_order": clip_order,
+        "beat_drop_points_sec": audio_data.get("peak_moments_sec", [])[:5],
+        "transition_summary": {
+            "hard_cut": sum(1 for c in clip_order if c["transition_type"] == "hard_cut"),
+            "cut": sum(1 for c in clip_order if c["transition_type"] == "cut"),
+            "hold": sum(1 for c in clip_order if c["transition_type"] == "hold"),
+        },
+    }
+
+    if dry_run:
+        log.info("[dry-run] Would write sequence template for %s", vid_id)
+        return
+
+    SEQUENCE_TEMPLATES_DIR.mkdir(parents=True, exist_ok=True)
+    out_path = SEQUENCE_TEMPLATES_DIR / f"{vid_id}.json"
+    out_path.write_text(json.dumps(template, indent=2))
+    log.info("   Sequence template saved → %s", out_path.name)
+
+
 # ── Core Ingest Ritual ────────────────────────────────────────────────────────
 
 def ingest_video(video_path: Path, dry_run: bool = False) -> None:
@@ -496,7 +595,7 @@ def ingest_video(video_path: Path, dry_run: bool = False) -> None:
     require_ffmpeg()
 
     ensure_dirs(CLIPS_DIR, RAW_DIR, ASSETS_VIDEO, ASSETS_AUDIO,
-                ASSETS_THUMB, STYLE_PROFILES_DIR)
+                ASSETS_THUMB, STYLE_PROFILES_DIR, SEQUENCE_TEMPLATES_DIR)
 
     vid_id = video_id(video_path)
     log.info("   Video ID: %s", vid_id)
@@ -507,18 +606,29 @@ def ingest_video(video_path: Path, dry_run: bool = False) -> None:
         shutil.copy2(video_path, raw_copy)
 
     # 1. Scene detection
-    log.info("   [1/6] Scene detection …")
+    log.info("   [1/9] Scene detection …")
     scene_times = detect_scenes(video_path, threshold=0.4)
     log.info("         %d scenes detected", len(scene_times))
 
     # 2. Keyframe extraction
-    log.info("   [2/6] Extracting keyframes …")
+    log.info("   [2/9] Extracting keyframes …")
     frames_dir = ASSETS_THUMB / vid_id
     frames = extract_keyframes(video_path, scene_times, frames_dir, dry_run)
     log.info("         %d frames extracted", len(frames))
 
-    # 3. Audio extraction + analysis
-    log.info("   [3/6] Audio extraction + BPM analysis …")
+    # 3. Text detection + removal
+    log.info("   [3/9] Text detection + OCR template extraction …")
+    _text_proc = _import_text_processor()
+    if _text_proc and (dry_run or frames_dir.exists()):
+        try:
+            _text_proc(vid_id, frames_dir, dry_run)
+        except Exception as e:
+            log.warning("Text processor failed (non-fatal): %s", e)
+    else:
+        log.info("         Text detection skipped.")
+
+    # 4. Audio extraction + analysis
+    log.info("   [4/9] Audio extraction + BPM analysis …")
     wav_path = extract_audio(video_path, ASSETS_AUDIO, dry_run)
     if not dry_run and wav_path.exists():
         audio_data = analyze_audio(wav_path)
@@ -526,15 +636,15 @@ def ingest_video(video_path: Path, dry_run: bool = False) -> None:
         audio_data = {"bpm": 0, "beat_times": [], "peak_moments_sec": []}
     log.info("         BPM: %d  |  %d beat markers", audio_data["bpm"], len(audio_data.get("beat_times", [])))
 
-    # 4. Color analysis
-    log.info("   [4/6] Color histogram analysis …")
+    # 5. Color analysis
+    log.info("   [5/9] Color histogram analysis …")
     color_data = analyze_color_grade(frames)
     log.info("         Grade: %s  (R%.0f G%.0f B%.0f)",
              color_data["color_grade"], color_data.get("avg_r", 0),
              color_data.get("avg_g", 0), color_data.get("avg_b", 0))
 
-    # 5. Style profile
-    log.info("   [5/6] Generating style-profile.json …")
+    # 6. Style profile
+    log.info("   [6/9] Generating style-profile.json …")
     duration = ffprobe_duration(video_path)
     creator = video_path.stem.split("_")[0] if "_" in video_path.stem else "unknown"
     profile = build_style_profile(vid_id, scene_times, audio_data, color_data, duration, creator)
@@ -542,10 +652,28 @@ def ingest_video(video_path: Path, dry_run: bool = False) -> None:
     save_json(profile_path, profile, dry_run)
     log.info("         Saved → %s", profile_path.name)
 
-    # 6. Clip segmentation
-    log.info("   [6/6] Exporting scene clips …")
+    # 7. Clip segmentation
+    log.info("   [7/9] Exporting scene clips …")
     clips = export_clip_segments(video_path, scene_times, vid_id, CLIPS_DIR, dry_run)
     log.info("         %d clips exported", len(clips))
+
+    # 8. Vision tagging
+    log.info("   [8/9] Vision tagging via Claude …")
+    _tagger = _import_vision_tagger()
+    if _tagger:
+        try:
+            clips = _tagger(vid_id, clips, ASSETS_THUMB, dry_run)
+        except Exception as e:
+            log.warning("Vision tagger failed (non-fatal): %s", e)
+    else:
+        log.info("         Vision tagging skipped (anthropic not available or no API key).")
+
+    # 9. Sequence template
+    log.info("   [9/9] Writing sequence template …")
+    try:
+        write_sequence_template(vid_id, clips, scene_times, audio_data, profile, dry_run)
+    except Exception as e:
+        log.warning("Sequence template failed (non-fatal): %s", e)
 
     # Update manifest + tags index
     update_clip_manifest(clips, dry_run)
