@@ -11,5 +11,5 @@
     "resolveJsonModule": true,
     "skipLibCheck": true
   },
-  "include": ["remotion/**/*"]
+  "include": ["remotion/**/*", "src/**/*"]
 }
