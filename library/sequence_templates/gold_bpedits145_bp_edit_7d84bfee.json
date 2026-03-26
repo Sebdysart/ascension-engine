@@ -1,0 +1,182 @@
+{
+  "vid_id": "gold_bpedits145_bp_edit_7d84bfee",
+  "generated_at": "2026-03-26T22:04:52.027338+00:00",
+  "total_clips": 7,
+  "total_duration_sec": 23.614,
+  "bpm": 108,
+  "avg_cut_length_sec": 3.0,
+  "beat_alignment": "loose",
+  "color_grade": "TealOrange",
+  "hook_pacing_sec": [
+    0,
+    6.0
+  ],
+  "clip_order": [
+    {
+      "index": 0,
+      "clip_id": "gold_bpedits145_bp_edit_7d84bfee_scene000",
+      "start_sec": 0.0,
+      "end_sec": 3.0,
+      "duration_sec": 3.0,
+      "tags": [
+        "text_overlay_heavy",
+        "talking_head_direct",
+        "street_walk",
+        "outdoor_natural",
+        "construction_site",
+        "reaction_moment",
+        "face_closeup_push",
+        "street_walk_outdoor",
+        "transformation_reveal",
+        "dark_cinema_mood"
+      ],
+      "beat_anchor_sec": 0.093,
+      "transition_type": "cut",
+      "rank": 0.5
+    },
+    {
+      "index": 1,
+      "clip_id": "gold_bpedits145_bp_edit_7d84bfee_scene001",
+      "start_sec": 3.0,
+      "end_sec": 6.0,
+      "duration_sec": 3.0,
+      "tags": [
+        "text_overlay_heavy",
+        "talking_head_direct",
+        "street_walk",
+        "outdoor_natural",
+        "construction_site",
+        "reaction_moment",
+        "face_closeup_push",
+        "street_walk_outdoor",
+        "transformation_reveal",
+        "dark_cinema_mood"
+      ],
+      "beat_anchor_sec": 2.926,
+      "transition_type": "cut",
+      "rank": 0.5
+    },
+    {
+      "index": 2,
+      "clip_id": "gold_bpedits145_bp_edit_7d84bfee_scene002",
+      "start_sec": 6.0,
+      "end_sec": 9.0,
+      "duration_sec": 3.0,
+      "tags": [
+        "text_overlay_heavy",
+        "talking_head_direct",
+        "street_walk",
+        "outdoor_natural",
+        "construction_site",
+        "reaction_moment",
+        "face_closeup_push",
+        "street_walk_outdoor",
+        "transformation_reveal",
+        "dark_cinema_mood"
+      ],
+      "beat_anchor_sec": 5.782,
+      "transition_type": "cut",
+      "rank": 0.5
+    },
+    {
+      "index": 3,
+      "clip_id": "gold_bpedits145_bp_edit_7d84bfee_scene003",
+      "start_sec": 9.0,
+      "end_sec": 12.0,
+      "duration_sec": 3.0,
+      "tags": [
+        "text_overlay_heavy",
+        "talking_head_direct",
+        "street_walk",
+        "outdoor_natural",
+        "construction_site",
+        "reaction_moment",
+        "face_closeup_push",
+        "street_walk_outdoor",
+        "transformation_reveal",
+        "dark_cinema_mood"
+      ],
+      "beat_anchor_sec": 9.149,
+      "transition_type": "cut",
+      "rank": 0.5
+    },
+    {
+      "index": 4,
+      "clip_id": "gold_bpedits145_bp_edit_7d84bfee_scene004",
+      "start_sec": 12.0,
+      "end_sec": 15.0,
+      "duration_sec": 3.0,
+      "tags": [
+        "text_overlay_heavy",
+        "talking_head_direct",
+        "street_walk",
+        "outdoor_natural",
+        "construction_site",
+        "reaction_moment",
+        "face_closeup_push",
+        "street_walk_outdoor",
+        "transformation_reveal",
+        "dark_cinema_mood"
+      ],
+      "beat_anchor_sec": 11.958,
+      "transition_type": "cut",
+      "rank": 0.5
+    },
+    {
+      "index": 5,
+      "clip_id": "gold_bpedits145_bp_edit_7d84bfee_scene005",
+      "start_sec": 15.0,
+      "end_sec": 18.0,
+      "duration_sec": 3.0,
+      "tags": [
+        "text_overlay_heavy",
+        "talking_head_direct",
+        "street_walk",
+        "outdoor_natural",
+        "construction_site",
+        "reaction_moment",
+        "face_closeup_push",
+        "street_walk_outdoor",
+        "transformation_reveal",
+        "dark_cinema_mood"
+      ],
+      "beat_anchor_sec": 14.768,
+      "transition_type": "cut",
+      "rank": 0.5
+    },
+    {
+      "index": 6,
+      "clip_id": "gold_bpedits145_bp_edit_7d84bfee_scene006",
+      "start_sec": 18.0,
+      "end_sec": 23.614,
+      "duration_sec": 5.614,
+      "tags": [
+        "text_overlay_heavy",
+        "talking_head_direct",
+        "street_walk",
+        "outdoor_natural",
+        "construction_site",
+        "reaction_moment",
+        "face_closeup_push",
+        "street_walk_outdoor",
+        "transformation_reveal",
+        "dark_cinema_mood"
+      ],
+      "beat_anchor_sec": 18.158,
+      "transition_type": "hold",
+      "rank": 0.5
+    }
+  ],
+  "beat_drop_points_sec": [
+    0.673,
+    0.697,
+    0.72,
+    1.254,
+    1.277
+  ],
+  "transition_summary": {
+    "hard_cut": 0,
+    "cut": 6,
+    "hold": 1
+  }
+}

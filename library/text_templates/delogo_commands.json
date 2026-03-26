@@ -53,5 +53,156 @@
       }
     ],
     "generated_at": "2026-03-26T12:01:36.965565+00:00"
+  },
+  "gold_bpedits145_bp_edit_7d84bfee": {
+    "delogo_filters": [],
+    "ffmpeg_filter_chain": null,
+    "frame_details": [
+      {
+        "frame": "every1s_0001.jpg",
+        "hits": [
+          {
+            "text": "*sees attractive girl?",
+            "type": "caption",
+            "confidence": 0.597,
+            "delogo": "delogo=x=66:y=387:w=424:h=77"
+          }
+        ]
+      },
+      {
+        "frame": "every1s_0003.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0005.jpg",
+        "hits": [
+          {
+            "text": "Soog",
+            "type": "caption",
+            "confidence": 0.45,
+            "delogo": "delogo=x=36:y=886:w=112:h=48"
+          }
+        ]
+      },
+      {
+        "frame": "every1s_0007.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0009.jpg",
+        "hits": [
+          {
+            "text": "Jawmax",
+            "type": "caption",
+            "confidence": 0.708,
+            "delogo": "delogo=x=68:y=552:w=112:h=42"
+          },
+          {
+            "text": "Sub-3",
+            "type": "caption",
+            "confidence": 0.494,
+            "delogo": "delogo=x=203:y=543:w=148:h=58"
+          },
+          {
+            "text": "PSL Scale",
+            "type": "caption",
+            "confidence": 1.0,
+            "delogo": "delogo=x=210:y=592:w=134:h=44"
+          },
+          {
+            "text": "PSL Score",
+            "type": "caption",
+            "confidence": 0.999,
+            "delogo": "delogo=x=50:y=654:w=126:h=42"
+          },
+          {
+            "text": "Mindset",
+            "type": "caption",
+            "confidence": 0.999,
+            "delogo": "delogo=x=272:y=656:w=104:h=40"
+          },
+          {
+            "text": "Cope",
+            "type": "caption",
+            "confidence": 0.999,
+            "delogo": "delogo=x=273:y=689:w=79:h=44"
+          },
+          {
+            "text": "Strategy",
+            "type": "caption",
+            "confidence": 1.0,
+            "delogo": "delogo=x=49:y=784:w=110:h=47"
+          },
+          {
+            "text": "Jawline Type",
+            "type": "caption",
+            "confidence": 1.0,
+            "delogo": "delogo=x=271:y=784:w=153:h=46"
+          },
+          {
+            "text": "Copemaxxing",
+            "type": "caption",
+            "confidence": 0.998,
+            "delogo": "delogo=x=51:y=817:w=167:h=47"
+          },
+          {
+            "text": "Recessed",
+            "type": "caption",
+            "confidence": 1.0,
+            "delogo": "delogo=x=274:y=820:w=124:h=40"
+          }
+        ]
+      },
+      {
+        "frame": "every1s_0011.jpg",
+        "hits": [
+          {
+            "text": "SHE LAUGHED",
+            "type": "caption",
+            "confidence": 0.965,
+            "delogo": "delogo=x=125:y=726:w=304:h=61"
+          }
+        ]
+      },
+      {
+        "frame": "every1s_0013.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0015.jpg",
+        "hits": [
+          {
+            "text": "Mogged",
+            "type": "overlay",
+            "confidence": 1.0,
+            "delogo": "delogo=x=214:y=409:w=279:h=181"
+          }
+        ]
+      },
+      {
+        "frame": "every1s_0017.jpg",
+        "hits": [
+          {
+            "text": "5",
+            "type": "caption",
+            "confidence": 0.482,
+            "delogo": "delogo=x=292:y=934:w=142:h=166"
+          }
+        ]
+      },
+      {
+        "frame": "every1s_0019.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0021.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0023.jpg",
+        "hits": []
+      }
+    ],
+    "generated_at": "2026-03-26T22:04:10.199444+00:00"
   }
 }

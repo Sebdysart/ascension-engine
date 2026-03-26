@@ -1,16 +1,105 @@
 {
   "version": "1.0",
-  "last_updated": "2026-03-26T12:01:45.465944+00:00",
+  "last_updated": "2026-03-26T22:04:52.029171+00:00",
   "tags": {
     "face_closeup": [],
     "gym_lift": [],
-    "transformation_reveal": [],
+    "transformation_reveal": [
+      "gold_bpedits145_bp_edit_7d84bfee_scene000",
+      "gold_bpedits145_bp_edit_7d84bfee_scene001",
+      "gold_bpedits145_bp_edit_7d84bfee_scene002",
+      "gold_bpedits145_bp_edit_7d84bfee_scene003",
+      "gold_bpedits145_bp_edit_7d84bfee_scene004",
+      "gold_bpedits145_bp_edit_7d84bfee_scene005",
+      "gold_bpedits145_bp_edit_7d84bfee_scene006"
+    ],
     "phonk_drop": [],
     "text_punch": [],
     "slow_motion": [],
     "before_after": [],
     "aggressive_ascension": [],
     "high_energy": [],
-    "glow_up_reveal": []
+    "glow_up_reveal": [],
+    "text_overlay_heavy": [
+      "gold_bpedits145_bp_edit_7d84bfee_scene000",
+      "gold_bpedits145_bp_edit_7d84bfee_scene001",
+      "gold_bpedits145_bp_edit_7d84bfee_scene002",
+      "gold_bpedits145_bp_edit_7d84bfee_scene003",
+      "gold_bpedits145_bp_edit_7d84bfee_scene004",
+      "gold_bpedits145_bp_edit_7d84bfee_scene005",
+      "gold_bpedits145_bp_edit_7d84bfee_scene006"
+    ],
+    "talking_head_direct": [
+      "gold_bpedits145_bp_edit_7d84bfee_scene000",
+      "gold_bpedits145_bp_edit_7d84bfee_scene001",
+      "gold_bpedits145_bp_edit_7d84bfee_scene002",
+      "gold_bpedits145_bp_edit_7d84bfee_scene003",
+      "gold_bpedits145_bp_edit_7d84bfee_scene004",
+      "gold_bpedits145_bp_edit_7d84bfee_scene005",
+      "gold_bpedits145_bp_edit_7d84bfee_scene006"
+    ],
+    "street_walk": [
+      "gold_bpedits145_bp_edit_7d84bfee_scene000",
+      "gold_bpedits145_bp_edit_7d84bfee_scene001",
+      "gold_bpedits145_bp_edit_7d84bfee_scene002",
+      "gold_bpedits145_bp_edit_7d84bfee_scene003",
+      "gold_bpedits145_bp_edit_7d84bfee_scene004",
+      "gold_bpedits145_bp_edit_7d84bfee_scene005",
+      "gold_bpedits145_bp_edit_7d84bfee_scene006"
+    ],
+    "outdoor_natural": [
+      "gold_bpedits145_bp_edit_7d84bfee_scene000",
+      "gold_bpedits145_bp_edit_7d84bfee_scene001",
+      "gold_bpedits145_bp_edit_7d84bfee_scene002",
+      "gold_bpedits145_bp_edit_7d84bfee_scene003",
+      "gold_bpedits145_bp_edit_7d84bfee_scene004",
+      "gold_bpedits145_bp_edit_7d84bfee_scene005",
+      "gold_bpedits145_bp_edit_7d84bfee_scene006"
+    ],
+    "construction_site": [
+      "gold_bpedits145_bp_edit_7d84bfee_scene000",
+      "gold_bpedits145_bp_edit_7d84bfee_scene001",
+      "gold_bpedits145_bp_edit_7d84bfee_scene002",
+      "gold_bpedits145_bp_edit_7d84bfee_scene003",
+      "gold_bpedits145_bp_edit_7d84bfee_scene004",
+      "gold_bpedits145_bp_edit_7d84bfee_scene005",
+      "gold_bpedits145_bp_edit_7d84bfee_scene006"
+    ],
+    "reaction_moment": [
+      "gold_bpedits145_bp_edit_7d84bfee_scene000",
+      "gold_bpedits145_bp_edit_7d84bfee_scene001",
+      "gold_bpedits145_bp_edit_7d84bfee_scene002",
+      "gold_bpedits145_bp_edit_7d84bfee_scene003",
+      "gold_bpedits145_bp_edit_7d84bfee_scene004",
+      "gold_bpedits145_bp_edit_7d84bfee_scene005",
+      "gold_bpedits145_bp_edit_7d84bfee_scene006"
+    ],
+    "face_closeup_push": [
+      "gold_bpedits145_bp_edit_7d84bfee_scene000",
+      "gold_bpedits145_bp_edit_7d84bfee_scene001",
+      "gold_bpedits145_bp_edit_7d84bfee_scene002",
+      "gold_bpedits145_bp_edit_7d84bfee_scene003",
+      "gold_bpedits145_bp_edit_7d84bfee_scene004",
+      "gold_bpedits145_bp_edit_7d84bfee_scene005",
+      "gold_bpedits145_bp_edit_7d84bfee_scene006"
+    ],
+    "street_walk_outdoor": [
+      "gold_bpedits145_bp_edit_7d84bfee_scene000",
+      "gold_bpedits145_bp_edit_7d84bfee_scene001",
+      "gold_bpedits145_bp_edit_7d84bfee_scene002",
+      "gold_bpedits145_bp_edit_7d84bfee_scene003",
+      "gold_bpedits145_bp_edit_7d84bfee_scene004",
+      "gold_bpedits145_bp_edit_7d84bfee_scene005",
+      "gold_bpedits145_bp_edit_7d84bfee_scene006"
+    ],
+    "dark_cinema_mood": [
+      "gold_bpedits145_bp_edit_7d84bfee_scene000",
+      "gold_bpedits145_bp_edit_7d84bfee_scene001",
+      "gold_bpedits145_bp_edit_7d84bfee_scene002",
+      "gold_bpedits145_bp_edit_7d84bfee_scene003",
+      "gold_bpedits145_bp_edit_7d84bfee_scene004",
+      "gold_bpedits145_bp_edit_7d84bfee_scene005",
+      "gold_bpedits145_bp_edit_7d84bfee_scene006"
+    ]
   }
 }
