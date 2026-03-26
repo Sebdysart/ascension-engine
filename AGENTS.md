@@ -14,6 +14,22 @@ Ascension Engine v2.1 — AI-powered short-form video production system built on
 | Ingest Pipeline | `python3 data/ingest.py` | N/A | Watch mode for video ingest; use `--dry-run --once <file>` for testing |
 | Weekly Analyzer | `python3 data/analyze.py` | N/A | Reads `data/analytics.db`; use `--report-only` for safe testing |
 
+### Full Pipeline Commands
+
+| Step | Command | What it does |
+|------|---------|-------------|
+| Ingest gold | `npm run ingest -- --once <file.mp4>` | Runs scene detection, audio analysis, color profiling, clip export |
+| Watch mode | `npm run ingest` | Auto-detects new MP4s in `input/gold/` |
+| Generate edit | `npm run generate -- --archetype GlowUp --render` | DNA transfer: selects clips → renders MP4 |
+| Batch generate | `npm run generate -- --batch 4 --archetype GlowUp --render` | Generate multiple compositions |
+| Compare (anti-slop) | `npm run compare -- -g out/edit.mp4 --gold-dir input/gold/` | SSIM + color + pacing + beat comparison |
+| Feedback loop | `npm run feedback` | Reads analytics DB → adjusts clip ranks |
+| Weekly analysis | `npm run analyze` | Bandit optimizer + style profile update |
+
+### ts-node quirk
+
+The `dna-transfer.ts` script must run with `--compiler-options '{"module":"commonjs","moduleResolution":"node"}'` because the project's `tsconfig.json` uses `module: ES2020` / `moduleResolution: bundler` (required for Remotion v4 types), but ts-node needs commonjs for Node.js execution. The `npm run generate` script handles this automatically.
+
 ### Gotchas
 
 - The `remotion/` directory name collides with the `remotion` npm package. Do **not** set `baseUrl` in `tsconfig.json` to `"."` — TypeScript will resolve bare `"remotion"` imports to the local directory instead of `node_modules`.

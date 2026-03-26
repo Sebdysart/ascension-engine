@@ -4,3 +4,4 @@ imagehash
 watchdog
 Pillow
 numpy
+scikit-image

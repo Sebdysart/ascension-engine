@@ -4,11 +4,16 @@
   "description": "AI-powered short-form video production system for male self-improvement content",
   "private": true,
   "scripts": {
-    "studio": "remotion studio",
-    "render": "remotion render",
+    "studio": "remotion studio remotion/index.ts",
+    "render": "remotion render remotion/index.ts",
     "lint": "eslint . --ext .ts,.tsx",
     "typecheck": "tsc --noEmit",
     "build": "tsc",
+    "generate": "ts-node --compiler-options '{\"module\":\"commonjs\",\"moduleResolution\":\"node\"}' src/scripts/dna-transfer.ts",
+    "ingest": "python3 data/ingest.py",
+    "compare": "python3 data/compare.py",
+    "feedback": "python3 data/feedback.py",
+    "analyze": "python3 data/analyze.py",
     "test": "echo 'No test framework configured yet'"
   },
   "dependencies": {
