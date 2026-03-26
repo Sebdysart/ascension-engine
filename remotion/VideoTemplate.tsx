@@ -28,9 +28,22 @@ export interface ClipSegment {
   trimStartFrames?: number;
 }
 
+/** A single timed caption entry matching editing-rules.md spec. */
+export interface CaptionEntry {
+  /** Raw caption text — will be auto-broken at 18 chars. */
+  text: string;
+  /** Frame at which this caption appears. */
+  startFrame: number;
+  /** How many frames the caption stays visible (spoken duration + 4 frame buffer). */
+  durationFrames: number;
+}
+
 export interface VideoTemplateProps {
   hookText: string;
   bodyClips: ClipSegment[];
+  /** Structured caption track (preferred — use instead of overlayTexts). */
+  captions?: CaptionEntry[];
+  /** Legacy overlay texts — still supported for backwards compatibility. */
   overlayTexts?: { text: string; startFrame: number; durationFrames: number }[];
   ctaText?: string;
   musicPath?: string;
@@ -53,6 +66,42 @@ const COLOR_GRADES: Record<string, string> = {
 
 // ── Sub-components ─────────────────────────────────────────────────────────
 
+// ── Caption utilities ───────────────────────────────────────────────────────
+
+const CAPTION_MAX_CHARS = 18;
+
+/**
+ * Break text at natural word boundaries so no line exceeds CAPTION_MAX_CHARS.
+ * Matches editing-rules.md §4: "Break at natural speech pause, not mid-word."
+ */
+function breakCaptionLines(text: string, maxChars: number = CAPTION_MAX_CHARS): string[] {
+  const words = text.split(/\s+/).filter(Boolean);
+  const lines: string[] = [];
+  let current = "";
+
+  for (const word of words) {
+    const candidate = current ? `${current} ${word}` : word;
+    if (candidate.length <= maxChars) {
+      current = candidate;
+    } else {
+      if (current) lines.push(current);
+      // If a single word exceeds limit, hard-break it
+      if (word.length > maxChars) {
+        for (let i = 0; i < word.length; i += maxChars) {
+          lines.push(word.slice(i, i + maxChars));
+        }
+        current = "";
+      } else {
+        current = word;
+      }
+    }
+  }
+  if (current) lines.push(current);
+  return lines;
+}
+
+// ── GlowText — single caption block ────────────────────────────────────────
+
 const GlowText: React.FC<{
   text: string;
   fontSize?: string;
@@ -61,11 +110,13 @@ const GlowText: React.FC<{
 }> = ({ text, fontSize = "3.2rem", bottom = 180, opacity = 1 }) => {
   const frame = useCurrentFrame();
 
-  // Punch-in: scale 1.2 → 1.0 over 6 frames
+  // Punch-in: scale 1.2 → 1.0 over 6 frames (editing-rules.md §4)
   const scale = interpolate(frame, [0, 6], [1.2, 1.0], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
+
+  const lines = breakCaptionLines(text.toUpperCase());
 
   return (
     <div
@@ -82,6 +133,7 @@ const GlowText: React.FC<{
         textTransform: "uppercase",
         letterSpacing: "0.04em",
         lineHeight: 1.1,
+        // Glow effect: white glow 6px blur + black stroke 3px (editing-rules.md §4)
         textShadow: `
           0 0 6px rgba(255,255,255,0.8),
           0 0 12px rgba(255,255,255,0.4),
@@ -95,8 +147,40 @@ const GlowText: React.FC<{
         zIndex: 10,
       }}
     >
-      {text}
+      {lines.map((line, i) => (
+        <div key={i}>{line}</div>
+      ))}
     </div>
+  );
+};
+
+// ── CaptionTrack — full timed caption system ────────────────────────────────
+
+/**
+ * Renders a full caption track from an array of CaptionEntry objects.
+ * Each entry gets its own <Sequence> wrapper so punch-in resets per caption.
+ * Positioning: lower third (bottom 180px) matching editing-rules.md §4.
+ */
+const CaptionTrack: React.FC<{
+  captions: CaptionEntry[];
+  fontSize?: string;
+}> = ({ captions, fontSize = "3.0rem" }) => {
+  return (
+    <>
+      {captions.map((caption, i) => (
+        <Sequence
+          key={`caption-${i}`}
+          from={caption.startFrame}
+          durationInFrames={caption.durationFrames}
+        >
+          <GlowText
+            text={caption.text}
+            fontSize={fontSize}
+            bottom={180}
+          />
+        </Sequence>
+      ))}
+    </>
   );
 };
 
@@ -219,6 +303,7 @@ const CTACard: React.FC<{ text: string }> = ({ text }) => {
 export const VideoTemplate: React.FC<VideoTemplateProps> = ({
   hookText,
   bodyClips = [],
+  captions = [],
   overlayTexts = [],
   ctaText = "DISCIPLINE = RESULTS. DROP YOUR GLOW-UP PROGRESS BELOW.",
   musicPath,
@@ -302,8 +387,11 @@ export const VideoTemplate: React.FC<VideoTemplateProps> = ({
 
       </AbsoluteFill>
 
-      {/* ── OVERLAY TEXTS (rendered above color grade) ── */}
-      {overlayTexts.map((ot, i) => (
+      {/* ── CAPTION TRACK (structured, editing-rules.md compliant) ── */}
+      {captions.length > 0 && <CaptionTrack captions={captions} />}
+
+      {/* ── OVERLAY TEXTS (legacy — rendered above color grade) ── */}
+      {captions.length === 0 && overlayTexts.map((ot, i) => (
         <Sequence key={`ot-${i}`} from={ot.startFrame} durationInFrames={ot.durationFrames}>
           <GlowText text={ot.text} fontSize="2.8rem" bottom={160} />
         </Sequence>
