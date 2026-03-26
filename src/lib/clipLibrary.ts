@@ -340,3 +340,62 @@ export function getBrutalTimeline(
 
   return timeline;
 }
+
+// ── Sequence Template Remix ──────────────────────────────────────────────────
+
+const SEQUENCE_DIR = path.join(ROOT, 'library', 'sequence_templates');
+
+export function listSequenceTemplates(): string[] {
+  if (!fs.existsSync(SEQUENCE_DIR)) return [];
+  return fs.readdirSync(SEQUENCE_DIR)
+    .filter(f => f.endsWith('.json'))
+    .map(f => f.replace('.json', ''));
+}
+
+export function remixSequence(templateId: string, fps = 30): BPTimelineEntry[] {
+  const filePath = path.join(SEQUENCE_DIR, `${templateId}.json`);
+  if (!fs.existsSync(filePath)) throw new Error(`Template not found: ${templateId}`);
+  const template = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+
+  const allClips = getAllClips();
+  if (allClips.length === 0) return [];
+
+  const bySource = new Map<string, Clip[]>();
+  for (const c of allClips) {
+    if (!bySource.has(c.source_video_id)) bySource.set(c.source_video_id, []);
+    bySource.get(c.source_video_id)!.push(c);
+  }
+  const pool: Clip[] = [];
+  const sources = [...bySource.values()];
+  const maxLen = Math.max(...sources.map(s => s.length));
+  for (let i = 0; i < maxLen; i++) {
+    for (const s of sources) {
+      if (i < s.length) pool.push(s[i]);
+    }
+  }
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+
+  const timeline: BPTimelineEntry[] = [];
+  for (let i = 0; i < template.slots.length; i++) {
+    const slot = template.slots[i];
+    const clip = pool[i % pool.length];
+    const durationFrames = Math.round(slot.duration_sec * fps);
+    const clipMaxFrames = Math.round(clip.duration_sec * fps);
+    const actualDuration = Math.min(durationFrames, clipMaxFrames);
+    const maxTrimStart = Math.max(0, clipMaxFrames - actualDuration);
+    const trimStart = maxTrimStart > 0 ? Math.floor(Math.random() * maxTrimStart) : 0;
+
+    timeline.push({
+      clip,
+      startFrame: Math.round(slot.start_sec * fps),
+      durationFrames: actualDuration,
+      trimStartFrames: trimStart,
+      on_beat: slot.on_beat,
+      is_impact: slot.is_impact,
+    });
+  }
+  return timeline;
+}

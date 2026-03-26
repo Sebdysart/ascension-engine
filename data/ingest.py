@@ -472,6 +472,63 @@ def build_style_profile(
         "ingest_timestamp": datetime.now(timezone.utc).isoformat(),
     }
 
+# ── Library Asset Builders ────────────────────────────────────────────────────
+
+SEQUENCE_TEMPLATES_DIR = LIBRARY_DIR / "sequence_templates"
+GRADE_PRESETS_DIR = LIBRARY_DIR / "grade_presets"
+BLUEPRINTS_DIR = LIBRARY_DIR / "blueprints"
+
+
+def build_sequence_template(vid_id, clips, profile, source_creator):
+    """Extract reusable timeline template from ingested video."""
+    beat_times = profile.get("beat_times_sec", [])
+    peak_moments = set(round(p, 1) for p in profile.get("audio", {}).get("peak_moments_sec", []))
+
+    slots = []
+    for i, clip in enumerate(clips):
+        start = clip["start_sec"]
+        dur = clip["duration_sec"]
+        on_beat = any(abs(start - bt) < 0.08 for bt in beat_times) if beat_times else False
+        is_impact = any(abs(start - p) < 0.2 for p in peak_moments)
+
+        slots.append({
+            "index": i, "start_sec": round(start, 3), "duration_sec": round(dur, 3),
+            "on_beat": on_beat, "is_impact": is_impact,
+            "original_clip_id": clip["clip_id"], "preferred_tags": clip.get("tags", []),
+        })
+
+    cut_lengths = [s["duration_sec"] for s in slots if s["duration_sec"] > 0]
+    avg_cut = round(statistics.mean(cut_lengths), 3) if cut_lengths else 0
+    on_beat_count = sum(1 for s in slots if s["on_beat"])
+
+    return {
+        "template_id": f"seq_{vid_id}", "source_video_id": vid_id,
+        "source_creator": source_creator, "bpm": profile.get("bpm", 0),
+        "total_duration_sec": profile.get("total_duration_sec", 0),
+        "total_slots": len(slots), "avg_cut_sec": avg_cut,
+        "cuts_on_beat_pct": round(on_beat_count / max(len(slots), 1), 3),
+        "color_grade": profile.get("visual_grade", {}).get("color_grade", "unknown"),
+        "slots": slots, "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+
+
+def build_grade_preset(vid_id, color_data, profile):
+    """Generate reusable grade preset from color analysis."""
+    grade = color_data.get("color_grade", "unknown")
+    css = {"Desaturated": "saturate(0.15) contrast(1.25) brightness(0.95)",
+           "ColdBlue": "saturate(0.9) hue-rotate(20deg) brightness(0.85) contrast(1.2)",
+           "WarmGold": "saturate(1.2) sepia(0.3) brightness(1.05)",
+           "TealOrange": "saturate(1.3) hue-rotate(-10deg) contrast(1.15)",
+           "Neutral": "saturate(1.05) contrast(1.08) brightness(1.0)"}
+    return {
+        "preset_id": f"grade_{vid_id}", "name": f"{grade}_from_{vid_id[:20]}",
+        "css_filter": css.get(grade, "none"),
+        "avg_r": color_data.get("avg_r", 0), "avg_g": color_data.get("avg_g", 0),
+        "avg_b": color_data.get("avg_b", 0), "source_videos": [vid_id],
+        "description": f"From {profile.get('source_creator', 'unknown')} — {grade}",
+    }
+
+
 # ── Tags Index Update ─────────────────────────────────────────────────────────
 
 def update_tags_index(clips: list[dict], dry_run: bool) -> None:
@@ -529,16 +586,19 @@ def git_commit(vid_id: str, dry_run: bool) -> None:
 # ── Summary Report ────────────────────────────────────────────────────────────
 
 def print_summary(vid_id: str, clips: list[dict], profile: dict, duration: float) -> None:
+    cr = profile.get("cut_rhythm", {})
+    audio = profile.get("audio", {})
+    grade = profile.get("visual_grade", {}).get("color_grade", "unknown")
     print("\n" + "═" * 60)
     print(f"  ✅  INGEST COMPLETE — {vid_id}")
     print("═" * 60)
     print(f"  Duration      : {duration:.1f}s")
     print(f"  Scenes        : {len(clips)}")
-    print(f"  BPM           : {profile['audio']['bpm']}")
-    print(f"  Color Grade   : {profile['visuals']['color_grade']}")
-    print(f"  Avg Cut       : {profile['cut_rhythm']['avg_cut_length_sec']}s")
-    print(f"  Beat Alignment: {profile['audio']['beat_cut_alignment']}")
-    print(f"  Peak Moments  : {profile['audio']['peak_moments_sec'][:5]}")
+    print(f"  BPM           : {audio.get('bpm', 0)}")
+    print(f"  Color Grade   : {grade}")
+    print(f"  Avg Cut       : {cr.get('avg_cut_sec', 0)}s")
+    print(f"  Cuts on Beat  : {cr.get('cuts_on_beat_pct', 0) * 100:.0f}%")
+    print(f"  Onsets        : {len(audio.get('onset_times_sec', []))}")
     print("═" * 60 + "\n")
 
 # ── Core Ingest Ritual ────────────────────────────────────────────────────────
@@ -603,6 +663,14 @@ def ingest_video(video_path: Path, dry_run: bool = False) -> None:
     # Update manifest + tags index
     update_clip_manifest(clips, dry_run)
     update_tags_index(clips, dry_run)
+
+    # Library assets: sequence template, grade preset, blueprint
+    ensure_dirs(SEQUENCE_TEMPLATES_DIR, GRADE_PRESETS_DIR, BLUEPRINTS_DIR)
+    seq = build_sequence_template(vid_id, clips, profile, creator)
+    save_json(SEQUENCE_TEMPLATES_DIR / f"seq_{vid_id}.json", seq, dry_run)
+    log.info("         Sequence template: %d slots → seq_%s.json", len(seq["slots"]), vid_id[:30])
+    save_json(GRADE_PRESETS_DIR / f"grade_{vid_id}.json", build_grade_preset(vid_id, color_data, profile), dry_run)
+    save_json(BLUEPRINTS_DIR / f"bp_{vid_id}.json", profile, dry_run)
 
     # Git commit
     git_commit(vid_id, dry_run)

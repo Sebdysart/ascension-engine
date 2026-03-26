@@ -17,6 +17,8 @@ import {
   getAllClips,
   getBrutalTimeline,
   invalidateCache,
+  listSequenceTemplates,
+  remixSequence,
 } from '../lib/clipLibrary';
 
 const ROOT = path.resolve(__dirname, '..', '..');
@@ -91,6 +93,7 @@ function pickBlueprint(blueprints: Blueprint[], reference?: string): Blueprint {
 interface Config {
   style: string;
   reference?: string;
+  remix?: string;
   render: boolean;
   batch: number;
   prefix: string;
@@ -98,31 +101,41 @@ interface Config {
 }
 
 function generateOne(config: Config, blueprints: Blueprint[], index: number): string | null {
-  const blueprint = pickBlueprint(blueprints, config.reference);
-  if (!blueprint) {
-    console.log("  [SKIP] No blueprints with beat data available.");
-    return null;
-  }
-
   const ts = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
-  const id = `${config.prefix}_${config.style}_${ts}_${index}`;
+  const mode = config.remix ? "remix" : "blueprint";
+  const id = `${config.prefix}_${config.style}_${mode}_${ts}_${index}`;
   const grade = STYLE_GRADES[config.style] || "dark_cinema";
 
   console.log(`\n${'═'.repeat(60)}`);
   console.log(`  ${id}`);
   console.log(`${'═'.repeat(60)}`);
-  console.log(`  Blueprint : ${blueprint.video_id} (${blueprint.source_creator})`);
-  console.log(`  BPM       : ${blueprint.bpm}`);
-  console.log(`  Beats     : ${blueprint.beat_times_sec.length}`);
-  console.log(`  Avg cut   : ${blueprint.cut_rhythm.avg_cut_sec}s`);
-  console.log(`  Beat sync : ${(blueprint.cut_rhythm.cuts_on_beat_pct * 100).toFixed(0)}%`);
+  console.log(`  Mode      : ${mode}`);
   console.log(`  Grade     : ${grade}`);
 
   invalidateCache();
   const allClips = getAllClips();
   console.log(`  Library   : ${allClips.length} clips`);
 
-  const timeline = getBrutalTimeline(blueprint, FPS, DURATION_SEC);
+  let timeline;
+
+  if (config.remix) {
+    const templates = listSequenceTemplates();
+    const target = config.remix === 'auto'
+      ? templates[Math.floor(Math.random() * templates.length)]
+      : templates.find(t => t.includes(config.remix!)) || templates[0];
+    if (!target) { console.log("  [SKIP] No sequence templates."); return null; }
+    console.log(`  Template  : ${target}`);
+    timeline = remixSequence(target, FPS);
+    console.log(`  Remixed   : ${timeline.length} slots`);
+  } else {
+    const blueprint = pickBlueprint(blueprints, config.reference);
+    if (!blueprint) { console.log("  [SKIP] No blueprints."); return null; }
+    console.log(`  Blueprint : ${blueprint.video_id} (${blueprint.source_creator})`);
+    console.log(`  BPM       : ${blueprint.bpm}`);
+    console.log(`  Avg cut   : ${blueprint.cut_rhythm.avg_cut_sec}s`);
+    console.log(`  Beat sync : ${(blueprint.cut_rhythm.cuts_on_beat_pct * 100).toFixed(0)}%`);
+    timeline = getBrutalTimeline(blueprint, FPS, DURATION_SEC);
+  }
   console.log(`  Timeline  : ${timeline.length} cuts`);
 
   const sources = new Set(timeline.map(t => t.clip.source_video_id));
@@ -141,7 +154,7 @@ function generateOne(config: Config, blueprints: Blueprint[], index: number): st
   if (timeline.length > 8) console.log(`    ... +${timeline.length - 8} more`);
 
   // Build props
-  const impactHold = Math.round((blueprint.motion_fx?.impact_hold_ms || 120) / 1000 * FPS);
+  const impactHold = 4;
   const props = {
     bodyClips: timeline.map(t => ({
       src: t.clip.file,
@@ -196,6 +209,7 @@ function main() {
     switch (args[i]) {
       case '--style': config.style = args[++i]; break;
       case '--reference': config.reference = args[++i]; break;
+      case '--remix': config.remix = args[i + 1]?.startsWith('-') ? 'auto' : (args[++i] || 'auto'); break;
       case '--render': config.render = true; break;
       case '--batch': config.batch = parseInt(args[++i], 10); break;
       case '--prefix': config.prefix = args[++i]; break;
