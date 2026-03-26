@@ -214,3 +214,129 @@ export function updateClipRank(clipId: string, rankDelta: number): void {
   fs.writeFileSync(MANIFEST_PATH, JSON.stringify(manifest, null, 2));
   invalidateCache();
 }
+
+// ── Beat-Synced Timeline Builder ─────────────────────────────────────────────
+
+interface BPBlueprintInput {
+  bpm: number;
+  beat_times_sec: number[];
+  cut_rhythm: {
+    avg_cut_sec: number;
+    cut_points?: { time_sec: number; duration_sec: number; on_beat: boolean }[];
+  };
+  audio?: {
+    peak_moments_sec?: number[];
+    onset_times_sec?: number[];
+  };
+}
+
+interface BPTimelineEntry {
+  clip: Clip;
+  startFrame: number;
+  durationFrames: number;
+  trimStartFrames: number;
+  on_beat: boolean;
+  is_impact: boolean;
+}
+
+/**
+ * Build a beat-synced timeline from a brutal BP blueprint.
+ * Cuts land on beat times from the blueprint. Clips are pulled from the
+ * library and interleaved across sources for variety.
+ *
+ * @param blueprint - A brutal BP blueprint (from style-profiles/*.json)
+ * @param fps - Frames per second (default 30)
+ * @param totalDurationSec - Target total duration (default 15)
+ */
+export function getBrutalTimeline(
+  blueprint: BPBlueprintInput,
+  fps = 30,
+  totalDurationSec = 15,
+): BPTimelineEntry[] {
+  const allClips = getAllClips();
+  if (allClips.length === 0) return [];
+
+  const totalFrames = fps * totalDurationSec;
+  const beatTimes = blueprint.beat_times_sec.filter(t => t < totalDurationSec);
+  const peakMoments = new Set(
+    (blueprint.audio?.peak_moments_sec || [])
+      .filter(t => t < totalDurationSec)
+      .map(t => Math.round(t * 10) / 10)
+  );
+
+  // Build cut points from beat times
+  let cutTimes: number[];
+  if (beatTimes.length >= 4) {
+    // Use every Nth beat to get ~avg_cut_sec spacing
+    const targetCutSec = blueprint.cut_rhythm.avg_cut_sec || 1.0;
+    const beatInterval = beatTimes.length > 1
+      ? (beatTimes[beatTimes.length - 1] - beatTimes[0]) / (beatTimes.length - 1)
+      : 0.5;
+    const beatsPerCut = Math.max(1, Math.round(targetCutSec / beatInterval));
+    cutTimes = [0];
+    for (let i = beatsPerCut; i < beatTimes.length; i += beatsPerCut) {
+      if (beatTimes[i] < totalDurationSec) {
+        cutTimes.push(beatTimes[i]);
+      }
+    }
+  } else {
+    // Fallback: fixed intervals at avg_cut_sec
+    const cutSec = blueprint.cut_rhythm.avg_cut_sec || 1.0;
+    cutTimes = [];
+    for (let t = 0; t < totalDurationSec; t += cutSec) {
+      cutTimes.push(Math.round(t * 1000) / 1000);
+    }
+  }
+
+  // Interleave clips from different sources
+  const bySource = new Map<string, Clip[]>();
+  for (const c of allClips) {
+    const src = c.source_video_id;
+    if (!bySource.has(src)) bySource.set(src, []);
+    bySource.get(src)!.push(c);
+  }
+  const interleavedPool: Clip[] = [];
+  const sources = [...bySource.values()];
+  const maxLen = Math.max(...sources.map(s => s.length));
+  for (let i = 0; i < maxLen; i++) {
+    for (const s of sources) {
+      if (i < s.length) interleavedPool.push(s[i]);
+    }
+  }
+
+  // Build timeline entries
+  const timeline: BPTimelineEntry[] = [];
+  for (let i = 0; i < cutTimes.length; i++) {
+    const startSec = cutTimes[i];
+    const endSec = i + 1 < cutTimes.length ? cutTimes[i + 1] : totalDurationSec;
+    const durSec = endSec - startSec;
+    if (durSec < 0.15) continue;
+
+    const startFrame = Math.round(startSec * fps);
+    const durationFrames = Math.round(durSec * fps);
+    if (startFrame >= totalFrames) break;
+
+    const clip = interleavedPool[i % interleavedPool.length];
+    const clipMaxFrames = Math.round(clip.duration_sec * fps);
+    // Clamp segment to actual clip length
+    const actualDuration = Math.min(durationFrames, clipMaxFrames);
+    const maxTrimStart = Math.max(0, clipMaxFrames - actualDuration);
+    const trimStart = maxTrimStart > 0 ? Math.floor(Math.random() * maxTrimStart) : 0;
+
+    // Check if this cut is near a peak energy moment (= impact frame)
+    const isImpact = [...peakMoments].some(
+      p => Math.abs(p - startSec) < 0.2
+    );
+
+    timeline.push({
+      clip,
+      startFrame,
+      durationFrames: Math.min(actualDuration, totalFrames - startFrame),
+      trimStartFrames: trimStart,
+      on_beat: beatTimes.some(bt => Math.abs(bt - startSec) < 0.08),
+      is_impact: isImpact,
+    });
+  }
+
+  return timeline;
+}

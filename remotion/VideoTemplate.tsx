@@ -1,9 +1,7 @@
 /**
- * Ascension Engine v3.0 — VideoTemplate.tsx
- * Beat-synced BP/mog edit composition.
- *
- * Format: rapid-cut clip montage with dark cinema grading,
- * no CTA cards, zero or minimal text. The clips ARE the edit.
+ * Ascension Engine v4.0 — BrutalBeatMontage
+ * Beat-synced rapid-cut BP/mog edit composition.
+ * Zero text. Zero CTA. Just clips cut on beats with dark grading.
  */
 
 import {
@@ -23,41 +21,46 @@ export interface ClipSegment {
   src: string;
   durationFrames: number;
   trimStartFrames?: number;
+  isImpact?: boolean;
 }
 
 export interface VideoTemplateProps {
   bodyClips: ClipSegment[];
   musicPath?: string;
-  colorGrade?: "dark_cinema" | "desaturated" | "cold_blue" | "warm_ambient" | "natural" | "teal_orange" | "none";
+  colorGrade?: string;
   zoomPunch?: boolean;
-  overlayText?: string;
-  overlayPosition?: "top" | "center" | "bottom";
-  showOverlay?: boolean;
+  impactHoldFrames?: number;
   musicVolume?: number;
 }
 
-// ── Color Grade CSS Filters ─────────────────────────────────────────────
+// ── Color Grades (BP-accurate from gold DNA) ─────────────────────────────
 
 const COLOR_GRADES: Record<string, string> = {
-  dark_cinema:   "brightness(0.75) contrast(1.35) saturate(0.85) sepia(0.15)",
-  desaturated:   "saturate(0.15) contrast(1.25) brightness(0.95)",
-  cold_blue:     "saturate(0.9) hue-rotate(20deg) brightness(0.85) contrast(1.2)",
-  warm_ambient:  "saturate(1.1) sepia(0.2) brightness(0.85) contrast(1.2) hue-rotate(-5deg)",
-  natural:       "saturate(1.05) contrast(1.05) brightness(1.0)",
-  teal_orange:   "saturate(1.3) hue-rotate(-10deg) contrast(1.15)",
-  none:          "none",
+  dark_cinema:      "brightness(0.75) contrast(1.35) saturate(0.85) sepia(0.15)",
+  dark_cinema_hard: "brightness(0.68) contrast(1.45) saturate(0.75) sepia(0.12)",
+  desaturated:      "saturate(0.15) contrast(1.25) brightness(0.95)",
+  cold_blue:        "saturate(0.9) hue-rotate(20deg) brightness(0.85) contrast(1.2)",
+  warm_ambient:     "saturate(1.1) sepia(0.2) brightness(0.85) contrast(1.2) hue-rotate(-5deg)",
+  natural:          "saturate(1.05) contrast(1.08) brightness(1.0)",
+  teal_orange:      "saturate(1.3) hue-rotate(-10deg) contrast(1.15)",
+  teal_orange_hard: "saturate(1.4) hue-rotate(-12deg) contrast(1.25) brightness(0.9)",
+  none:             "none",
 };
 
-// ── Main Composition ───────────────────────────────────────────────────────
+// ── Micro-zoom with cubic easing ─────────────────────────────────────────
+
+function cubicEaseIn(t: number): number {
+  return t * t;
+}
+
+// ── Main Composition ─────────────────────────────────────────────────────
 
 export const VideoTemplate: React.FC<VideoTemplateProps> = ({
   bodyClips = [],
   musicPath,
   colorGrade = "dark_cinema",
   zoomPunch = true,
-  overlayText,
-  overlayPosition = "bottom",
-  showOverlay = false,
+  impactHoldFrames = 4,
   musicVolume = 0.85,
 }) => {
   const { fps, durationInFrames } = useVideoConfig();
@@ -65,7 +68,7 @@ export const VideoTemplate: React.FC<VideoTemplateProps> = ({
 
   const cssFilter = COLOR_GRADES[colorGrade] || COLOR_GRADES.dark_cinema;
 
-  // Build timeline: each clip plays sequentially
+  // Build sequential timeline
   let currentFrame = 0;
   const timeline = bodyClips.map((clip, i) => {
     const start = currentFrame;
@@ -75,21 +78,34 @@ export const VideoTemplate: React.FC<VideoTemplateProps> = ({
   }).filter(c => c.startFrame < durationInFrames);
 
   return (
-    <AbsoluteFill style={{ backgroundColor: "#000", overflow: "hidden" }}>
+    <AbsoluteFill style={{ backgroundColor: "#0a0a0a", overflow: "hidden" }}>
+
+      {/* Vignette overlay */}
+      <div style={{
+        position: "absolute", inset: 0, zIndex: 20, pointerEvents: "none",
+        background: "radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.45) 100%)",
+      }} />
 
       {/* Color graded clip layer */}
       <AbsoluteFill style={{ filter: cssFilter }}>
         {timeline.map((clip) => {
-          // Per-clip zoom punch: subtle push-in from 1.0 → 1.06
           const clipLocalFrame = frame - clip.startFrame;
+          const clipProgress = clipLocalFrame / Math.max(clip.renderDuration, 1);
+
+          // Micro-zoom: 1.0 → 1.06 with cubic ease
           const zoom = zoomPunch
             ? interpolate(
-                clipLocalFrame,
-                [0, clip.renderDuration],
+                cubicEaseIn(Math.min(1, clipProgress)),
+                [0, 1],
                 [1.0, 1.06],
                 { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
               )
             : 1.0;
+
+          // Impact frames: brief brightness flash on first 2 frames
+          const impactFlash = clip.isImpact && clipLocalFrame < 2
+            ? "brightness(1.3)"
+            : "";
 
           return (
             <Sequence
@@ -97,7 +113,10 @@ export const VideoTemplate: React.FC<VideoTemplateProps> = ({
               from={clip.startFrame}
               durationInFrames={clip.renderDuration}
             >
-              <AbsoluteFill style={{ transform: `scale(${zoom})` }}>
+              <AbsoluteFill style={{
+                transform: `scale(${zoom})`,
+                filter: impactFlash,
+              }}>
                 <Video
                   src={staticFile(clip.src)}
                   startFrom={clip.trimStartFrames || 0}
@@ -109,39 +128,7 @@ export const VideoTemplate: React.FC<VideoTemplateProps> = ({
         })}
       </AbsoluteFill>
 
-      {/* Optional minimal text overlay (only if explicitly set) */}
-      {showOverlay && overlayText && (
-        <Sequence from={0} durationInFrames={Math.round(2.5 * fps)}>
-          <div
-            style={{
-              position: "absolute",
-              ...(overlayPosition === "top" ? { top: 80 } : {}),
-              ...(overlayPosition === "center" ? { top: "50%", transform: "translateY(-50%)" } : {}),
-              ...(overlayPosition === "bottom" ? { bottom: 200 } : {}),
-              left: 20,
-              right: 20,
-              textAlign: "center",
-              fontFamily: "Impact, Arial Black, sans-serif",
-              fontSize: "2.4rem",
-              fontWeight: "bold",
-              color: "#FFFFFF",
-              textTransform: "uppercase",
-              letterSpacing: "0.03em",
-              lineHeight: 1.1,
-              textShadow: "3px 3px 0 #000, -1px -1px 0 #000",
-              opacity: interpolate(frame, [0, 4, Math.round(2 * fps), Math.round(2.5 * fps)], [0, 1, 1, 0], {
-                extrapolateLeft: "clamp",
-                extrapolateRight: "clamp",
-              }),
-              zIndex: 10,
-            }}
-          >
-            {overlayText}
-          </div>
-        </Sequence>
-      )}
-
-      {/* Audio track */}
+      {/* Audio */}
       {musicPath && (
         <Audio src={staticFile(musicPath)} volume={musicVolume} />
       )}
