@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "last_updated": "2026-03-26T22:06:20.254008+00:00",
+  "last_updated": "2026-03-26T22:07:45.025800+00:00",
   "tags": {
     "face_closeup": [],
     "gym_lift": [],
@@ -52,7 +52,13 @@
       "roge.editz_7588525512478166294_ee3e02fa_scene004",
       "roge.editz_7588525512478166294_ee3e02fa_scene005",
       "roge.editz_7588525512478166294_ee3e02fa_scene006",
-      "roge.editz_7588525512478166294_ee3e02fa_scene007"
+      "roge.editz_7588525512478166294_ee3e02fa_scene007",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene000",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene001",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene002",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene003",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene004",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene005"
     ],
     "street_walk": [
       "gold_bpedits145_bp_edit_7d84bfee_scene000",
@@ -105,7 +111,13 @@
       "roge.editz_7588525512478166294_ee3e02fa_scene004",
       "roge.editz_7588525512478166294_ee3e02fa_scene005",
       "roge.editz_7588525512478166294_ee3e02fa_scene006",
-      "roge.editz_7588525512478166294_ee3e02fa_scene007"
+      "roge.editz_7588525512478166294_ee3e02fa_scene007",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene000",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene001",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene002",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene003",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene004",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene005"
     ],
     "street_walk_outdoor": [
       "gold_bpedits145_bp_edit_7d84bfee_scene000",
@@ -131,7 +143,13 @@
       "roge.editz_7588525512478166294_ee3e02fa_scene004",
       "roge.editz_7588525512478166294_ee3e02fa_scene005",
       "roge.editz_7588525512478166294_ee3e02fa_scene006",
-      "roge.editz_7588525512478166294_ee3e02fa_scene007"
+      "roge.editz_7588525512478166294_ee3e02fa_scene007",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene000",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene001",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene002",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene003",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene004",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene005"
     ],
     "motivational_narrative": [
       "roge.editz_7588525512478166294_ee3e02fa_scene000",
@@ -212,6 +230,62 @@
       "roge.editz_7588525512478166294_ee3e02fa_scene005",
       "roge.editz_7588525512478166294_ee3e02fa_scene006",
       "roge.editz_7588525512478166294_ee3e02fa_scene007"
+    ],
+    "podcast_set": [
+      "black.pill.city_7600958206642326806_8d9f3a15_scene000",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene001",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene002",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene003",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene004",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene005"
+    ],
+    "face_closeup_transition": [
+      "black.pill.city_7600958206642326806_8d9f3a15_scene000",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene001",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene002",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene003",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene004",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene005"
+    ],
+    "duo_interview": [
+      "black.pill.city_7600958206642326806_8d9f3a15_scene000",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene001",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene002",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene003",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene004",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene005"
+    ],
+    "microphone_focus": [
+      "black.pill.city_7600958206642326806_8d9f3a15_scene000",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene001",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene002",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene003",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene004",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene005"
+    ],
+    "car_interior": [
+      "black.pill.city_7600958206642326806_8d9f3a15_scene000",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene001",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene002",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene003",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene004",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene005"
+    ],
+    "crowd_reaction": [
+      "black.pill.city_7600958206642326806_8d9f3a15_scene000",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene001",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene002",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene003",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene004",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene005"
+    ],
+    "high_energy_cut": [
+      "black.pill.city_7600958206642326806_8d9f3a15_scene000",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene001",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene002",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene003",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene004",
+      "black.pill.city_7600958206642326806_8d9f3a15_scene005"
     ]
   }
 }

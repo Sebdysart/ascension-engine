@@ -1,0 +1,160 @@
+{
+  "vid_id": "black.pill.city_7600958206642326806_8d9f3a15",
+  "generated_at": "2026-03-26T22:07:45.023795+00:00",
+  "total_clips": 6,
+  "total_duration_sec": 18.667,
+  "bpm": 123,
+  "avg_cut_length_sec": 3.0,
+  "beat_alignment": "loose",
+  "color_grade": "Desaturated",
+  "hook_pacing_sec": [
+    0,
+    6.0
+  ],
+  "clip_order": [
+    {
+      "index": 0,
+      "clip_id": "black.pill.city_7600958206642326806_8d9f3a15_scene000",
+      "start_sec": 0.0,
+      "end_sec": 3.0,
+      "duration_sec": 3.0,
+      "tags": [
+        "podcast_set",
+        "talking_head_direct",
+        "face_closeup_transition",
+        "dark_cinema_mood",
+        "duo_interview",
+        "microphone_focus",
+        "face_closeup_push",
+        "car_interior",
+        "crowd_reaction",
+        "high_energy_cut"
+      ],
+      "beat_anchor_sec": 0.418,
+      "transition_type": "cut",
+      "rank": 0.5
+    },
+    {
+      "index": 1,
+      "clip_id": "black.pill.city_7600958206642326806_8d9f3a15_scene001",
+      "start_sec": 3.0,
+      "end_sec": 6.0,
+      "duration_sec": 3.0,
+      "tags": [
+        "podcast_set",
+        "talking_head_direct",
+        "face_closeup_transition",
+        "dark_cinema_mood",
+        "duo_interview",
+        "microphone_focus",
+        "face_closeup_push",
+        "car_interior",
+        "crowd_reaction",
+        "high_energy_cut"
+      ],
+      "beat_anchor_sec": 2.902,
+      "transition_type": "cut",
+      "rank": 0.5
+    },
+    {
+      "index": 2,
+      "clip_id": "black.pill.city_7600958206642326806_8d9f3a15_scene002",
+      "start_sec": 6.0,
+      "end_sec": 9.0,
+      "duration_sec": 3.0,
+      "tags": [
+        "podcast_set",
+        "talking_head_direct",
+        "face_closeup_transition",
+        "dark_cinema_mood",
+        "duo_interview",
+        "microphone_focus",
+        "face_closeup_push",
+        "car_interior",
+        "crowd_reaction",
+        "high_energy_cut"
+      ],
+      "beat_anchor_sec": 5.875,
+      "transition_type": "cut",
+      "rank": 0.5
+    },
+    {
+      "index": 3,
+      "clip_id": "black.pill.city_7600958206642326806_8d9f3a15_scene003",
+      "start_sec": 9.0,
+      "end_sec": 12.0,
+      "duration_sec": 3.0,
+      "tags": [
+        "podcast_set",
+        "talking_head_direct",
+        "face_closeup_transition",
+        "dark_cinema_mood",
+        "duo_interview",
+        "microphone_focus",
+        "face_closeup_push",
+        "car_interior",
+        "crowd_reaction",
+        "high_energy_cut"
+      ],
+      "beat_anchor_sec": 8.8,
+      "transition_type": "cut",
+      "rank": 0.5
+    },
+    {
+      "index": 4,
+      "clip_id": "black.pill.city_7600958206642326806_8d9f3a15_scene004",
+      "start_sec": 12.0,
+      "end_sec": 15.0,
+      "duration_sec": 3.0,
+      "tags": [
+        "podcast_set",
+        "talking_head_direct",
+        "face_closeup_transition",
+        "dark_cinema_mood",
+        "duo_interview",
+        "microphone_focus",
+        "face_closeup_push",
+        "car_interior",
+        "crowd_reaction",
+        "high_energy_cut"
+      ],
+      "beat_anchor_sec": 11.773,
+      "transition_type": "cut",
+      "rank": 0.5
+    },
+    {
+      "index": 5,
+      "clip_id": "black.pill.city_7600958206642326806_8d9f3a15_scene005",
+      "start_sec": 15.0,
+      "end_sec": 18.667,
+      "duration_sec": 3.667,
+      "tags": [
+        "podcast_set",
+        "talking_head_direct",
+        "face_closeup_transition",
+        "dark_cinema_mood",
+        "duo_interview",
+        "microphone_focus",
+        "face_closeup_push",
+        "car_interior",
+        "crowd_reaction",
+        "high_energy_cut"
+      ],
+      "beat_anchor_sec": 15.232,
+      "transition_type": "hold",
+      "rank": 0.5
+    }
+  ],
+  "beat_drop_points_sec": [
+    10.356,
+    10.379,
+    10.403,
+    10.426,
+    10.449
+  ],
+  "transition_summary": {
+    "hard_cut": 0,
+    "cut": 5,
+    "hold": 1
+  }
+}

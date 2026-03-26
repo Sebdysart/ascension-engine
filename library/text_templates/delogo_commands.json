@@ -319,5 +319,265 @@
       }
     ],
     "generated_at": "2026-03-26T22:05:21.902443+00:00"
+  },
+  "black.pill.city_7600958206642326806_8d9f3a15": {
+    "delogo_filters": [
+      "delogo=x=40:y=1338:w=108:h=46",
+      "delogo=x=33:y=1359:w=134:h=56",
+      "delogo=x=101:y=1276:w=63:h=79",
+      "delogo=x=42:y=1338:w=106:h=46",
+      "delogo=x=33:y=1361:w=134:h=52",
+      "delogo=x=873:y=1247:w=108:h=250",
+      "delogo=x=7:y=1311:w=57:h=72",
+      "delogo=x=42:y=1338:w=104:h=46",
+      "delogo=x=35:y=1361:w=132:h=52",
+      "delogo=x=21:y=1401:w=156:h=32",
+      "delogo=x=42:y=1338:w=102:h=44",
+      "delogo=x=19:y=1401:w=158:h=32"
+    ],
+    "ffmpeg_filter_chain": "delogo=x=40:y=1338:w=108:h=46,delogo=x=33:y=1359:w=134:h=56,delogo=x=101:y=1276:w=63:h=79,delogo=x=42:y=1338:w=106:h=46,delogo=x=33:y=1361:w=134:h=52,delogo=x=873:y=1247:w=108:h=250,delogo=x=7:y=1311:w=57:h=72,delogo=x=42:y=1338:w=104:h=46,delogo=x=35:y=1361:w=132:h=52,delogo=x=21:y=1401:w=156:h=32,delogo=x=42:y=1338:w=102:h=44,delogo=x=19:y=1401:w=158:h=32",
+    "frame_details": [
+      {
+        "frame": "every1s_0001.jpg",
+        "hits": [
+          {
+            "text": "LAAK",
+            "type": "watermark",
+            "confidence": 0.751,
+            "delogo": "delogo=x=40:y=1338:w=108:h=46"
+          },
+          {
+            "text": "JRIAD",
+            "type": "watermark",
+            "confidence": 0.513,
+            "delogo": "delogo=x=33:y=1359:w=134:h=56"
+          },
+          {
+            "text": "3",
+            "type": "caption",
+            "confidence": 0.996,
+            "delogo": "delogo=x=775:y=1345:w=102:h=154"
+          },
+          {
+            "text": "1",
+            "type": "watermark",
+            "confidence": 0.432,
+            "delogo": "delogo=x=101:y=1276:w=63:h=79"
+          }
+        ]
+      },
+      {
+        "frame": "every1s_0003.jpg",
+        "hits": [
+          {
+            "text": "DARK",
+            "type": "watermark",
+            "confidence": 0.999,
+            "delogo": "delogo=x=42:y=1338:w=106:h=46"
+          },
+          {
+            "text": "TRIAD",
+            "type": "watermark",
+            "confidence": 0.994,
+            "delogo": "delogo=x=33:y=1361:w=134:h=52"
+          }
+        ]
+      },
+      {
+        "frame": "every1s_0005.jpg",
+        "hits": [
+          {
+            "text": "2",
+            "type": "caption",
+            "confidence": 0.536,
+            "delogo": "delogo=x=145:y=1268:w=90:h=209"
+          },
+          {
+            "text": "3",
+            "type": "watermark",
+            "confidence": 0.469,
+            "delogo": "delogo=x=873:y=1247:w=108:h=250"
+          },
+          {
+            "text": "1",
+            "type": "watermark",
+            "confidence": 0.59,
+            "delogo": "delogo=x=7:y=1311:w=57:h=72"
+          }
+        ]
+      },
+      {
+        "frame": "every1s_0007.jpg",
+        "hits": [
+          {
+            "text": "DARK",
+            "type": "watermark",
+            "confidence": 0.999,
+            "delogo": "delogo=x=42:y=1338:w=104:h=46"
+          },
+          {
+            "text": "TRIAD",
+            "type": "watermark",
+            "confidence": 0.874,
+            "delogo": "delogo=x=35:y=1361:w=132:h=52"
+          },
+          {
+            "text": "MACHIAVELLIANISM",
+            "type": "watermark",
+            "confidence": 0.76,
+            "delogo": "delogo=x=21:y=1401:w=156:h=32"
+          }
+        ]
+      },
+      {
+        "frame": "every1s_0009.jpg",
+        "hits": [
+          {
+            "text": "DARK",
+            "type": "watermark",
+            "confidence": 1.0,
+            "delogo": "delogo=x=42:y=1338:w=104:h=46"
+          },
+          {
+            "text": "TRIAD",
+            "type": "watermark",
+            "confidence": 0.957,
+            "delogo": "delogo=x=35:y=1361:w=132:h=52"
+          }
+        ]
+      },
+      {
+        "frame": "every1s_0011.jpg",
+        "hits": [
+          {
+            "text": "DARK",
+            "type": "watermark",
+            "confidence": 0.999,
+            "delogo": "delogo=x=42:y=1338:w=104:h=46"
+          },
+          {
+            "text": "TRIAD",
+            "type": "watermark",
+            "confidence": 0.984,
+            "delogo": "delogo=x=35:y=1361:w=132:h=52"
+          }
+        ]
+      },
+      {
+        "frame": "every1s_0013.jpg",
+        "hits": [
+          {
+            "text": "DARK",
+            "type": "watermark",
+            "confidence": 1.0,
+            "delogo": "delogo=x=42:y=1338:w=102:h=44"
+          },
+          {
+            "text": "TRIAD",
+            "type": "watermark",
+            "confidence": 1.0,
+            "delogo": "delogo=x=35:y=1361:w=132:h=52"
+          }
+        ]
+      },
+      {
+        "frame": "every1s_0015.jpg",
+        "hits": [
+          {
+            "text": "DARK",
+            "type": "watermark",
+            "confidence": 0.999,
+            "delogo": "delogo=x=42:y=1338:w=104:h=46"
+          },
+          {
+            "text": "TRIAD",
+            "type": "watermark",
+            "confidence": 0.998,
+            "delogo": "delogo=x=35:y=1361:w=132:h=52"
+          }
+        ]
+      },
+      {
+        "frame": "every1s_0017.jpg",
+        "hits": [
+          {
+            "text": "DARK",
+            "type": "watermark",
+            "confidence": 0.999,
+            "delogo": "delogo=x=42:y=1338:w=106:h=46"
+          },
+          {
+            "text": "TRIAD",
+            "type": "watermark",
+            "confidence": 0.999,
+            "delogo": "delogo=x=35:y=1361:w=132:h=52"
+          },
+          {
+            "text": "MACHIAVEL LIANISM",
+            "type": "watermark",
+            "confidence": 0.83,
+            "delogo": "delogo=x=19:y=1401:w=158:h=32"
+          }
+        ]
+      },
+      {
+        "frame": "every1s_0019.jpg",
+        "hits": [
+          {
+            "text": "DARK",
+            "type": "watermark",
+            "confidence": 0.999,
+            "delogo": "delogo=x=42:y=1338:w=106:h=46"
+          },
+          {
+            "text": "TRIAD",
+            "type": "watermark",
+            "confidence": 0.996,
+            "delogo": "delogo=x=35:y=1361:w=132:h=52"
+          }
+        ]
+      },
+      {
+        "frame": "scene_0001_3.00s.jpg",
+        "hits": [
+          {
+            "text": "DARK",
+            "type": "watermark",
+            "confidence": 0.999,
+            "delogo": "delogo=x=42:y=1338:w=106:h=46"
+          },
+          {
+            "text": "TRIAD",
+            "type": "watermark",
+            "confidence": 0.994,
+            "delogo": "delogo=x=35:y=1361:w=132:h=52"
+          }
+        ]
+      },
+      {
+        "frame": "scene_0003_9.00s.jpg",
+        "hits": [
+          {
+            "text": "DARK",
+            "type": "watermark",
+            "confidence": 0.998,
+            "delogo": "delogo=x=42:y=1338:w=106:h=46"
+          },
+          {
+            "text": "TRIAD",
+            "type": "watermark",
+            "confidence": 0.992,
+            "delogo": "delogo=x=33:y=1361:w=134:h=52"
+          },
+          {
+            "text": "MACHIAVELLAWISM",
+            "type": "watermark",
+            "confidence": 0.747,
+            "delogo": "delogo=x=21:y=1401:w=156:h=32"
+          }
+        ]
+      }
+    ],
+    "generated_at": "2026-03-26T22:06:52.228226+00:00"
   }
 }
