@@ -13,12 +13,11 @@ export const RemotionRoot: React.FC = () => {
         width={1080}
         height={1920}
         defaultProps={{
-          hookText: "I CHANGED MY FACE IN 90 DAYS",
           bodyClips: [],
-          ctaText: "DISCIPLINE = RESULTS. DROP YOUR GLOW-UP PROGRESS BELOW.",
-          colorGrade: "teal_orange",
-          cutRateSec: 2.0,
-          archetype: "glow_up",
+          colorGrade: "dark_cinema",
+          zoomPunch: true,
+          showOverlay: false,
+          musicVolume: 0.85,
         }}
       />
     </>
