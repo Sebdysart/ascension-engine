@@ -1,10 +1,7 @@
 /**
- * Ascension Engine v2.0 — VideoTemplate.tsx
- * Remotion composition for looksmax/glow-up short-form video.
- *
- * Setup:
- *   npm install remotion @remotion/player
- *   npx remotion render remotion/VideoTemplate.tsx AscensionVideo out/video.mp4
+ * Ascension Engine v4.0 — BrutalBeatMontage
+ * Beat-synced rapid-cut BP/mog edit composition.
+ * Zero text. Zero CTA. Just clips cut on beats with dark grading.
  */
 
 import {
@@ -14,282 +11,112 @@ import {
   useCurrentFrame,
   useVideoConfig,
   interpolate,
-  spring,
   Audio,
-  Img,
   staticFile,
 } from "remotion";
 
 // ── Types ──────────────────────────────────────────────────────────────────
 
 export interface ClipSegment {
-  src: string;            // path to video clip
+  src: string;
   durationFrames: number;
   trimStartFrames?: number;
+  isImpact?: boolean;
 }
 
 export interface VideoTemplateProps {
-  hookText: string;
   bodyClips: ClipSegment[];
-  overlayTexts?: { text: string; startFrame: number; durationFrames: number }[];
-  ctaText?: string;
   musicPath?: string;
-  colorGrade?: "teal_orange" | "cold_blue" | "warm_gold" | "desaturated";
-  cutRateSec?: number;
-  archetype?: "glow_up" | "frame_maxxing" | "skin_maxxing" | "style_maxxing";
-  showBeforeAfter?: boolean;
-  beforeImageSrc?: string;
-  afterImageSrc?: string;
+  colorGrade?: string;
+  zoomPunch?: boolean;
+  impactHoldFrames?: number;
+  musicVolume?: number;
 }
 
-// ── Color Grade CSS Filters ─────────────────────────────────────────────
+// ── Color Grades (BP-accurate from gold DNA) ─────────────────────────────
 
 const COLOR_GRADES: Record<string, string> = {
-  teal_orange:  "saturate(1.3) hue-rotate(-10deg) contrast(1.15)",
-  cold_blue:    "saturate(0.9) hue-rotate(20deg) brightness(0.95) contrast(1.1)",
-  warm_gold:    "saturate(1.2) sepia(0.3) brightness(1.05)",
-  desaturated:  "saturate(0.6) contrast(1.2) brightness(1.0)",
+  dark_cinema:      "brightness(0.75) contrast(1.35) saturate(0.85) sepia(0.15)",
+  dark_cinema_hard: "brightness(0.68) contrast(1.45) saturate(0.75) sepia(0.12)",
+  desaturated:      "saturate(0.15) contrast(1.25) brightness(0.95)",
+  cold_blue:        "saturate(0.9) hue-rotate(20deg) brightness(0.85) contrast(1.2)",
+  warm_ambient:     "saturate(1.1) sepia(0.2) brightness(0.85) contrast(1.2) hue-rotate(-5deg)",
+  natural:          "saturate(1.05) contrast(1.08) brightness(1.0)",
+  teal_orange:      "saturate(1.3) hue-rotate(-10deg) contrast(1.15)",
+  teal_orange_hard: "saturate(1.4) hue-rotate(-12deg) contrast(1.25) brightness(0.9)",
+  none:             "none",
 };
 
-// ── Sub-components ─────────────────────────────────────────────────────────
+// ── Micro-zoom with cubic easing ─────────────────────────────────────────
 
-const GlowText: React.FC<{
-  text: string;
-  fontSize?: string;
-  bottom?: number;
-  opacity?: number;
-}> = ({ text, fontSize = "3.2rem", bottom = 180, opacity = 1 }) => {
-  const frame = useCurrentFrame();
+function cubicEaseIn(t: number): number {
+  return t * t;
+}
 
-  // Punch-in: scale 1.2 → 1.0 over 6 frames
-  const scale = interpolate(frame, [0, 6], [1.2, 1.0], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-  });
-
-  return (
-    <div
-      style={{
-        position: "absolute",
-        bottom,
-        left: 20,
-        right: 20,
-        textAlign: "center",
-        fontFamily: "Impact, Arial Black, sans-serif",
-        fontSize,
-        fontWeight: "bold",
-        color: "#FFFFFF",
-        textTransform: "uppercase",
-        letterSpacing: "0.04em",
-        lineHeight: 1.1,
-        textShadow: `
-          0 0 6px rgba(255,255,255,0.8),
-          0 0 12px rgba(255,255,255,0.4),
-          3px 3px 0 #000,
-          -3px -3px 0 #000,
-          3px -3px 0 #000,
-          -3px 3px 0 #000
-        `,
-        transform: `scale(${scale})`,
-        opacity,
-        zIndex: 10,
-      }}
-    >
-      {text}
-    </div>
-  );
-};
-
-const BeforeAfterReveal: React.FC<{
-  beforeSrc: string;
-  afterSrc: string;
-  durationFrames: number;
-}> = ({ beforeSrc, afterSrc, durationFrames }) => {
-  const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
-
-  // Wipe from left to right over 30 frames, starting at frame 20
-  const wipeProgress = interpolate(
-    frame,
-    [20, 50],
-    [0, 100],
-    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
-  );
-
-  // Seam line opacity: visible during wipe
-  const seamOpacity = interpolate(
-    frame,
-    [18, 22, 48, 52],
-    [0, 1, 1, 0],
-    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
-  );
-
-  return (
-    <AbsoluteFill>
-      {/* Before image (full frame) */}
-      <Img
-        src={beforeSrc}
-        style={{ width: "100%", height: "100%", objectFit: "cover" }}
-      />
-      {/* After image (revealed via clip-path wipe) */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          clipPath: `inset(0 ${100 - wipeProgress}% 0 0)`,
-        }}
-      >
-        <Img
-          src={afterSrc}
-          style={{ width: "100%", height: "100%", objectFit: "cover" }}
-        />
-      </div>
-      {/* Seam line */}
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          bottom: 0,
-          left: `${wipeProgress}%`,
-          width: 3,
-          background: "rgba(255,255,255,0.9)",
-          opacity: seamOpacity,
-          zIndex: 5,
-        }}
-      />
-      {/* BEFORE label */}
-      <div style={{
-        position: "absolute", top: 60, left: 30,
-        fontFamily: "Impact, sans-serif", fontSize: "1.6rem",
-        color: "#fff", textShadow: "2px 2px 0 #000",
-        opacity: interpolate(frame, [0, 5, 18, 22], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })
-      }}>BEFORE</div>
-      {/* AFTER label */}
-      <div style={{
-        position: "absolute", top: 60, right: 30,
-        fontFamily: "Impact, sans-serif", fontSize: "1.6rem",
-        color: "#fff", textShadow: "2px 2px 0 #000",
-        opacity: interpolate(frame, [48, 52], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })
-      }}>AFTER</div>
-    </AbsoluteFill>
-  );
-};
-
-const CTACard: React.FC<{ text: string }> = ({ text }) => {
-  const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
-
-  const opacity = spring({ frame, fps, config: { damping: 12 } });
-  const translateY = interpolate(opacity, [0, 1], [30, 0]);
-
-  return (
-    <AbsoluteFill
-      style={{
-        backgroundColor: "rgba(0,0,0,0.75)",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: "0 40px",
-      }}
-    >
-      <div
-        style={{
-          transform: `translateY(${translateY}px)`,
-          opacity,
-          textAlign: "center",
-          fontFamily: "Impact, Arial Black, sans-serif",
-          fontSize: "2.2rem",
-          color: "#FFFFFF",
-          textTransform: "uppercase",
-          lineHeight: 1.25,
-          textShadow: `
-            0 0 8px rgba(255,255,255,0.6),
-            3px 3px 0 #000
-          `,
-          maxWidth: 900,
-        }}
-      >
-        {text}
-      </div>
-    </AbsoluteFill>
-  );
-};
-
-// ── Main Composition ───────────────────────────────────────────────────────
+// ── Main Composition ─────────────────────────────────────────────────────
 
 export const VideoTemplate: React.FC<VideoTemplateProps> = ({
-  hookText,
   bodyClips = [],
-  overlayTexts = [],
-  ctaText = "DISCIPLINE = RESULTS. DROP YOUR GLOW-UP PROGRESS BELOW.",
   musicPath,
-  colorGrade = "teal_orange",
-  cutRateSec = 2.0,
-  archetype = "glow_up",
-  showBeforeAfter = false,
-  beforeImageSrc,
-  afterImageSrc,
+  colorGrade = "dark_cinema",
+  zoomPunch = true,
+  impactHoldFrames = 4,
+  musicVolume = 0.85,
 }) => {
   const { fps, durationInFrames } = useVideoConfig();
   const frame = useCurrentFrame();
 
-  const cutRateFrames = Math.round(cutRateSec * fps);
-  const hookDurationFrames = Math.round(3 * fps);   // 3s hook section
-  const ctaDurationFrames = Math.round(3 * fps);    // 3s CTA
-  const revealDurationFrames = Math.round(3 * fps); // 3s before/after
+  const cssFilter = COLOR_GRADES[colorGrade] || COLOR_GRADES.dark_cinema;
 
-  // Body clips section: remaining frames between hook and CTA
-  const bodyStart = hookDurationFrames + (showBeforeAfter ? revealDurationFrames : 0);
-  const bodyDuration = durationInFrames - bodyStart - ctaDurationFrames;
-
-  const cssFilter = COLOR_GRADES[colorGrade] || COLOR_GRADES.teal_orange;
-
-  // Subtle push-in zoom: 1.0 → 1.08 over clip duration
-  const zoom = interpolate(
-    frame % cutRateFrames,
-    [0, cutRateFrames],
-    [1.0, 1.08],
-    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
-  );
+  // Build sequential timeline
+  let currentFrame = 0;
+  const timeline = bodyClips.map((clip, i) => {
+    const start = currentFrame;
+    const dur = Math.min(clip.durationFrames, durationInFrames - start);
+    currentFrame += dur;
+    return { ...clip, startFrame: start, renderDuration: Math.max(1, dur), index: i };
+  }).filter(c => c.startFrame < durationInFrames);
 
   return (
-    <AbsoluteFill style={{ backgroundColor: "#000", overflow: "hidden" }}>
+    <AbsoluteFill style={{ backgroundColor: "#0a0a0a", overflow: "hidden" }}>
 
-      {/* Global color grade wrapper */}
+      {/* Vignette overlay */}
+      <div style={{
+        position: "absolute", inset: 0, zIndex: 20, pointerEvents: "none",
+        background: "radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.45) 100%)",
+      }} />
+
+      {/* Color graded clip layer */}
       <AbsoluteFill style={{ filter: cssFilter }}>
+        {timeline.map((clip) => {
+          const clipLocalFrame = frame - clip.startFrame;
+          const clipProgress = clipLocalFrame / Math.max(clip.renderDuration, 1);
 
-        {/* ── SEQUENCE 1: HOOK (0 → hookDurationFrames) ── */}
-        <Sequence from={0} durationInFrames={hookDurationFrames}>
-          <AbsoluteFill style={{ transform: `scale(${zoom})` }}>
-            {bodyClips[0] && (
-              <Video
-                src={staticFile(bodyClips[0].src)}
-                startFrom={bodyClips[0].trimStartFrames || 0}
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
-              />
-            )}
-          </AbsoluteFill>
-          <GlowText text={hookText} fontSize="3.4rem" bottom={200} />
-        </Sequence>
+          // Micro-zoom: 1.0 → 1.06 with cubic ease
+          const zoom = zoomPunch
+            ? interpolate(
+                cubicEaseIn(Math.min(1, clipProgress)),
+                [0, 1],
+                [1.0, 1.06],
+                { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+              )
+            : 1.0;
 
-        {/* ── SEQUENCE 2: BEFORE/AFTER REVEAL (optional) ── */}
-        {showBeforeAfter && beforeImageSrc && afterImageSrc && (
-          <Sequence from={hookDurationFrames} durationInFrames={revealDurationFrames}>
-            <BeforeAfterReveal
-              beforeSrc={staticFile(beforeImageSrc)}
-              afterSrc={staticFile(afterImageSrc)}
-              durationFrames={revealDurationFrames}
-            />
-          </Sequence>
-        )}
+          // Impact frames: brief brightness flash on first 2 frames
+          const impactFlash = clip.isImpact && clipLocalFrame < 2
+            ? "brightness(1.3)"
+            : "";
 
-        {/* ── SEQUENCE 3: BODY CLIPS ── */}
-        {bodyClips.slice(1).map((clip, i) => {
-          const clipStart = bodyStart + i * cutRateFrames;
-          if (clipStart >= durationInFrames - ctaDurationFrames) return null;
-          const clipDuration = Math.min(cutRateFrames, durationInFrames - ctaDurationFrames - clipStart);
           return (
-            <Sequence key={i} from={clipStart} durationInFrames={clipDuration}>
-              <AbsoluteFill style={{ transform: `scale(${zoom})` }}>
+            <Sequence
+              key={clip.index}
+              from={clip.startFrame}
+              durationInFrames={clip.renderDuration}
+            >
+              <AbsoluteFill style={{
+                transform: `scale(${zoom})`,
+                filter: impactFlash,
+              }}>
                 <Video
                   src={staticFile(clip.src)}
                   startFrom={clip.trimStartFrames || 0}
@@ -299,61 +126,15 @@ export const VideoTemplate: React.FC<VideoTemplateProps> = ({
             </Sequence>
           );
         })}
-
       </AbsoluteFill>
 
-      {/* ── OVERLAY TEXTS (rendered above color grade) ── */}
-      {overlayTexts.map((ot, i) => (
-        <Sequence key={`ot-${i}`} from={ot.startFrame} durationInFrames={ot.durationFrames}>
-          <GlowText text={ot.text} fontSize="2.8rem" bottom={160} />
-        </Sequence>
-      ))}
-
-      {/* ── SEQUENCE 4: CTA ── */}
-      <Sequence
-        from={durationInFrames - ctaDurationFrames}
-        durationInFrames={ctaDurationFrames}
-      >
-        <CTACard text={ctaText} />
-      </Sequence>
-
-      {/* ── AUDIO ── */}
+      {/* Audio */}
       {musicPath && (
-        <Audio src={staticFile(musicPath)} volume={0.75} />
+        <Audio src={staticFile(musicPath)} volume={musicVolume} />
       )}
 
     </AbsoluteFill>
   );
 };
 
-// ── Remotion Composition Registration ─────────────────────────────────────
-
 export default VideoTemplate;
-
-/**
- * Register in your remotion/index.tsx:
- *
- * import { Composition } from "remotion";
- * import { VideoTemplate } from "./VideoTemplate";
- *
- * export const RemotionRoot = () => (
- *   <>
- *     <Composition
- *       id="AscensionVideo"
- *       component={VideoTemplate}
- *       durationInFrames={450}   // 15s at 30fps
- *       fps={30}
- *       width={1080}
- *       height={1920}
- *       defaultProps={{
- *         hookText: "I CHANGED MY FACE IN 90 DAYS",
- *         bodyClips: [],
- *         ctaText: "DISCIPLINE = RESULTS. DROP YOUR GLOW-UP PROGRESS BELOW.",
- *         colorGrade: "teal_orange",
- *         cutRateSec: 2.0,
- *         archetype: "glow_up",
- *       }}
- *     />
- *   </>
- * );
- */
