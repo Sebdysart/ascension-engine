@@ -213,6 +213,12 @@ def analyze_audio(wav_path: Path) -> dict:
     tempo, beat_frames = librosa.beat.beat_track(y=y, sr=sr)
     beat_times = librosa.frames_to_time(beat_frames, sr=sr).tolist()
 
+    # Handle tempo being an ndarray (librosa >= 0.10)
+    if hasattr(tempo, '__len__'):
+        tempo_val = float(tempo[0]) if len(tempo) > 0 else 0.0
+    else:
+        tempo_val = float(tempo)
+
     # RMS energy peaks
     rms = librosa.feature.rms(y=y)[0]
     times = librosa.frames_to_time(range(len(rms)), sr=sr)
@@ -220,7 +226,7 @@ def analyze_audio(wav_path: Path) -> dict:
     peak_times = [float(times[i]) for i, v in enumerate(rms) if v > threshold]
 
     return {
-        "bpm": int(round(float(tempo))),
+        "bpm": int(round(tempo_val)),
         "beat_times": [round(t, 3) for t in beat_times],
         "peak_moments_sec": [round(t, 3) for t in peak_times],
     }
