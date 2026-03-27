@@ -115,12 +115,15 @@ def _load_victim_clips_from_db() -> list[dict]:
     try:
         conn = sqlite3.connect(str(_DB_PATH))
         conn.row_factory = sqlite3.Row
-        rows = conn.execute(
-            "SELECT clip_id, file_path, rank, tags FROM clips WHERE track = 'victim_contrast'"
-        ).fetchall()
-        conn.close()
-        return [dict(r) for r in rows]
-    except Exception:
+        try:
+            rows = conn.execute(
+                "SELECT clip_id, file_path, rank, tags, mog_score FROM clips WHERE track = 'victim_contrast'"
+            ).fetchall()
+            return [dict(r) for r in rows]
+        finally:
+            conn.close()
+    except Exception as e:
+        log.warning("_load_victim_clips_from_db failed: %s", e)
         return []
 
 
@@ -146,7 +149,7 @@ def generate_hook_spec(
     explicit_clips = clips is not None
     _clips = clips if explicit_clips else _load_clips_from_manifest()
 
-    if not _clips and not explicit_clips:
+    if not _clips and not explicit_clips and not dry_run:
         _clips = _load_victim_clips_from_db()
 
     if not _clips:
