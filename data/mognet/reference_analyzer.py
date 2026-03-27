@@ -68,12 +68,11 @@ def _get_fidelity_scores() -> dict[str, float]:
     Falls back to empty dict if no data or DB unavailable.
     """
     try:
-        conn = sqlite3.connect(str(_DB_PATH))
-        rows = conn.execute(
-            "SELECT output_file, fidelity_score FROM generations "
-            "WHERE fidelity_score IS NOT NULL"
-        ).fetchall()
-        conn.close()
+        with sqlite3.connect(str(_DB_PATH)) as conn:
+            rows = conn.execute(
+                "SELECT output_file, fidelity_score FROM generations "
+                "WHERE fidelity_score IS NOT NULL"
+            ).fetchall()
         scores = {}
         for output_file, score in rows:
             if output_file:
@@ -102,7 +101,9 @@ def analyze_gold_library(
     Trained ViralScorer instance
     """
     import sys as _sys
-    _sys.path.insert(0, str(_ROOT / "data"))
+    _data_path = str(_ROOT / "data")
+    if _data_path not in _sys.path:
+        _sys.path.insert(0, _data_path)
 
     from mognet.feature_extractor import extract_video_features
     from mognet.viral_scorer import ViralScorer
