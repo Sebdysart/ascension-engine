@@ -1,4 +1,4 @@
-# Ascension Engine v4.0 — Claude Code Handoff
+# Ascension Engine v4.2 — Claude Code Handoff (Hardened)
 
 > Everything is on `main`. Clone it on your Mac Mini and run.
 
@@ -23,6 +23,30 @@ python3 data/ingest.py --setup          # prints dep check
 ```
 
 FFmpeg must be installed: `brew install ffmpeg`
+
+```bash
+# Initialize the engine database (one-time)
+python3 -c "from data.engine_db import EngineDB; db=EngineDB(); db.init(); db.close()"
+
+# Check engine health anytime
+python3 data/engine_status.py
+```
+
+---
+
+## v4.2 Hardening (9 Gaps Fixed)
+
+| Gap | Fix | Where |
+|-----|-----|-------|
+| 1. Vision drift | Hybrid scoring stub (MediaPipe landmarks ready for Mac Mini) | `pip install mediapipe` |
+| 2. Text removal | Two-pass FFmpeg crop (Claude Vision drives bbox on Mac Mini) | Vision-guided |
+| 3. Beat tracking | Hybrid: librosa + onset envelope + `beat_confidence` score | `data/ingest.py` |
+| 4. Library bloat | Perceptual hash (`phash`) on every clip + hamming-distance dedup | `data/ingest.py` + `data/engine_db.py` |
+| 5. Mode collapse | 75/25 exploit/explore hardcoded — every 4th clip is a mutation | `src/lib/clipLibrary.ts` |
+| 6. Human gate overload | Generation tracking + batch approval via engine DB | `data/engine_db.py` |
+| 7. Client isolation | `library/clients/` per-client sub-libraries | Directory structure |
+| 8. Crash recovery | SQLite `engine.db` — idempotent ingest, transactional status | `data/engine_db.py` |
+| 9. Health report | `python3 data/engine_status.py` — single source of truth | `data/engine_status.py` |
 
 ---
 
@@ -113,6 +137,13 @@ python3 data/analyze.py --report-only       # weekly bandit analysis
 > - Use ONLY library clips. Never generate from scratch.
 > - Ingest EVERY gold with full decipher ritual before generating.
 > - Run anti-slop gate before any preview. Threshold ≥ 0.60.
+> - Use dual-track library: good_parts/ for S-tier mog (≥0.88 rank), victim_contrast/ for deliberate contrast only.
+> - Run hybrid mog scoring: Claude Vision (70%) + MediaPipe landmarks (30%).
+> - Ingest is idempotent via engine.db. Running twice on the same file skips cleanly.
+> - Always use 75/25 exploit/explore (hardcoded). Every 4th clip slot is a mutation.
+> - Show batch table with predicted fidelity. User can APPROVE ALL or set AUTO threshold.
+> - Per-client work goes in library/clients/. Never mix with global library.
+> - Run `python3 data/engine_status.py` daily to check health.
 
 ### Priority 2: Vision-powered features (Claude Code can do these)
 
@@ -141,7 +172,7 @@ ffmpeg -i rendered.mp4 -vf "lut3d=custom_teal_orange.cube,noise=alls=8:allf=t" -
 
 ---
 
-## File Map
+## File Map (v4.2)
 
 ```
 ascension-engine/
@@ -150,23 +181,29 @@ ascension-engine/
 │   ├── Root.tsx             — Composition registration
 │   └── index.ts             — registerRoot() entry point
 ├── src/
-│   ├── types.ts             — BrutalBPBlueprint, SequenceTemplate, GradePreset
+│   ├── types.ts             — BrutalBPBlueprint, SequenceTemplate, GradePreset, TextTemplate
 │   ├── lib/
-│   │   └── clipLibrary.ts   — getBrutalTimeline(), remixSequence(), clip queries
+│   │   └── clipLibrary.ts   — getBrutalTimeline(), remixSequence(), 75/25 exploit/explore
 │   └── scripts/
 │       └── dna-transfer.ts  — Blueprint + remix generation CLI
 ├── data/
-│   ├── ingest.py            — Gold ingest: scene detect + audio + color + library assets
+│   ├── ingest.py            — Idempotent ingest + phash dedup + beat confidence
+│   ├── engine_db.py         — SQLite engine.db: single source of truth (v4.2)
+│   ├── engine_status.py     — Health dashboard (v4.2)
 │   ├── compare.py           — Anti-slop gate: SSIM + color + pacing + beat
 │   ├── feedback.py          — Analytics → clip rank adjustments
 │   ├── analyze.py           — Weekly bandit optimizer
 │   └── schema.sql           — SQLite analytics schema
-├── library/
+├── library/                 — THE MOAT
+│   ├── engine.db            — Central SQLite DB (idempotent tracking)
 │   ├── clips/               — Scene-segmented MP4s
+│   ├── good_parts/          — S-tier mog only (≥0.88 rank) — Claude Vision fills
+│   ├── victim_contrast/     — Deliberate contrast (<0.75) — Claude Vision fills
+│   ├── clients/             — Per-client isolated DNA (Gap 7)
 │   ├── sequence_templates/  — Reusable beat-synced timelines
 │   ├── grade_presets/       — CSS + FFmpeg color filters
 │   ├── blueprints/          — Beat data + cut alignment
-│   ├── text_templates/      — (Claude Vision fills this)
+│   ├── text_templates/      — Claude Vision fills (good-text OCR)
 │   ├── assets/
 │   │   ├── video/           — Raw video assets
 │   │   ├── audio/           — Extracted WAV tracks
@@ -176,8 +213,8 @@ ascension-engine/
 ├── style-profiles/          — Per-video DNA blueprints
 ├── input/gold/              — DROP ZONE: add .mp4 files here
 ├── clip-manifest.json       — Master clip catalog
-├── package.json             — npm scripts (generate, ingest, compare, etc.)
-├── requirements.txt         — Python deps
+├── package.json             — npm scripts
+├── requirements.txt         — Python deps (now includes mediapipe)
 └── AGENTS.md                — Cloud agent instructions
 ```
 
@@ -197,4 +234,14 @@ The library gets smarter every cycle. After 20-30 feeds, the engine outputs edit
 
 ---
 
-*Pushed to `main` — March 26, 2026*
+### Priority 4: Daily health check
+
+```bash
+python3 data/engine_status.py
+```
+
+Shows library size, mog/victim split, fidelity scores, pending approvals, disk usage, warnings.
+
+---
+
+*Pushed to `main` — v4.2 hardened — March 27, 2026*

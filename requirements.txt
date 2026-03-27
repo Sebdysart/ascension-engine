@@ -14,6 +14,8 @@ numpy                   # required by librosa + color analysis
 Pillow                  # PIL — frame dimensions, image I/O
 imagehash               # perceptual hashing for duplicate frame detection
 easyocr                 # text detection in keyframes (text_processor.py)
+scikit-image            # SSIM structural similarity for anti-slop gate
+mediapipe               # deterministic face landmark scoring (v4.2)
 
 # ── File watching ──────────────────────────────────────────────────────────
 watchdog                # filesystem watcher for ingest hot-folder mode

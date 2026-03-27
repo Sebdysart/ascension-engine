@@ -69,6 +69,16 @@ try:
 except ImportError:
     HAS_WATCHDOG = False
 
+try:
+    from data.engine_db import EngineDB
+    HAS_ENGINE_DB = True
+except ImportError:
+    try:
+        from engine_db import EngineDB
+        HAS_ENGINE_DB = True
+    except ImportError:
+        HAS_ENGINE_DB = False
+
 # ── Paths ─────────────────────────────────────────────────────────────────────
 ROOT = Path(__file__).resolve().parent.parent
 SEQUENCE_TEMPLATES_DIR = ROOT / "library" / "sequence_templates"
@@ -270,11 +280,18 @@ def analyze_audio(wav_path: Path) -> dict:
     threshold = float(np.mean(rms) + 1.5 * np.std(rms))
     peak_times = [float(times[i]) for i, v in enumerate(rms) if v > threshold]
 
+    # Beat confidence: ratio of onset-aligned beats (hybrid scoring)
+    beat_confidence = 0.0
+    if beat_times and onset_times:
+        aligned = sum(1 for bt in beat_times if any(abs(bt - ot) < 0.1 for ot in onset_times))
+        beat_confidence = round(aligned / max(len(beat_times), 1), 3)
+
     return {
         "bpm": int(round(tempo_val)),
         "beat_times": [round(t, 3) for t in beat_times],
         "onset_times": [round(t, 3) for t in onset_times],
         "peak_moments_sec": [round(t, 3) for t in peak_times],
+        "beat_confidence": beat_confidence,
     }
 
 # ── Color Histogram Analysis ──────────────────────────────────────────────────
@@ -387,6 +404,14 @@ def export_clip_segments(
             dry_run=dry_run,
         )
 
+        # Perceptual hash for deduplication
+        phash = ""
+        if HAS_IMAGEHASH and not dry_run and thumb_path.exists():
+            try:
+                phash = str(imagehash.phash(Image.open(thumb_path)))
+            except Exception:
+                pass
+
         clips.append({
             "clip_id": clip_id,
             "source_video_id": vid_id,
@@ -398,6 +423,7 @@ def export_clip_segments(
             "thumbnail": str(thumb_path.relative_to(ROOT)),
             "tags": [],
             "rank": 0.5,
+            "phash": phash,
             "ingest_timestamp": datetime.now(timezone.utc).isoformat(),
         })
 
@@ -703,15 +729,35 @@ def write_sequence_template(
 # ── Core Ingest Ritual ────────────────────────────────────────────────────────
 
 def ingest_video(video_path: Path, dry_run: bool = False) -> None:
-    """Run the full ingest ritual for a single .mp4 file."""
+    """Run the full ingest ritual for a single .mp4 file. Idempotent via engine DB."""
     log.info("▶  Ingesting: %s", video_path.name)
     require_ffmpeg()
+
+    # Idempotency check via engine DB
+    file_hash = hashlib.sha256(video_path.read_bytes()).hexdigest()[:16]
+    db = None
+    if HAS_ENGINE_DB and not dry_run:
+        try:
+            db = EngineDB()
+            db.init()
+            if db.is_ingested(file_hash):
+                log.info("   ⏩ Already ingested (hash %s). Skipping.", file_hash)
+                db.close()
+                return
+        except Exception as e:
+            log.warning("Engine DB error: %s — continuing without DB tracking", e)
+            db = None
 
     ensure_dirs(CLIPS_DIR, RAW_DIR, ASSETS_VIDEO, ASSETS_AUDIO,
                 ASSETS_THUMB, STYLE_PROFILES_DIR, SEQUENCE_TEMPLATES_DIR)
 
     vid_id = video_id(video_path)
     log.info("   Video ID: %s", vid_id)
+
+    # Register in engine DB
+    creator = video_path.stem.split("_")[0] if "_" in video_path.stem else "unknown"
+    if db:
+        db.start_ingest(vid_id, str(video_path), file_hash, creator)
 
     # Copy to raw library
     raw_copy = RAW_DIR / video_path.name
@@ -802,6 +848,24 @@ def ingest_video(video_path: Path, dry_run: bool = False) -> None:
 
     # Git commit
     git_commit(vid_id, dry_run)
+
+    # Mark complete in engine DB + register clips
+    if db:
+        try:
+            for clip in clips:
+                db.add_clip(
+                    clip["clip_id"], vid_id, clip["scene_index"],
+                    clip["start_sec"], clip["end_sec"], clip["duration_sec"],
+                    clip["file"], clip["thumbnail"], clip.get("phash", "")
+                )
+            db.update_ingest_status(vid_id, "complete",
+                bpm=audio_data.get("bpm", 0),
+                color_grade=color_data.get("color_grade", ""),
+                total_clips=len(clips),
+                cuts_on_beat_pct=profile.get("cut_rhythm", {}).get("cuts_on_beat_pct", 0))
+            db.close()
+        except Exception as e:
+            log.warning("Engine DB finalize error: %s", e)
 
     # Summary
     print_summary(vid_id, clips, profile, duration)
