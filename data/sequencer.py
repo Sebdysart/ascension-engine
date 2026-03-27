@@ -159,6 +159,94 @@ def describe(slots: list[Slot], bpm: float | None = None) -> str:
     return "\n".join(lines)
 
 
+# ── Narrative-aware slot (extends with act context) ───────────────────────────
+
+from dataclasses import dataclass as _dataclass
+
+
+@_dataclass
+class NarrativeAwareSlot:
+    """Slot with full narrative arc metadata for act-aware clip assignment."""
+    start: float
+    end: float
+    duration: float
+    section: SectionType
+    clip_index: int
+    act: str                         # "victim" | "awakening" | "ascension"
+    narrative_role: str              # reveal_tier or act name
+    is_victim_slot: bool
+    angle_inversion_required: bool
+    pre_drop_silence_sec: float      # 0.04–0.08 or 0.0
+    slow_mo: bool
+    zoom_pulse: bool
+    shake_intensity: float
+    preferred_pool: str              # "victim_contrast" | "mid_tier" | "good_parts" | "low_cinematic"
+
+
+def build_narrative_sequence(
+    bpm: float = 114.0,
+    total_sec: float = 15.0,
+    beats: list | None = None,
+) -> list[NarrativeAwareSlot]:
+    """
+    Build a narrative-aware cut schedule from the three-act arc.
+
+    Wraps build_narrative() from narrative_engine and maps NarrativeSlots
+    to NarrativeAwareSlots carrying pool hints for clip assignment.
+
+    Pool assignment:
+      Act 1 (victim)    → preferred_pool = "victim_contrast"
+      Act 2 (awakening) → preferred_pool = "mid_tier"
+      Act 3 (ascension) → preferred_pool = "good_parts"
+      Victim slots (pre-drop) → preferred_pool = "victim_contrast"
+
+    Backwards compatible: existing build_sequence() is unchanged.
+    """
+    import sys as _sys
+    from pathlib import Path as _Path
+    _sys.path.insert(0, str(_Path(__file__).resolve().parent))
+    from narrative_engine import build_narrative
+
+    _ACT_SECTION: dict[str, SectionType] = {
+        "victim": "verse",
+        "awakening": "buildup",
+        "ascension": "drop",
+    }
+
+    _ACT_POOL: dict[str, str] = {
+        "victim": "victim_contrast",
+        "awakening": "mid_tier",
+        "ascension": "good_parts",
+    }
+
+    narrative = build_narrative(bpm=bpm, total_sec=total_sec, beats=beats or [])
+
+    out: list[NarrativeAwareSlot] = []
+    for ns in narrative.slots:
+        act = ns.act
+        pool = "victim_contrast" if ns.is_victim_slot else _ACT_POOL.get(act, "mid_tier")
+        section: SectionType = _ACT_SECTION.get(act, "verse")
+
+        out.append(NarrativeAwareSlot(
+            start=ns.start_sec,
+            end=ns.end_sec,
+            duration=ns.duration_sec,
+            section=section,
+            clip_index=ns.index,
+            act=act,
+            narrative_role=ns.reveal_tier or act,
+            is_victim_slot=ns.is_victim_slot,
+            angle_inversion_required=ns.angle_inversion_required,
+            pre_drop_silence_sec=ns.pre_drop_silence_sec,
+            slow_mo=ns.slow_mo,
+            zoom_pulse=ns.zoom_pulse,
+            shake_intensity=ns.shake_intensity,
+            preferred_pool=pool,
+        ))
+
+    return out
+
+
 if __name__ == "__main__":
     import sys
 
