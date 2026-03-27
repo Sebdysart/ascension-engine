@@ -14,6 +14,20 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 
+# ── Narrative engine lazy import ──────────────────────────────────────────────
+def _import_narrative_engine():
+    """Import narrative modules — returns tuple of functions or None on failure."""
+    try:
+        import sys as _sys
+        from pathlib import Path as _Path
+        _sys.path.insert(0, str(_Path(__file__).resolve().parent))
+        from narrative_engine import build_narrative, describe_narrative, GRADE_SPEC
+        from hook_generator import generate_hook_spec
+        from sequencer import build_narrative_sequence
+        return build_narrative, describe_narrative, GRADE_SPEC, generate_hook_spec, build_narrative_sequence
+    except ImportError as e:
+        return None
+
 ROOT    = Path(__file__).resolve().parent.parent
 GOLD    = ROOT / "input" / "gold"
 OUT     = ROOT / "out"
@@ -183,6 +197,64 @@ def sources_for_template(template: dict) -> list[Path]:
     return out
 
 
+def _assign_clips_to_narrative_slots(
+    slots: list,
+    sources: list,
+    gf: str,
+    tmp_dir: "Path",
+    dry_run: bool = False,
+) -> list[dict]:
+    """
+    Assign source clips to narrative slots based on each slot's preferred_pool.
+
+    Pool → source heuristic:
+      victim_contrast  → prefer dark/roge-style sources
+      good_parts       → prefer bp-coded sources
+      mid_tier         → any sources
+    """
+    bp_pref   = [f for f in sources if any(k in f.name for k in ["bp", "gold", "morph", "saffyro"])]
+    dark_pref = [f for f in sources if any(k in f.name for k in ["black", "roge", "pilled", "editz"])]
+
+    pool_sources = {
+        "good_parts":      bp_pref or sources,
+        "victim_contrast": dark_pref or sources,
+        "mid_tier":        sources,
+        "low_cinematic":   sources,
+    }
+
+    assignments: list[dict] = []
+    for slot in slots:
+        pool     = getattr(slot, "preferred_pool", "mid_tier")
+        src_list = pool_sources.get(pool, sources)
+        src      = src_list[len(assignments) % len(src_list)]
+        dur      = slot.duration
+
+        clip_out = tmp_dir / f"c{slot.clip_index:03d}.mp4"
+
+        if not dry_run:
+            start = best_window(src, dur)
+            ok    = extract_clip(src, start, dur, clip_out, gf)
+            if not ok:
+                ok = extract_clip(src, 0.5, dur, clip_out, gf)
+        else:
+            ok = True
+
+        assignments.append({
+            "slot_index":   slot.clip_index,
+            "act":          getattr(slot, "act", "unknown"),
+            "is_victim":    getattr(slot, "is_victim_slot", False),
+            "pre_drop_sil": getattr(slot, "pre_drop_silence_sec", 0.0),
+            "zoom_pulse":   getattr(slot, "zoom_pulse", False),
+            "pool":         pool,
+            "source":       src.name,
+            "duration":     dur,
+            "extracted":    ok,
+            "path":         str(clip_out) if ok else None,
+        })
+
+    return assignments
+
+
 def generate_from_template(template: dict, dry_run: bool = False) -> dict:
     vid_id   = template.get("vid_id") or template.get("_file").stem
     bpm      = template.get("bpm", 108)
@@ -210,67 +282,117 @@ def generate_from_template(template: dict, dry_run: bool = False) -> dict:
         print("  [error] no sources")
         return {"name": out_name, "error": "no_sources"}
 
-    # Beat detection
+    # ── Beat detection ─────────────────────────────────────────────────────────
     audio_src = BEAT_AUDIO.get(grade, sources[0])
     if not audio_src.exists():
         audio_src = sources[0]
 
     print(f"  ▶ Beat detection ({audio_src.name[:40]}) ...", flush=True)
     detected_bpm, beats = detect_beats(audio_src, max_sec=total_dur + 5)
-    if beats:
-        actual_bpm = detected_bpm
-        beat_interval = 60.0 / actual_bpm
-        # beats_per_cut: aim for avg cut = total_dur / n_clips
-        target_cut = total_dur / n_clips
-        beats_per_cut = max(1, round(target_cut / beat_interval))
-        cut_durs = []
-        prev = 0.0
-        for i, bt in enumerate(beats):
-            if i % beats_per_cut == 0 and i > 0:
-                d = bt - prev
-                if 0.3 <= d <= 5.0:
-                    cut_durs.append(d)
-                    prev = bt
-    else:
-        actual_bpm = float(bpm)
-        target_cut = total_dur / n_clips
-        cut_durs = [target_cut] * n_clips
+    actual_bpm = detected_bpm if beats else float(bpm)
 
-    # Trim to target duration
-    used, final_durs = 0.0, []
-    for d in cut_durs:
-        if used + d > total_dur:
-            break
-        final_durs.append(d)
-        used += d
-    if not final_durs:
-        final_durs = [total_dur / n_clips] * n_clips
-        used = total_dur
-
-    avg_cut = used / len(final_durs)
-    print(f"  ▶ {len(final_durs)} cuts  avg={avg_cut:.2f}s  total={used:.1f}s  BPM={actual_bpm:.1f}", flush=True)
-
-    # Extract clips
-    gf = GRADE_FILTER.get(grade, "")
+    narrative_report: dict = {}
     tmp_dir = TMP / out_name
     tmp_dir.mkdir(exist_ok=True)
-    extracted = []
+    gf = GRADE_FILTER.get(grade, "")
 
-    for i, dur in enumerate(final_durs):
-        src = sources[i % len(sources)]
-        clip_out = tmp_dir / f"c{i:03d}.mp4"
-        start = best_window(src, dur)
-        ok = extract_clip(src, start, dur, clip_out, gf)
-        if not ok:
-            ok = extract_clip(src, 0.5, dur, clip_out, gf)
-        if ok:
-            extracted.append(clip_out)
-            print(f"    [{i+1:2d}/{len(final_durs)}] {src.name[:35]:38} {dur:.2f}s ✓", flush=True)
+    narrative_mods = _import_narrative_engine()
+    if narrative_mods is not None:
+        # ── Narrative arc mode ──────────────────────────────────────────────────
+        _build_narrative, _describe_narrative, _GRADE_SPEC, _generate_hook_spec, _build_narrative_sequence = narrative_mods
+
+        print(f"  ▶ Building MogNarrative arc (BPM={actual_bpm:.1f}) ...", flush=True)
+        nslots = _build_narrative_sequence(bpm=actual_bpm, total_sec=total_dur, beats=beats)
+        hook_spec = _generate_hook_spec(beats=beats, dry_run=dry_run)
+
+        assignments = _assign_clips_to_narrative_slots(nslots, sources, gf, tmp_dir, dry_run)
+        extracted   = [Path(a["path"]) for a in assignments if a["extracted"] and a["path"]]
+        final_durs  = [a["duration"] for a in assignments if a["extracted"]]
+        used        = sum(final_durs)
+
+        # Build narrative report
+        act_counts: dict[str, int] = {"victim": 0, "awakening": 0, "ascension": 0}
+        victim_placements: list[int] = []
+        pre_drop_silence_slots: list[dict] = []
+        for a in assignments:
+            act_counts[a["act"]] = act_counts.get(a["act"], 0) + 1
+            if a["is_victim"]:
+                victim_placements.append(a["slot_index"])
+            if a["pre_drop_sil"] > 0:
+                pre_drop_silence_slots.append({"slot": a["slot_index"], "sec": a["pre_drop_sil"]})
+
+        narrative_report = {
+            "mode": "narrative_arc",
+            "act_cuts": act_counts,
+            "victim_placements": victim_placements,
+            "pre_drop_silence": pre_drop_silence_slots,
+            "total_cuts": len(assignments),
+        }
+
+        print(
+            f"  ▶ Narrative: Act1={act_counts['victim']} Act2={act_counts['awakening']} "
+            f"Act3={act_counts['ascension']}  victims@{victim_placements}",
+            flush=True,
+        )
+        for a in assignments:
+            status      = "✓" if a["extracted"] else "✗"
+            victim_flag = " [VICTIM]" if a["is_victim"] else ""
+            predrop     = f" [sil={a['pre_drop_sil']:.3f}s]" if a["pre_drop_sil"] > 0 else ""
+            print(
+                f"    [{a['slot_index']:2d}] {a['act']:10s}  {a['source'][:35]:38} "
+                f"{a['duration']:.2f}s {status}{victim_flag}{predrop}",
+                flush=True,
+            )
+    else:
+        # ── Fallback: flat beat-grid (narrative_engine not available) ───────────
+        print("  ▶ [fallback] narrative_engine not found — using flat beat grid", flush=True)
+        beat_interval  = 60.0 / actual_bpm
+        target_cut     = total_dur / n_clips
+        beats_per_cut  = max(1, round(target_cut / beat_interval))
+        cut_durs: list[float] = []
+        prev = 0.0
+        if beats:
+            for i, bt in enumerate(beats):
+                if i % beats_per_cut == 0 and i > 0:
+                    d = bt - prev
+                    if 0.3 <= d <= 5.0:
+                        cut_durs.append(d)
+                        prev = bt
         else:
-            print(f"    [{i+1:2d}/{len(final_durs)}] {src.name[:35]:38} {dur:.2f}s ✗", flush=True)
+            target_cut_fb = total_dur / n_clips
+            cut_durs = [target_cut_fb] * n_clips
+
+        used, final_durs = 0.0, []
+        for d in cut_durs:
+            if used + d > total_dur:
+                break
+            final_durs.append(d)
+            used += d
+        if not final_durs:
+            final_durs = [total_dur / n_clips] * n_clips
+            used = total_dur
+
+        _avg_cut_fb = used / len(final_durs)
+        print(f"  ▶ {len(final_durs)} cuts  avg={_avg_cut_fb:.2f}s  total={used:.1f}s  BPM={actual_bpm:.1f}", flush=True)
+
+        extracted = []
+        for i, dur in enumerate(final_durs):
+            src      = sources[i % len(sources)]
+            clip_out = tmp_dir / f"c{i:03d}.mp4"
+            start    = best_window(src, dur)
+            ok       = extract_clip(src, start, dur, clip_out, gf)
+            if not ok:
+                ok = extract_clip(src, 0.5, dur, clip_out, gf)
+            if ok:
+                extracted.append(clip_out)
+                print(f"    [{i+1:2d}/{len(final_durs)}] {src.name[:35]:38} {dur:.2f}s ✓", flush=True)
+            else:
+                print(f"    [{i+1:2d}/{len(final_durs)}] {src.name[:35]:38} {dur:.2f}s ✗", flush=True)
 
     if len(extracted) < 2:
         return {"name": out_name, "error": "insufficient_clips"}
+
+    avg_cut = (used / len(final_durs)) if final_durs else 0.0
 
     # Concat + mux
     print(f"  ▶ Concatenating {len(extracted)} clips ...", flush=True)
@@ -308,6 +430,7 @@ def generate_from_template(template: dict, dry_run: bool = False) -> dict:
         "avg_cut_sec": round(avg_cut, 3),
         "total_duration_sec": round(used, 2),
         "file_size_mb": round(size_mb, 2),
+        "narrative": narrative_report,
     }
     print(f"  ✅  {out_final.name}  ({size_mb:.1f} MB)")
     return result
@@ -352,6 +475,13 @@ def main():
         else:
             print(f"  ✓  {r['name']}")
             print(f"       BPM={r['bpm']}  grade={r['color_grade']}  cuts={r['clips_used']}  avg={r['avg_cut_sec']}s  dur={r['total_duration_sec']}s  {r['file_size_mb']}MB")
+            nr = r.get("narrative", {})
+            if nr.get("mode") == "narrative_arc":
+                ac = nr.get("act_cuts", {})
+                vp = nr.get("victim_placements", [])
+                ps = len(nr.get("pre_drop_silence", []))
+                print(f"       Narrative: Act1={ac.get('victim',0)} Act2={ac.get('awakening',0)} Act3={ac.get('ascension',0)}")
+                print(f"       Victims@slots={vp}  pre-drop-silence={ps}")
     print(f"\n  Manifest: {manifest}")
 
 
