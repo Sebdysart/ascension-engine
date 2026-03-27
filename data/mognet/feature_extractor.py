@@ -12,15 +12,12 @@ import subprocess
 import sys
 import tempfile
 from pathlib import Path
-from typing import List
 
 import cv2
 import librosa
 import numpy as np
 
 log = logging.getLogger("mognet.feature_extractor")
-
-_ROOT = Path(__file__).resolve().parent.parent.parent  # project root
 
 # Act time boundaries (seconds)
 _ACT1_END = 3.0
@@ -246,7 +243,7 @@ def _camera_angles(frames: list[dict], cut_times: list[float]) -> list[float]:
             angles.append(0.0)
         else:
             # Largest face
-            fx, fy, fw, fh = max(faces, key=lambda f: f[2] * f[3])
+            fx, fy, fw, fh = max(faces, key=lambda face: face[2] * face[3])
             cx = fx + fw // 2
             # Map from [0, w] to [-45, 45]
             yaw = ((cx / w) - 0.5) * 90.0
@@ -268,7 +265,7 @@ def _brightness_contrast_ratio(brightnesses: list[float]) -> float:
     Ratio of max/min brightness across clips.
     High = victim is washed out vs mogger dark/contrasty.
     """
-    if not brightnesses or min(brightnesses) < 1:
+    if not brightnesses or min(brightnesses) < 1e-3:
         return 1.0
     return round(max(brightnesses) / (min(brightnesses) + 1e-6), 3)
 
@@ -284,14 +281,6 @@ def _color_temp_shift(temps: list[float]) -> bool:
 
 def _audio_features(path: str, max_sec: float = 22.0) -> dict:
     """Extract BPM, beat drops, silence gaps, build detection, drop intensity."""
-    try:
-        import librosa
-    except ImportError:
-        return {
-            "bpm": 108.0, "drop_timestamps": [], "silence_gaps_before_drop": [],
-            "avg_silence_gap_ms": 0.0, "build_detected": False, "drop_intensity_db": -20.0,
-        }
-
     with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as tmp:
         wav_path = tmp.name
 
@@ -443,12 +432,13 @@ def extract_video_features(video_path: str) -> dict:
         raise FileNotFoundError(f"Video not found: {video_path}")
 
     cap = _open_video(str(p))
-    fps = cap.get(cv2.CAP_PROP_FPS) or 30.0
-    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    total_dur = total_frames / fps
-
-    frames = _extract_frame_sequence(cap, max_frames=200)
-    cap.release()
+    try:
+        fps = cap.get(cv2.CAP_PROP_FPS) or 30.0
+        total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+        total_dur = total_frames / fps
+        frames = _extract_frame_sequence(cap, max_frames=200)
+    finally:
+        cap.release()
 
     cut_times = _detect_cuts(frames)
 
@@ -487,7 +477,7 @@ def extract_video_features(video_path: str) -> dict:
     aggression = _score_aggression(hook_text)
     has_second_person = any(w in hook_text.lower().split()
                              for w in ["you", "your", "you're", "you've", "you'll"])
-    text_density = round(len(hook_text) / max(15.0, 1.0), 2)
+    text_density = round(len(hook_text) / max(total_dur, 1.0), 2)
 
     text = {
         "hook_text":             hook_text,
