@@ -861,7 +861,9 @@ def ingest_video(video_path: Path, dry_run: bool = False) -> None:
                 if clip.get("mog_score") is not None:
                     db.update_clip_rank(clip["clip_id"], clip["mog_score"])
                 if clip.get("mog_track"):
-                    db.set_clip_track(clip["clip_id"], clip["mog_track"])
+                    _DB_TRACK = {"good_parts": "good_parts", "victim_contrast": "victim_contrast",
+                                 "mid_tier": "unclassified"}
+                    db.set_clip_track(clip["clip_id"], _DB_TRACK.get(clip["mog_track"], "unclassified"))
             db.conn.commit()
             db.update_ingest_status(vid_id, "complete",
                 bpm=audio_data.get("bpm", 0),
