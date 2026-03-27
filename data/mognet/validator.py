@@ -35,7 +35,7 @@ def _apply_rule_critiques(features: dict) -> tuple[list[str], list[str]]:
 
     # Rule 1: Silence gap too short
     gap_ms = float(a.get("avg_silence_gap_ms", 0.0))
-    if gap_ms > 0 and gap_ms < 40.0:
+    if gap_ms > 0 and gap_ms < 40.0:  # 0.0 means no gap data — skip rather than false-positive
         warnings.append(
             f"WARNING: silence gap too short ({gap_ms:.0f}ms < 40ms) — "
             "increase pre-drop breath room for impact"
