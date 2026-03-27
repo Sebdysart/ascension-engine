@@ -27,6 +27,6 @@ anthropic               # Anthropic Python SDK
 python-dotenv           # .env loading for optional config overrides
 
 # ── MogNet — edit intelligence layer ───────────────────────────────────────
-xgboost
-lightgbm
-joblib
+xgboost                 # XGBoost regressor — viral score prediction
+lightgbm                # LightGBM — fallback / ensemble scorer
+joblib                  # model serialisation (save/load trained scorers)
