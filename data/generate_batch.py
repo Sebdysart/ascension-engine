@@ -37,6 +37,51 @@ except ImportError:
     _MOGNET = None
 
 
+ROOT    = Path(__file__).resolve().parent.parent
+GOLD    = ROOT / "input" / "gold"
+OUT     = ROOT / "out"
+TMP     = ROOT / "tmp_genbatch"
+SEQ_DIR = ROOT / "library" / "sequence_templates"
+LUTS    = ROOT / "luts"
+
+_MODEL_PATH = ROOT / "data" / "mognet" / "viral_scorer.pkl"
+
+OUT.mkdir(exist_ok=True)
+TMP.mkdir(exist_ok=True)
+
+LUT_MAP = {
+    "TealOrange":   "teal_orange",
+    "WarmGold":     "warm_gold",
+    "Desaturated":  "desaturated",
+    "unknown":      "neutral",
+}
+
+GRADE_FILTER = {
+    "TealOrange": (
+        "eq=brightness=-0.04:contrast=1.18:saturation=0.82,"
+        "colorbalance=rs=0.08:gs=0.02:bs=-0.12:"
+        "rm=0.04:gm=0.01:bm=-0.06:rh=-0.02:gh=0.0:bh=-0.04"
+    ),
+    "WarmGold": (
+        "eq=brightness=0.02:contrast=1.12:saturation=1.05,"
+        "colorbalance=rs=0.10:gs=0.04:bs=-0.15:"
+        "rm=0.06:gm=0.02:bm=-0.08:rh=0.0:gh=0.0:bh=-0.05"
+    ),
+    "Desaturated": (
+        "eq=brightness=-0.06:contrast=1.22:saturation=0.55,"
+        "colorbalance=rs=-0.02:gs=0.0:bs=0.04"
+    ),
+    "unknown": "",
+}
+
+# Audio with strong beat for each grade
+BEAT_AUDIO = {
+    "TealOrange":  GOLD / "bp_masterx_7589676463071268118.mp4",
+    "WarmGold":    GOLD / "bp4ever.ae_7542208986699844869.mp4",
+    "Desaturated": GOLD / "black.pill.city_7600958206642326806.mp4",
+}
+
+
 def _load_mognet_scorer():
     """Load or bootstrap the MogNet viral scorer. Returns None if unavailable."""
     if _MOGNET is None:
@@ -51,10 +96,9 @@ def _load_mognet_scorer():
             print(f"  [mognet] Could not load model ({e}), bootstrapping from gold ...", flush=True)
     # Bootstrap from gold library
     try:
-        import sys as _s
         _data_path = str(ROOT / "data")
-        if _data_path not in _s.path:
-            _s.path.insert(0, _data_path)
+        if _data_path not in sys.path:
+            sys.path.insert(0, _data_path)
         from mognet.reference_analyzer import analyze_gold_library
         return analyze_gold_library()
     except Exception as e:
@@ -119,50 +163,6 @@ def _validate_and_maybe_retry(
 def _import_narrative_engine():
     """Return narrative module tuple or None if unavailable."""
     return _NARRATIVE_ENGINE
-
-ROOT    = Path(__file__).resolve().parent.parent
-GOLD    = ROOT / "input" / "gold"
-OUT     = ROOT / "out"
-TMP     = ROOT / "tmp_genbatch"
-SEQ_DIR = ROOT / "library" / "sequence_templates"
-LUTS    = ROOT / "luts"
-
-_MODEL_PATH = ROOT / "data" / "mognet" / "viral_scorer.pkl"
-
-OUT.mkdir(exist_ok=True)
-TMP.mkdir(exist_ok=True)
-
-LUT_MAP = {
-    "TealOrange":   "teal_orange",
-    "WarmGold":     "warm_gold",
-    "Desaturated":  "desaturated",
-    "unknown":      "neutral",
-}
-
-GRADE_FILTER = {
-    "TealOrange": (
-        "eq=brightness=-0.04:contrast=1.18:saturation=0.82,"
-        "colorbalance=rs=0.08:gs=0.02:bs=-0.12:"
-        "rm=0.04:gm=0.01:bm=-0.06:rh=-0.02:gh=0.0:bh=-0.04"
-    ),
-    "WarmGold": (
-        "eq=brightness=0.02:contrast=1.12:saturation=1.05,"
-        "colorbalance=rs=0.10:gs=0.04:bs=-0.15:"
-        "rm=0.06:gm=0.02:bm=-0.08:rh=0.0:gh=0.0:bh=-0.05"
-    ),
-    "Desaturated": (
-        "eq=brightness=-0.06:contrast=1.22:saturation=0.55,"
-        "colorbalance=rs=-0.02:gs=0.0:bs=0.04"
-    ),
-    "unknown": "",
-}
-
-# Audio with strong beat for each grade
-BEAT_AUDIO = {
-    "TealOrange":  GOLD / "bp_masterx_7589676463071268118.mp4",
-    "WarmGold":    GOLD / "bp4ever.ae_7542208986699844869.mp4",
-    "Desaturated": GOLD / "black.pill.city_7600958206642326806.mp4",
-}
 
 
 def score_frame(png_bytes: bytes) -> float:
@@ -554,6 +554,19 @@ def main():
     else:
         print("  ~ MogNet not available — skipping validation")
 
+    mognet_db = None
+    if mognet_scorer:
+        try:
+            import sys as _s
+            _data_path = str(ROOT / "data")
+            if _data_path not in _s.path:
+                _s.path.insert(0, _data_path)
+            from engine_db import EngineDB as _EngineDB
+            mognet_db = _EngineDB()
+            mognet_db.init()
+        except Exception as _e:
+            print(f"  [mognet] DB init failed: {_e}", flush=True)
+
     print(f"\n  Templates selected:")
     for t in templates:
         print(f"    {t.get('vid_id','?')[:48]:50} BPM={t.get('bpm',0):3}  grade={t.get('color_grade','?')}")
@@ -563,20 +576,13 @@ def main():
         r = generate_from_template(t, dry_run=args.dry_run)
         if mognet_scorer and not args.dry_run:
             r = _validate_and_maybe_retry(t, r, mognet_scorer)
-            # Save prediction to DB
-            try:
-                import sys as _s
-                _data_path = str(ROOT / "data")
-                if _data_path not in _s.path:
-                    _s.path.insert(0, _data_path)
-                from engine_db import EngineDB
-                db = EngineDB()
-                db.init()
-                edit_id = r.get("name", "unknown")
-                pred    = r.get("validation", {}).get("viral_score", 0.0)
-                db.save_mognet_prediction(edit_id, r.get("output", ""), pred, "")
-            except Exception as _e:
-                print(f"  [mognet] DB save failed: {_e}", flush=True)
+            if mognet_db:
+                try:
+                    edit_id = r.get("name", "unknown")
+                    pred    = r.get("validation", {}).get("viral_score", 0.0)
+                    mognet_db.save_mognet_prediction(edit_id, r.get("output", ""), pred, "")
+                except Exception as _e:
+                    print(f"  [mognet] DB save failed: {_e}", flush=True)
         results.append(r)
 
     manifest = OUT / "generate_batch_manifest.json"
