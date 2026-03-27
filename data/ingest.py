@@ -143,43 +143,60 @@ def save_json(path: Path, data: dict, dry_run: bool = False) -> None:
 
 # ── Scene Detection ───────────────────────────────────────────────────────────
 
-def detect_scenes(video_path: Path, threshold: float = 0.4) -> list[float]:
+def detect_scenes(video_path: Path, threshold: float = 0.32) -> list[float]:
     """
-    Run PySceneDetect and return a list of scene-start timestamps in seconds.
-    Falls back to fixed 3s intervals if scenedetect is not installed.
+    Detect scene boundaries using PySceneDetect Python API.
+    Tuned for fast TikTok cuts (0.3-1.5s) with low threshold.
+    Falls back to beat-aligned cuts if scenedetect is not available.
     """
-    if shutil.which("scenedetect") is None:
-        log.warning("scenedetect not found — using 3s fallback intervals.")
-        duration = ffprobe_duration(video_path)
-        return [i * 3.0 for i in range(int(duration // 3))]
+    try:
+        from scenedetect import open_video, SceneManager
+        from scenedetect.detectors import ContentDetector
 
-    result = subprocess.run(
-        [
-            "scenedetect",
-            "--input", str(video_path),
-            "--output", str(video_path.parent),
-            "detect-content",
-            "--threshold", str(threshold),
-            "list-scenes",
-            "--output", str(video_path.parent),
-            "--filename", f"{video_path.stem}-scenes.csv",
-            "--no-output-file",   # print to stdout
-        ],
-        capture_output=True, text=True,
-    )
-    timestamps: list[float] = []
-    for line in result.stdout.splitlines():
-        parts = line.strip().split(",")
-        if len(parts) >= 3 and parts[0].strip().isdigit():
+        video = open_video(str(video_path))
+        scene_manager = SceneManager()
+        scene_manager.add_detector(ContentDetector(
+            threshold=threshold,
+            min_scene_len=7,  # ~0.23s at 30fps
+        ))
+        scene_manager.detect_scenes(video)
+        scene_list = scene_manager.get_scene_list()
+
+        if scene_list:
+            timestamps = [scene[0].get_seconds() for scene in scene_list]
+            log.info("         PySceneDetect: %d scenes (threshold=%.2f)", len(timestamps), threshold)
+            return timestamps
+
+    except ImportError:
+        log.warning("scenedetect Python API not available.")
+    except Exception as e:
+        log.warning("Scene detection error: %s", e)
+
+    # Fallback: use FFmpeg scene filter (works without scenedetect)
+    log.info("         Using FFmpeg scene filter fallback...")
+    try:
+        result = subprocess.run(
+            ["ffprobe", "-v", "quiet", "-show_entries", "frame=pts_time",
+             "-of", "csv=p=0", "-f", "lavfi",
+             f"movie={video_path},select=gt(scene\\,0.3)"],
+            capture_output=True, text=True, timeout=30,
+        )
+        timestamps = []
+        for line in result.stdout.strip().splitlines():
             try:
-                timestamps.append(float(parts[3].strip()))
-            except (IndexError, ValueError):
+                timestamps.append(float(line.strip()))
+            except ValueError:
                 pass
-    if not timestamps:
-        log.warning("Scene detection returned no timestamps — using 3s fallback.")
-        duration = ffprobe_duration(video_path)
-        timestamps = [i * 3.0 for i in range(int(duration // 3))]
-    return timestamps
+        if timestamps:
+            log.info("         FFmpeg scene filter: %d cuts detected", len(timestamps))
+            return timestamps
+    except Exception:
+        pass
+
+    # Final fallback: beat-aligned if we have audio, else fixed intervals
+    log.warning("No scene detection available — using 1.0s intervals for BP-pace cuts.")
+    duration = ffprobe_duration(video_path)
+    return [i * 1.0 for i in range(int(duration // 1.0))]
 
 # ── Frame & Audio Extraction ──────────────────────────────────────────────────
 
@@ -227,24 +244,36 @@ def extract_audio(video_path: Path, out_dir: Path, dry_run: bool) -> Path:
 # ── Audio Analysis ────────────────────────────────────────────────────────────
 
 def analyze_audio(wav_path: Path) -> dict:
-    """Return BPM, beat locations, and peak moments via librosa."""
+    """Return BPM, beat locations, onset times, and peak moments via librosa."""
     if not HAS_LIBROSA:
         log.warning("librosa not installed — audio analysis skipped.")
-        return {"bpm": 0, "beat_times": [], "peak_moments_sec": []}
+        return {"bpm": 0, "beat_times": [], "peak_moments_sec": [], "onset_times": []}
 
     y, sr = librosa.load(str(wav_path), sr=22050, mono=True)
     tempo, beat_frames = librosa.beat.beat_track(y=y, sr=sr)
     beat_times = librosa.frames_to_time(beat_frames, sr=sr).tolist()
 
-    # RMS energy peaks
+    # Handle tempo being an ndarray (librosa >= 0.10)
+    if hasattr(tempo, '__len__'):
+        tempo_val = float(tempo[0]) if len(tempo) > 0 else 0.0
+    else:
+        tempo_val = float(tempo)
+
+    # Onset detection (strong transients — phonk drops, bass hits)
+    onset_env = librosa.onset.onset_strength(y=y, sr=sr)
+    onset_frames = librosa.onset.onset_detect(y=y, sr=sr, onset_envelope=onset_env)
+    onset_times = librosa.frames_to_time(onset_frames, sr=sr).tolist()
+
+    # RMS energy peaks (high-energy moments)
     rms = librosa.feature.rms(y=y)[0]
     times = librosa.frames_to_time(range(len(rms)), sr=sr)
     threshold = float(np.mean(rms) + 1.5 * np.std(rms))
     peak_times = [float(times[i]) for i, v in enumerate(rms) if v > threshold]
 
     return {
-        "bpm": int(round(float(tempo))),
+        "bpm": int(round(tempo_val)),
         "beat_times": [round(t, 3) for t in beat_times],
+        "onset_times": [round(t, 3) for t in onset_times],
         "peak_moments_sec": [round(t, 3) for t in peak_times],
     }
 
@@ -376,6 +405,43 @@ def export_clip_segments(
 
 # ── Style Profile Builder ─────────────────────────────────────────────────────
 
+def compute_beat_aligned_cuts(
+    scene_times: list[float],
+    beat_times: list[float],
+    tolerance_ms: float = 80.0,
+) -> list[dict]:
+    """For each scene cut, find nearest beat and compute offset."""
+    cut_points = []
+    tol_sec = tolerance_ms / 1000.0
+
+    for i, cut_time in enumerate(scene_times):
+        nearest_beat = None
+        offset_ms = 999.0
+        on_beat = False
+
+        if beat_times:
+            diffs = [(abs(cut_time - bt), bt) for bt in beat_times]
+            min_diff, nearest_beat = min(diffs, key=lambda x: x[0])
+            offset_ms = round(min_diff * 1000, 1)
+            on_beat = min_diff <= tol_sec
+
+        # Duration to next cut
+        if i + 1 < len(scene_times):
+            dur = round(scene_times[i + 1] - cut_time, 3)
+        else:
+            dur = 0.0
+
+        cut_points.append({
+            "time_sec": round(cut_time, 3),
+            "duration_sec": dur,
+            "on_beat": on_beat,
+            "beat_offset_ms": offset_ms,
+            "tags": [],
+        })
+
+    return cut_points
+
+
 def build_style_profile(
     vid_id: str,
     scene_times: list[float],
@@ -384,63 +450,107 @@ def build_style_profile(
     duration: float,
     source_creator: str = "unknown",
 ) -> dict:
-    """Assemble the style-profile.json schema."""
-    cut_lengths = []
-    if len(scene_times) > 1:
-        cut_lengths = [
-            round(scene_times[i + 1] - scene_times[i], 3)
-            for i in range(len(scene_times) - 1)
-        ]
+    """Build brutal BP blueprint from extracted DNA."""
+    beat_times = audio_data.get("beat_times", [])
+    cut_points = compute_beat_aligned_cuts(scene_times, beat_times)
 
+    cut_lengths = [cp["duration_sec"] for cp in cut_points if cp["duration_sec"] > 0]
     avg_cut = round(statistics.mean(cut_lengths), 3) if cut_lengths else 0.0
-    std_dev = round(statistics.stdev(cut_lengths), 3) if len(cut_lengths) > 1 else 0.0
-    cuts_per_15 = int(round(15 / avg_cut)) if avg_cut > 0 else 0
 
-    hook_end = scene_times[2] if len(scene_times) > 2 else min(3.0, duration)
-
-    beat_cut_alignment = "unknown"
-    if audio_data.get("beat_times") and cut_lengths:
-        aligned = sum(
-            1 for ct in scene_times
-            if any(abs(ct - bt) < 0.15 for bt in audio_data["beat_times"])
-        )
-        ratio = aligned / len(scene_times) if scene_times else 0
-        beat_cut_alignment = "tight" if ratio > 0.6 else "loose" if ratio > 0.3 else "free"
+    on_beat_count = sum(1 for cp in cut_points if cp["on_beat"])
+    on_beat_pct = round(on_beat_count / max(len(cut_points), 1), 3)
+    avg_offset = round(
+        statistics.mean([cp["beat_offset_ms"] for cp in cut_points]) if cut_points else 0, 1
+    )
 
     return {
         "video_id": vid_id,
-        "ingest_timestamp": datetime.now(timezone.utc).isoformat(),
         "source_creator": source_creator,
+        "total_duration_sec": round(duration, 2),
+        "bpm": audio_data.get("bpm", 0),
+        "beat_times_sec": beat_times,
         "cut_rhythm": {
-            "avg_cut_length_sec": avg_cut,
-            "std_dev_sec": std_dev,
-            "cuts_per_15s": cuts_per_15,
-            "hook_pacing_sec": [0, round(hook_end, 2)],
-            "zoom_points_sec": [],
+            "avg_cut_sec": avg_cut,
+            "total_cuts": len(scene_times),
+            "cuts_on_beat_pct": on_beat_pct,
+            "beat_offset_avg_ms": avg_offset,
+            "cut_points": cut_points,
         },
-        "visuals": {
+        "visual_grade": {
             "color_grade": color_data.get("color_grade", "unknown"),
-            "blur_zoom_patterns": "unanalyzed",
-            "motion_types_frequency": {},
-        },
-        "text": {
-            "caption_density": 0.0,
-            "font_style": "unanalyzed",
-            "casing": "unanalyzed",
-            "animation": "unanalyzed",
-            "tikTok_config": {"position": "bottom-third", "max_chars_per_line": 18},
+            "description": f"avg_r={color_data.get('avg_r', 0)}, avg_g={color_data.get('avg_g', 0)}, avg_b={color_data.get('avg_b', 0)}",
         },
         "audio": {
             "bpm": audio_data.get("bpm", 0),
-            "beat_cut_alignment": beat_cut_alignment,
-            "vo_music_balance": {"music": 0.0, "vo": 0.0},
+            "beat_times_sec": beat_times,
+            "onset_times_sec": audio_data.get("onset_times", []),
             "peak_moments_sec": audio_data.get("peak_moments_sec", []),
+            "energy_profile": "phonk" if audio_data.get("bpm", 0) >= 120 else "atmospheric",
         },
-        "hook_style": "unanalyzed",
-        "critique": "",
-        "user_notes": None,
-        "performance_link": None,
+        "motion_fx": {
+            "zoom_punch": True,
+            "zoom_easing": "cubic-bezier(0.25,0.1,0.25,1)",
+            "impact_hold_ms": 120,
+        },
+        "ingest_timestamp": datetime.now(timezone.utc).isoformat(),
     }
+
+# ── Library Asset Builders ────────────────────────────────────────────────────
+
+SEQUENCE_TEMPLATES_DIR = LIBRARY_DIR / "sequence_templates"
+GRADE_PRESETS_DIR = LIBRARY_DIR / "grade_presets"
+BLUEPRINTS_DIR = LIBRARY_DIR / "blueprints"
+
+
+def build_sequence_template(vid_id, clips, profile, source_creator):
+    """Extract reusable timeline template from ingested video."""
+    beat_times = profile.get("beat_times_sec", [])
+    peak_moments = set(round(p, 1) for p in profile.get("audio", {}).get("peak_moments_sec", []))
+
+    slots = []
+    for i, clip in enumerate(clips):
+        start = clip["start_sec"]
+        dur = clip["duration_sec"]
+        on_beat = any(abs(start - bt) < 0.08 for bt in beat_times) if beat_times else False
+        is_impact = any(abs(start - p) < 0.2 for p in peak_moments)
+
+        slots.append({
+            "index": i, "start_sec": round(start, 3), "duration_sec": round(dur, 3),
+            "on_beat": on_beat, "is_impact": is_impact,
+            "original_clip_id": clip["clip_id"], "preferred_tags": clip.get("tags", []),
+        })
+
+    cut_lengths = [s["duration_sec"] for s in slots if s["duration_sec"] > 0]
+    avg_cut = round(statistics.mean(cut_lengths), 3) if cut_lengths else 0
+    on_beat_count = sum(1 for s in slots if s["on_beat"])
+
+    return {
+        "template_id": f"seq_{vid_id}", "source_video_id": vid_id,
+        "source_creator": source_creator, "bpm": profile.get("bpm", 0),
+        "total_duration_sec": profile.get("total_duration_sec", 0),
+        "total_slots": len(slots), "avg_cut_sec": avg_cut,
+        "cuts_on_beat_pct": round(on_beat_count / max(len(slots), 1), 3),
+        "color_grade": profile.get("visual_grade", {}).get("color_grade", "unknown"),
+        "slots": slots, "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+
+
+def build_grade_preset(vid_id, color_data, profile):
+    """Generate reusable grade preset from color analysis."""
+    grade = color_data.get("color_grade", "unknown")
+    css = {"Desaturated": "saturate(0.15) contrast(1.25) brightness(0.95)",
+           "ColdBlue": "saturate(0.9) hue-rotate(20deg) brightness(0.85) contrast(1.2)",
+           "WarmGold": "saturate(1.2) sepia(0.3) brightness(1.05)",
+           "TealOrange": "saturate(1.3) hue-rotate(-10deg) contrast(1.15)",
+           "Neutral": "saturate(1.05) contrast(1.08) brightness(1.0)"}
+    return {
+        "preset_id": f"grade_{vid_id}", "name": f"{grade}_from_{vid_id[:20]}",
+        "css_filter": css.get(grade, "none"),
+        "avg_r": color_data.get("avg_r", 0), "avg_g": color_data.get("avg_g", 0),
+        "avg_b": color_data.get("avg_b", 0), "source_videos": [vid_id],
+        "description": f"From {profile.get('source_creator', 'unknown')} — {grade}",
+    }
+
 
 # ── Tags Index Update ─────────────────────────────────────────────────────────
 
@@ -499,16 +609,19 @@ def git_commit(vid_id: str, dry_run: bool) -> None:
 # ── Summary Report ────────────────────────────────────────────────────────────
 
 def print_summary(vid_id: str, clips: list[dict], profile: dict, duration: float) -> None:
+    cr = profile.get("cut_rhythm", {})
+    audio = profile.get("audio", {})
+    grade = profile.get("visual_grade", {}).get("color_grade", "unknown")
     print("\n" + "═" * 60)
     print(f"  ✅  INGEST COMPLETE — {vid_id}")
     print("═" * 60)
     print(f"  Duration      : {duration:.1f}s")
     print(f"  Scenes        : {len(clips)}")
-    print(f"  BPM           : {profile['audio']['bpm']}")
-    print(f"  Color Grade   : {profile['visuals']['color_grade']}")
-    print(f"  Avg Cut       : {profile['cut_rhythm']['avg_cut_length_sec']}s")
-    print(f"  Beat Alignment: {profile['audio']['beat_cut_alignment']}")
-    print(f"  Peak Moments  : {profile['audio']['peak_moments_sec'][:5]}")
+    print(f"  BPM           : {audio.get('bpm', 0)}")
+    print(f"  Color Grade   : {grade}")
+    print(f"  Avg Cut       : {cr.get('avg_cut_sec', 0)}s")
+    print(f"  Cuts on Beat  : {cr.get('cuts_on_beat_pct', 0) * 100:.0f}%")
+    print(f"  Onsets        : {len(audio.get('onset_times_sec', []))}")
     print("═" * 60 + "\n")
 
 # ── Sequence Template Writer ──────────────────────────────────────────────────
@@ -678,6 +791,14 @@ def ingest_video(video_path: Path, dry_run: bool = False) -> None:
     # Update manifest + tags index
     update_clip_manifest(clips, dry_run)
     update_tags_index(clips, dry_run)
+
+    # Library assets: sequence template, grade preset, blueprint
+    ensure_dirs(SEQUENCE_TEMPLATES_DIR, GRADE_PRESETS_DIR, BLUEPRINTS_DIR)
+    seq = build_sequence_template(vid_id, clips, profile, creator)
+    save_json(SEQUENCE_TEMPLATES_DIR / f"seq_{vid_id}.json", seq, dry_run)
+    log.info("         Sequence template: %d slots → seq_%s.json", len(seq["slots"]), vid_id[:30])
+    save_json(GRADE_PRESETS_DIR / f"grade_{vid_id}.json", build_grade_preset(vid_id, color_data, profile), dry_run)
+    save_json(BLUEPRINTS_DIR / f"bp_{vid_id}.json", profile, dry_run)
 
     # Git commit
     git_commit(vid_id, dry_run)

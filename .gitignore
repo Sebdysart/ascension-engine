@@ -11,3 +11,4 @@ style-profiles/*.json
 data/analytics.db
 __pycache__/
 .DS_Store
+public/
