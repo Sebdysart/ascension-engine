@@ -157,4 +157,5 @@ def validate_edit(edit_path: str, scorer: ViralScorer) -> dict:
         "strengths":   strengths,
         "warnings":    warnings,
         "critiques":   critiques,
+        "features":    features,  # included for DB persistence in generate_batch
     }

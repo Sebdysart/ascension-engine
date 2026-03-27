@@ -578,9 +578,12 @@ def main():
             r = _validate_and_maybe_retry(t, r, mognet_scorer)
             if mognet_db:
                 try:
-                    edit_id = r.get("name", "unknown")
-                    pred    = r.get("validation", {}).get("viral_score", 0.0)
-                    mognet_db.save_mognet_prediction(edit_id, r.get("output", ""), pred, "")
+                    import json as _json
+                    edit_id  = r.get("name", "unknown")
+                    pred     = r.get("validation", {}).get("viral_score", 0.0)
+                    feats    = r.get("validation", {}).get("features", {})
+                    feats_js = _json.dumps(feats) if feats else ""
+                    mognet_db.save_mognet_prediction(edit_id, r.get("output", ""), pred, feats_js)
                 except Exception as _e:
                     print(f"  [mognet] DB save failed: {_e}", flush=True)
         results.append(r)

@@ -99,7 +99,7 @@ def test_result_keys():
     scorer = _make_scorer(80.0)
     with patch("mognet.validator.extract_video_features", return_value=_make_good_features()):
         result = validate_edit("/fake/path.mp4", scorer)
-    for key in ["decision", "viral_score", "strengths", "warnings", "critiques"]:
+    for key in ["decision", "viral_score", "strengths", "warnings", "critiques", "features"]:
         assert key in result, f"Missing key: {key}"
 
 

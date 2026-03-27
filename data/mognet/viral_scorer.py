@@ -139,7 +139,7 @@ class ViralScorer:
                 random_state=42,
                 verbose=-1,
             )
-            self._lgbm.fit(X, y)
+            self._lgbm.fit(X, y, feature_name=_FEATURE_NAMES)
         except Exception as e:
             log.warning("LightGBM ensemble skipped: %s", e)
             self._lgbm = None
@@ -156,7 +156,7 @@ class ViralScorer:
         -------
         {
             "score": float (0–100),
-            "confidence": float (0–1),
+            "confidence": float (0–1),  # static proxy: 0.85=ensemble, 0.70=XGBoost-only
             "breakdown": {
                 "cut_rate_contribution": float,
                 "audio_contribution":    float,
