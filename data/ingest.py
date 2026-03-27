@@ -858,6 +858,11 @@ def ingest_video(video_path: Path, dry_run: bool = False) -> None:
                     clip["start_sec"], clip["end_sec"], clip["duration_sec"],
                     clip["file"], clip["thumbnail"], clip.get("phash", "")
                 )
+                if clip.get("mog_score") is not None:
+                    db.update_clip_rank(clip["clip_id"], clip["mog_score"])
+                if clip.get("mog_track"):
+                    db.set_clip_track(clip["clip_id"], clip["mog_track"])
+            db.conn.commit()
             db.update_ingest_status(vid_id, "complete",
                 bpm=audio_data.get("bpm", 0),
                 color_grade=color_data.get("color_grade", ""),

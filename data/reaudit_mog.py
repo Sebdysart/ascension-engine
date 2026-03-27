@@ -1,22 +1,22 @@
 #!/usr/bin/env python3
 """
-Ascension Engine — Mog Track Re-Audit
-Scores every clip in clip-manifest.json using Claude Vision,
-classifies into good_parts / mid_tier / victim_contrast,
-updates clip-manifest.json, and updates engine.db track column.
+Ascension Engine — Cinematic Quality Re-Audit
+Scores every clip in engine.db using Claude Vision (cinematic quality 0.0–1.0),
+classifies into good_parts / mid_tier / victim_contrast, and updates the DB.
+
+Scoring is done per-video (shared keyframes), then applied to all clips
+from that video.
 
 Usage:
-    python3 data/reaudit_mog.py                    # score all unscored clips
-    python3 data/reaudit_mog.py --all              # re-score everything (overwrite)
-    python3 data/reaudit_mog.py --dry-run          # print what would happen, no writes
-    python3 data/reaudit_mog.py --stats            # show current split without scoring
+    python3 data/reaudit_mog.py              # score all unscored clips
+    python3 data/reaudit_mog.py --all        # re-score everything
+    python3 data/reaudit_mog.py --dry-run    # print plan, no writes
+    python3 data/reaudit_mog.py --stats      # show current split without scoring
 """
 
 import argparse
-import json
 import logging
 import sys
-from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -28,157 +28,126 @@ from engine_db import EngineDB
 logging.basicConfig(level=logging.INFO, format="%(asctime)s  %(levelname)-8s  %(message)s")
 log = logging.getLogger("reaudit_mog")
 
-MANIFEST_PATH = ROOT / "clip-manifest.json"
-ASSETS_THUMB  = ROOT / "library" / "assets" / "thumbnails"
+ASSETS_THUMB = ROOT / "library" / "assets" / "thumbnails"
 
-TRACK_LABELS = {
-    "good_parts":      "S-Tier  (≥0.88)",
-    "mid_tier":        "Mid     (0.75–0.87)",
-    "victim_contrast": "Victim  (<0.75)",
-}
-
-# engine.db only allows: unclassified | good_parts | victim_contrast | archived
-# mid_tier maps to 'unclassified' in DB until schema is extended
+# engine.db track CHECK constraint only allows these values
 DB_TRACK_MAP = {
     "good_parts":      "good_parts",
     "victim_contrast": "victim_contrast",
-    "mid_tier":        "unclassified",
+    "mid_tier":        "unclassified",   # mid_tier not in DB enum yet
 }
 
 
-def load_manifest() -> dict:
-    if not MANIFEST_PATH.exists():
-        log.error("clip-manifest.json not found")
-        sys.exit(1)
-    return json.loads(MANIFEST_PATH.read_text())
-
-
-def save_manifest(data: dict) -> None:
-    data["last_updated"] = datetime.now(timezone.utc).isoformat()
-    MANIFEST_PATH.write_text(json.dumps(data, indent=2))
-
-
-def print_stats(clips: list[dict]) -> None:
-    counts: dict[str, int] = {"good_parts": 0, "mid_tier": 0, "victim_contrast": 0, "unscored": 0}
-    for clip in clips:
-        score = clip.get("mog_score")
-        if score is None:
-            counts["unscored"] += 1
-        else:
-            counts[classify_mog_track(score)] += 1
-
+def print_stats(db: EngineDB) -> None:
+    rows = db.conn.execute("SELECT track, COUNT(*) FROM clips GROUP BY track").fetchall()
+    total = db.conn.execute("SELECT COUNT(*) FROM clips").fetchone()[0]
+    counts = {r[0]: r[1] for r in rows}
     print("\n" + "═" * 60)
-    print("  MOG TRACK AUDIT")
+    print("  CINEMATIC QUALITY SPLIT")
     print("═" * 60)
-    print(f"  Total clips      : {len(clips)}")
-    print(f"  S-Tier  (≥{MOG_S_TIER}) : {counts['good_parts']} clips → good_parts/")
-    print(f"  Mid     ({MOG_VICTIM}–{MOG_S_TIER}): {counts['mid_tier']} clips → mid_tier/")
-    print(f"  Victim  (<{MOG_VICTIM}) : {counts['victim_contrast']} clips → victim_contrast/")
-    print(f"  Unscored         : {counts['unscored']} clips")
+    print(f"  Total clips               : {total}")
+    print(f"  S-tier good_parts (≥{MOG_S_TIER}) : {counts.get('good_parts', 0)}")
+    print(f"  mid_tier ({MOG_VICTIM}–{MOG_S_TIER})      : {counts.get('unclassified', 0)}")
+    print(f"  victim_contrast (<{MOG_VICTIM})  : {counts.get('victim_contrast', 0)}")
+    print(f"  archived                  : {counts.get('archived', 0)}")
     print("═" * 60 + "\n")
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Mog track re-auditor")
-    parser.add_argument("--all",     action="store_true", help="Re-score all clips, not just unscored")
-    parser.add_argument("--dry-run", action="store_true", help="Print plan, no writes")
-    parser.add_argument("--stats",   action="store_true", help="Show current split and exit")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--all",     action="store_true", help="Re-score all clips")
+    parser.add_argument("--dry-run", action="store_true", help="No writes")
+    parser.add_argument("--stats",   action="store_true", help="Show split and exit")
     args = parser.parse_args()
-
-    manifest = load_manifest()
-    clips: list[dict] = manifest.get("clips", [])
-
-    if args.stats:
-        print_stats(clips)
-        return
-
-    # Deduplicate by source_video_id — score once per video's keyframe set,
-    # apply that score to all clips from that video (they share keyframes).
-    scored_videos: dict[str, dict] = {}   # video_id → mog_result
-    to_score: list[dict] = []
-
-    for clip in clips:
-        vid = clip.get("source_video_id", "")
-        already_has_score = clip.get("mog_score") is not None
-        if not args.all and already_has_score:
-            continue
-        if vid not in scored_videos:
-            to_score.append(clip)   # representative clip per video
-
-    if not to_score:
-        log.info("All clips already scored. Use --all to force re-score.")
-        print_stats(clips)
-        return
-
-    # Identify unique videos that need scoring
-    unique_vids = []
-    seen_vids: set[str] = set()
-    for clip in to_score:
-        vid = clip.get("source_video_id", "")
-        if vid not in seen_vids:
-            seen_vids.add(vid)
-            unique_vids.append(vid)
-
-    log.info("Scoring %d video(s) covering %d clips …", len(unique_vids), len(clips))
 
     db = EngineDB()
     db.init()
 
-    for vid in unique_vids:
+    if args.stats:
+        print_stats(db)
+        db.close()
+        return
+
+    # Get all clips from DB
+    if args.all:
+        rows = db.conn.execute("SELECT clip_id, video_id, rank FROM clips ORDER BY video_id, clip_id").fetchall()
+    else:
+        # Only score clips at the default rank (0.5 = never scored)
+        rows = db.conn.execute(
+            "SELECT clip_id, video_id, rank FROM clips WHERE rank = 0.5 ORDER BY video_id, clip_id"
+        ).fetchall()
+
+    if not rows:
+        log.info("No clips to score. Use --all to force re-score.")
+        print_stats(db)
+        db.close()
+        return
+
+    # Group clips by video_id for efficient scoring (one API call per video)
+    from collections import defaultdict
+    by_video: dict[str, list[str]] = defaultdict(list)
+    for clip_id, video_id, _ in rows:
+        by_video[video_id].append(clip_id)
+
+    log.info("Scoring %d video(s) covering %d clips…", len(by_video), len(rows))
+
+    scored_videos: dict[str, dict] = {}
+
+    for vid, clip_ids in by_video.items():
         kf_dir = ASSETS_THUMB / vid
         if not kf_dir.exists():
-            log.warning("  No keyframes for %s — defaulting to 0.5", vid[:50])
-            scored_videos[vid] = {"mog_score": 0.5, "dominant_trait": "unknown", "notes": "no keyframes"}
-            continue
-
-        frames = _gather_frames(kf_dir, max_frames=3)
-        if not frames:
-            log.warning("  No frames found in %s — defaulting to 0.5", kf_dir.name[:50])
-            scored_videos[vid] = {"mog_score": 0.5, "dominant_trait": "unknown", "notes": "no frames"}
-            continue
+            # Fall back to individual scene thumbnails
+            frame_paths = [ASSETS_THUMB / f"{cid}.jpg" for cid in clip_ids
+                           if (ASSETS_THUMB / f"{cid}.jpg").exists()]
+            if not frame_paths:
+                log.warning("  [SKIP] no keyframes for %s", vid[:55])
+                scored_videos[vid] = {"mog_score": 0.5, "dominant_trait": "unknown", "notes": "no frames"}
+                continue
+        else:
+            frame_paths = _gather_frames(kf_dir, max_frames=4)
+            if not frame_paths:
+                log.warning("  [SKIP] empty keyframe dir for %s", vid[:55])
+                scored_videos[vid] = {"mog_score": 0.5, "dominant_trait": "unknown", "notes": "empty dir"}
+                continue
 
         if args.dry_run:
-            log.info("  [dry-run] Would score %s (%d frames)", vid[:50], len(frames))
+            log.info("  [dry-run] Would score %s (%d frames, %d clips)", vid[:50], len(frame_paths), len(clip_ids))
             scored_videos[vid] = {"mog_score": 0.5, "dominant_trait": "dry_run", "notes": ""}
             continue
 
-        log.info("  Scoring %s …", vid[:55])
-        result = _call_claude_mog_score(frames)
+        log.info("  Scoring %s … (%d frames, %d clips)", vid[:50], len(frame_paths), len(clip_ids))
+        result = _call_claude_mog_score(frame_paths)
         scored_videos[vid] = result
         track = classify_mog_track(result["mog_score"])
-        log.info("    → %.3f (%s) — %s  [%s]",
-                 result["mog_score"], result["dominant_trait"], result.get("notes", ""), track)
+        log.info("    → %.3f (%s) — [%s]  %s",
+                 result["mog_score"], result.get("dominant_trait", "?"), track,
+                 result.get("notes", ""))
 
-    # Apply scores to all clips in manifest
+    # Update DB
     changed = 0
-    for clip in clips:
-        vid = clip.get("source_video_id", "")
-        if vid not in scored_videos:
+    for vid, clip_ids in by_video.items():
+        result = scored_videos.get(vid)
+        if not result:
             continue
-        result = scored_videos[vid]
-        old_track = clip.get("mog_track", "unscored")
-        new_track = classify_mog_track(result["mog_score"])
-        clip["mog_score"] = result["mog_score"]
-        clip["mog_track"] = new_track
-        clip["mog_notes"] = result.get("notes", "")
-        if old_track != new_track:
+        score = result["mog_score"]
+        track = DB_TRACK_MAP.get(classify_mog_track(score), "unclassified")
+        for clip_id in clip_ids:
+            if not args.dry_run:
+                db.update_clip_rank(clip_id, score)
+                db.set_clip_track(clip_id, track)
             changed += 1
-
-        if not args.dry_run:
-            # Update engine.db track column
-            db.conn.execute(
-                "UPDATE clips SET track = ? WHERE clip_id = ?",
-                (DB_TRACK_MAP.get(new_track, "unclassified"), clip["clip_id"])
-            )
 
     if not args.dry_run:
         db.conn.commit()
-        manifest["clips"] = clips
-        save_manifest(manifest)
-        log.info("Saved manifest + DB. %d clips changed track.", changed)
+        log.info("Updated %d clips in engine.db", changed)
 
     db.close()
-    print_stats(clips)
+    if not args.dry_run:
+        db2 = EngineDB(); db2.init()
+        print_stats(db2)
+        db2.close()
+    else:
+        log.info("[dry-run] No changes written.")
 
 
 if __name__ == "__main__":

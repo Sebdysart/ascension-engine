@@ -83,10 +83,13 @@ Scoring criteria:
 Output ONLY a valid JSON object, nothing else:
 {{"mog_score": <float 0.0-1.0>, "dominant_trait": "<one word>", "notes": "<10 words max>"}}
 
+Calibration notes — typical phone/selfie footage scores 0.30–0.75. Reserve 0.75+ for genuinely
+cinematic clips with real lighting and composition. Use the full range; do not cluster near extremes.
+
 Examples:
-{{"mog_score": 0.91, "dominant_trait": "lighting", "notes": "dramatic rim light, crushed blacks, teal grade"}}
-{{"mog_score": 0.43, "dominant_trait": "flat", "notes": "blown out overhead light, no contrast, dead composition"}}
-{{"mog_score": 0.72, "dominant_trait": "composition", "notes": "decent framing, moderate contrast, average lighting"}}
+{{"mog_score": 0.78, "dominant_trait": "lighting", "notes": "dramatic rim light, crushed blacks, teal grade"}}
+{{"mog_score": 0.35, "dominant_trait": "flat", "notes": "blown out overhead light, no contrast, dead composition"}}
+{{"mog_score": 0.58, "dominant_trait": "composition", "notes": "decent framing, moderate contrast, average lighting"}}
 """
 
 
@@ -246,9 +249,9 @@ def _call_claude_mog_score(frame_paths: list[Path]) -> dict:
 
 
 # ── Mog Track Constants ────────────────────────────────────────────────────────
-MOG_S_TIER = 0.88    # → good_parts/
-MOG_VICTIM = 0.75    # below → victim_contrast/
-# between → mid_tier/
+MOG_S_TIER = 0.65    # → good_parts/  (realistic ceiling for phone footage)
+MOG_VICTIM = 0.45    # below → victim_contrast/
+# 0.45–0.65 → mid_tier/
 
 
 def classify_mog_track(mog_score: float) -> str:
