@@ -11,7 +11,10 @@
       "thumbnail": "library/assets/thumbnails/test_glow_up_0eddb822_scene000.jpg",
       "tags": [],
       "rank": 0.5,
-      "ingest_timestamp": "2026-03-26T12:01:43.688377+00:00"
+      "ingest_timestamp": "2026-03-26T12:01:43.688377+00:00",
+      "mog_score": 0.5,
+      "mog_track": "victim_contrast",
+      "mog_notes": "no keyframes"
     },
     {
       "clip_id": "test_glow_up_0eddb822_scene001",
@@ -24,7 +27,10 @@
       "thumbnail": "library/assets/thumbnails/test_glow_up_0eddb822_scene001.jpg",
       "tags": [],
       "rank": 0.5,
-      "ingest_timestamp": "2026-03-26T12:01:44.169888+00:00"
+      "ingest_timestamp": "2026-03-26T12:01:44.169888+00:00",
+      "mog_score": 0.5,
+      "mog_track": "victim_contrast",
+      "mog_notes": "no keyframes"
     },
     {
       "clip_id": "test_glow_up_0eddb822_scene002",
@@ -37,7 +43,10 @@
       "thumbnail": "library/assets/thumbnails/test_glow_up_0eddb822_scene002.jpg",
       "tags": [],
       "rank": 0.5,
-      "ingest_timestamp": "2026-03-26T12:01:44.610376+00:00"
+      "ingest_timestamp": "2026-03-26T12:01:44.610376+00:00",
+      "mog_score": 0.5,
+      "mog_track": "victim_contrast",
+      "mog_notes": "no keyframes"
     },
     {
       "clip_id": "test_glow_up_0eddb822_scene003",
@@ -50,7 +59,10 @@
       "thumbnail": "library/assets/thumbnails/test_glow_up_0eddb822_scene003.jpg",
       "tags": [],
       "rank": 0.5,
-      "ingest_timestamp": "2026-03-26T12:01:45.105880+00:00"
+      "ingest_timestamp": "2026-03-26T12:01:45.105880+00:00",
+      "mog_score": 0.5,
+      "mog_track": "victim_contrast",
+      "mog_notes": "no keyframes"
     },
     {
       "clip_id": "gold_bpedits145_bp_edit_7d84bfee_scene000",
@@ -74,7 +86,10 @@
         "dark_cinema_mood"
       ],
       "rank": 0.5,
-      "ingest_timestamp": "2026-03-26T22:04:14.338920+00:00"
+      "ingest_timestamp": "2026-03-26T22:04:14.338920+00:00",
+      "mog_score": 0.69,
+      "mog_track": "victim_contrast",
+      "mog_notes": "warm natural light, sharp profile, simple moment"
     },
     {
       "clip_id": "gold_bpedits145_bp_edit_7d84bfee_scene001",
@@ -98,7 +113,10 @@
         "dark_cinema_mood"
       ],
       "rank": 0.5,
-      "ingest_timestamp": "2026-03-26T22:04:14.867388+00:00"
+      "ingest_timestamp": "2026-03-26T22:04:14.867388+00:00",
+      "mog_score": 0.69,
+      "mog_track": "victim_contrast",
+      "mog_notes": "warm natural light, sharp profile, simple moment"
     },
     {
       "clip_id": "gold_bpedits145_bp_edit_7d84bfee_scene002",
@@ -122,7 +140,10 @@
         "dark_cinema_mood"
       ],
       "rank": 0.5,
-      "ingest_timestamp": "2026-03-26T22:04:15.379291+00:00"
+      "ingest_timestamp": "2026-03-26T22:04:15.379291+00:00",
+      "mog_score": 0.69,
+      "mog_track": "victim_contrast",
+      "mog_notes": "warm natural light, sharp profile, simple moment"
     },
     {
       "clip_id": "gold_bpedits145_bp_edit_7d84bfee_scene003",
@@ -146,7 +167,10 @@
         "dark_cinema_mood"
       ],
       "rank": 0.5,
-      "ingest_timestamp": "2026-03-26T22:04:15.874962+00:00"
+      "ingest_timestamp": "2026-03-26T22:04:15.874962+00:00",
+      "mog_score": 0.69,
+      "mog_track": "victim_contrast",
+      "mog_notes": "warm natural light, sharp profile, simple moment"
     },
     {
       "clip_id": "gold_bpedits145_bp_edit_7d84bfee_scene004",
@@ -170,7 +194,10 @@
         "dark_cinema_mood"
       ],
       "rank": 0.5,
-      "ingest_timestamp": "2026-03-26T22:04:16.354497+00:00"
+      "ingest_timestamp": "2026-03-26T22:04:16.354497+00:00",
+      "mog_score": 0.69,
+      "mog_track": "victim_contrast",
+      "mog_notes": "warm natural light, sharp profile, simple moment"
     },
     {
       "clip_id": "gold_bpedits145_bp_edit_7d84bfee_scene005",
@@ -194,7 +221,10 @@
         "dark_cinema_mood"
       ],
       "rank": 0.5,
-      "ingest_timestamp": "2026-03-26T22:04:16.979222+00:00"
+      "ingest_timestamp": "2026-03-26T22:04:16.979222+00:00",
+      "mog_score": 0.69,
+      "mog_track": "victim_contrast",
+      "mog_notes": "warm natural light, sharp profile, simple moment"
     },
     {
       "clip_id": "gold_bpedits145_bp_edit_7d84bfee_scene006",
@@ -218,7 +248,10 @@
         "dark_cinema_mood"
       ],
       "rank": 0.5,
-      "ingest_timestamp": "2026-03-26T22:04:17.933991+00:00"
+      "ingest_timestamp": "2026-03-26T22:04:17.933991+00:00",
+      "mog_score": 0.69,
+      "mog_track": "victim_contrast",
+      "mog_notes": "warm natural light, sharp profile, simple moment"
     },
     {
       "clip_id": "roge.editz_7588525512478166294_ee3e02fa_scene000",
@@ -244,7 +277,10 @@
         "grayscale_filter"
       ],
       "rank": 0.5,
-      "ingest_timestamp": "2026-03-26T22:05:28.473297+00:00"
+      "ingest_timestamp": "2026-03-26T22:05:28.473297+00:00",
+      "mog_score": 0.727,
+      "mog_track": "victim_contrast",
+      "mog_notes": "strong text design, color grading pops, good depth separation"
     },
     {
       "clip_id": "roge.editz_7588525512478166294_ee3e02fa_scene001",
@@ -270,7 +306,10 @@
         "grayscale_filter"
       ],
       "rank": 0.5,
-      "ingest_timestamp": "2026-03-26T22:05:30.289101+00:00"
+      "ingest_timestamp": "2026-03-26T22:05:30.289101+00:00",
+      "mog_score": 0.727,
+      "mog_track": "victim_contrast",
+      "mog_notes": "strong text design, color grading pops, good depth separation"
     },
     {
       "clip_id": "roge.editz_7588525512478166294_ee3e02fa_scene002",
@@ -296,7 +335,10 @@
         "grayscale_filter"
       ],
       "rank": 0.5,
-      "ingest_timestamp": "2026-03-26T22:05:31.881462+00:00"
+      "ingest_timestamp": "2026-03-26T22:05:31.881462+00:00",
+      "mog_score": 0.727,
+      "mog_track": "victim_contrast",
+      "mog_notes": "strong text design, color grading pops, good depth separation"
     },
     {
       "clip_id": "roge.editz_7588525512478166294_ee3e02fa_scene003",
@@ -322,7 +364,10 @@
         "grayscale_filter"
       ],
       "rank": 0.5,
-      "ingest_timestamp": "2026-03-26T22:05:33.471793+00:00"
+      "ingest_timestamp": "2026-03-26T22:05:33.471793+00:00",
+      "mog_score": 0.727,
+      "mog_track": "victim_contrast",
+      "mog_notes": "strong text design, color grading pops, good depth separation"
     },
     {
       "clip_id": "roge.editz_7588525512478166294_ee3e02fa_scene004",
@@ -348,7 +393,10 @@
         "grayscale_filter"
       ],
       "rank": 0.5,
-      "ingest_timestamp": "2026-03-26T22:05:35.495579+00:00"
+      "ingest_timestamp": "2026-03-26T22:05:35.495579+00:00",
+      "mog_score": 0.727,
+      "mog_track": "victim_contrast",
+      "mog_notes": "strong text design, color grading pops, good depth separation"
     },
     {
       "clip_id": "roge.editz_7588525512478166294_ee3e02fa_scene005",
@@ -374,7 +422,10 @@
         "grayscale_filter"
       ],
       "rank": 0.5,
-      "ingest_timestamp": "2026-03-26T22:05:37.496334+00:00"
+      "ingest_timestamp": "2026-03-26T22:05:37.496334+00:00",
+      "mog_score": 0.727,
+      "mog_track": "victim_contrast",
+      "mog_notes": "strong text design, color grading pops, good depth separation"
     },
     {
       "clip_id": "roge.editz_7588525512478166294_ee3e02fa_scene006",
@@ -400,7 +451,10 @@
         "grayscale_filter"
       ],
       "rank": 0.5,
-      "ingest_timestamp": "2026-03-26T22:05:39.430467+00:00"
+      "ingest_timestamp": "2026-03-26T22:05:39.430467+00:00",
+      "mog_score": 0.727,
+      "mog_track": "victim_contrast",
+      "mog_notes": "strong text design, color grading pops, good depth separation"
     },
     {
       "clip_id": "roge.editz_7588525512478166294_ee3e02fa_scene007",
@@ -426,7 +480,10 @@
         "grayscale_filter"
       ],
       "rank": 0.5,
-      "ingest_timestamp": "2026-03-26T22:05:41.496768+00:00"
+      "ingest_timestamp": "2026-03-26T22:05:41.496768+00:00",
+      "mog_score": 0.727,
+      "mog_track": "victim_contrast",
+      "mog_notes": "strong text design, color grading pops, good depth separation"
     },
     {
       "clip_id": "black.pill.city_7600958206642326806_8d9f3a15_scene000",
@@ -450,7 +507,10 @@
         "high_energy_cut"
       ],
       "rank": 0.5,
-      "ingest_timestamp": "2026-03-26T22:06:58.542659+00:00"
+      "ingest_timestamp": "2026-03-26T22:06:58.542659+00:00",
+      "mog_score": 0.66,
+      "mog_track": "victim_contrast",
+      "mog_notes": "genuine smile, sharp close-up, emotive moment, good skin rendering"
     },
     {
       "clip_id": "black.pill.city_7600958206642326806_8d9f3a15_scene001",
@@ -474,7 +534,10 @@
         "high_energy_cut"
       ],
       "rank": 0.5,
-      "ingest_timestamp": "2026-03-26T22:07:00.470019+00:00"
+      "ingest_timestamp": "2026-03-26T22:07:00.470019+00:00",
+      "mog_score": 0.66,
+      "mog_track": "victim_contrast",
+      "mog_notes": "genuine smile, sharp close-up, emotive moment, good skin rendering"
     },
     {
       "clip_id": "black.pill.city_7600958206642326806_8d9f3a15_scene002",
@@ -498,7 +561,10 @@
         "high_energy_cut"
       ],
       "rank": 0.5,
-      "ingest_timestamp": "2026-03-26T22:07:02.218427+00:00"
+      "ingest_timestamp": "2026-03-26T22:07:02.218427+00:00",
+      "mog_score": 0.66,
+      "mog_track": "victim_contrast",
+      "mog_notes": "genuine smile, sharp close-up, emotive moment, good skin rendering"
     },
     {
       "clip_id": "black.pill.city_7600958206642326806_8d9f3a15_scene003",
@@ -522,7 +588,10 @@
         "high_energy_cut"
       ],
       "rank": 0.5,
-      "ingest_timestamp": "2026-03-26T22:07:04.334457+00:00"
+      "ingest_timestamp": "2026-03-26T22:07:04.334457+00:00",
+      "mog_score": 0.66,
+      "mog_track": "victim_contrast",
+      "mog_notes": "genuine smile, sharp close-up, emotive moment, good skin rendering"
     },
     {
       "clip_id": "black.pill.city_7600958206642326806_8d9f3a15_scene004",
@@ -546,7 +615,10 @@
         "high_energy_cut"
       ],
       "rank": 0.5,
-      "ingest_timestamp": "2026-03-26T22:07:06.804031+00:00"
+      "ingest_timestamp": "2026-03-26T22:07:06.804031+00:00",
+      "mog_score": 0.66,
+      "mog_track": "victim_contrast",
+      "mog_notes": "genuine smile, sharp close-up, emotive moment, good skin rendering"
     },
     {
       "clip_id": "black.pill.city_7600958206642326806_8d9f3a15_scene005",
@@ -570,7 +642,10 @@
         "high_energy_cut"
       ],
       "rank": 0.5,
-      "ingest_timestamp": "2026-03-26T22:07:09.440608+00:00"
+      "ingest_timestamp": "2026-03-26T22:07:09.440608+00:00",
+      "mog_score": 0.66,
+      "mog_track": "victim_contrast",
+      "mog_notes": "genuine smile, sharp close-up, emotive moment, good skin rendering"
     },
     {
       "clip_id": "gold_etxereal0_cookie_king_03146501_scene000",
@@ -592,7 +667,10 @@
         "meme_aesthetic"
       ],
       "rank": 0.5,
-      "ingest_timestamp": "2026-03-26T22:14:43.365302+00:00"
+      "ingest_timestamp": "2026-03-26T22:14:43.365302+00:00",
+      "mog_score": 0.583,
+      "mog_track": "victim_contrast",
+      "mog_notes": "tilted head adds motion, dimensional lighting, dynamic angle"
     },
     {
       "clip_id": "gold_etxereal0_cookie_king_03146501_scene001",
@@ -614,7 +692,10 @@
         "meme_aesthetic"
       ],
       "rank": 0.5,
-      "ingest_timestamp": "2026-03-26T22:14:44.995972+00:00"
+      "ingest_timestamp": "2026-03-26T22:14:44.995972+00:00",
+      "mog_score": 0.583,
+      "mog_track": "victim_contrast",
+      "mog_notes": "tilted head adds motion, dimensional lighting, dynamic angle"
     },
     {
       "clip_id": "gold_etxereal0_cookie_king_03146501_scene002",
@@ -636,7 +717,10 @@
         "meme_aesthetic"
       ],
       "rank": 0.5,
-      "ingest_timestamp": "2026-03-26T22:14:46.578547+00:00"
+      "ingest_timestamp": "2026-03-26T22:14:46.578547+00:00",
+      "mog_score": 0.583,
+      "mog_track": "victim_contrast",
+      "mog_notes": "tilted head adds motion, dimensional lighting, dynamic angle"
     },
     {
       "clip_id": "gold_etxereal0_cookie_king_03146501_scene003",
@@ -658,7 +742,10 @@
         "meme_aesthetic"
       ],
       "rank": 0.5,
-      "ingest_timestamp": "2026-03-26T22:14:47.859709+00:00"
+      "ingest_timestamp": "2026-03-26T22:14:47.859709+00:00",
+      "mog_score": 0.583,
+      "mog_track": "victim_contrast",
+      "mog_notes": "tilted head adds motion, dimensional lighting, dynamic angle"
     },
     {
       "clip_id": "gold_etxereal0_cookie_king_03146501_scene004",
@@ -680,7 +767,10 @@
         "meme_aesthetic"
       ],
       "rank": 0.5,
-      "ingest_timestamp": "2026-03-26T22:14:49.476230+00:00"
+      "ingest_timestamp": "2026-03-26T22:14:49.476230+00:00",
+      "mog_score": 0.583,
+      "mog_track": "victim_contrast",
+      "mog_notes": "tilted head adds motion, dimensional lighting, dynamic angle"
     },
     {
       "clip_id": "gold_etxereal0_cookie_king_03146501_scene005",
@@ -702,7 +792,10 @@
         "meme_aesthetic"
       ],
       "rank": 0.5,
-      "ingest_timestamp": "2026-03-26T22:14:50.962527+00:00"
+      "ingest_timestamp": "2026-03-26T22:14:50.962527+00:00",
+      "mog_score": 0.583,
+      "mog_track": "victim_contrast",
+      "mog_notes": "tilted head adds motion, dimensional lighting, dynamic angle"
     },
     {
       "clip_id": "gold_etxereal0_cookie_king_03146501_scene006",
@@ -724,7 +817,10 @@
         "meme_aesthetic"
       ],
       "rank": 0.5,
-      "ingest_timestamp": "2026-03-26T22:14:52.075880+00:00"
+      "ingest_timestamp": "2026-03-26T22:14:52.075880+00:00",
+      "mog_score": 0.583,
+      "mog_track": "victim_contrast",
+      "mog_notes": "tilted head adds motion, dimensional lighting, dynamic angle"
     },
     {
       "clip_id": "gold_etxereal0_cookie_king_03146501_scene007",
@@ -746,7 +842,10 @@
         "meme_aesthetic"
       ],
       "rank": 0.5,
-      "ingest_timestamp": "2026-03-26T22:14:53.603113+00:00"
+      "ingest_timestamp": "2026-03-26T22:14:53.603113+00:00",
+      "mog_score": 0.583,
+      "mog_track": "victim_contrast",
+      "mog_notes": "tilted head adds motion, dimensional lighting, dynamic angle"
     },
     {
       "clip_id": "gold_etxereal0_cookie_king_03146501_scene008",
@@ -768,7 +867,10 @@
         "meme_aesthetic"
       ],
       "rank": 0.5,
-      "ingest_timestamp": "2026-03-26T22:14:55.453489+00:00"
+      "ingest_timestamp": "2026-03-26T22:14:55.453489+00:00",
+      "mog_score": 0.583,
+      "mog_track": "victim_contrast",
+      "mog_notes": "tilted head adds motion, dimensional lighting, dynamic angle"
     },
     {
       "clip_id": "marlon3edxtz_7612474595563638029_#real #looks #aura #edit #marlon \uff5c ib @e_c44cc8b6_scene000",
@@ -793,7 +895,10 @@
         "high_energy_cut"
       ],
       "rank": 0.5,
-      "ingest_timestamp": "2026-03-27T02:15:09.885743+00:00"
+      "ingest_timestamp": "2026-03-27T02:15:09.885743+00:00",
+      "mog_score": 0.14,
+      "mog_track": "victim_contrast",
+      "mog_notes": "warm indoor light, soft focus, excessive headroom, low contrast"
     },
     {
       "clip_id": "marlon3edxtz_7612474595563638029_#real #looks #aura #edit #marlon \uff5c ib @e_c44cc8b6_scene002",
@@ -818,10 +923,13 @@
         "high_energy_cut"
       ],
       "rank": 0.5,
-      "ingest_timestamp": "2026-03-27T02:15:10.134392+00:00"
+      "ingest_timestamp": "2026-03-27T02:15:10.134392+00:00",
+      "mog_score": 0.14,
+      "mog_track": "victim_contrast",
+      "mog_notes": "warm indoor light, soft focus, excessive headroom, low contrast"
     }
   ],
   "version": "1.0",
-  "last_updated": "2026-03-27T03:35:14.316955+00:00",
+  "last_updated": "2026-03-27T04:12:50.117239+00:00",
   "total_clips": 36
 }

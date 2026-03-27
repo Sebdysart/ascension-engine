@@ -70,23 +70,23 @@ _MOG_SCORE_PROMPT = """\
 Use the Read tool to read each of these image files:
 {paths}
 
-You are scoring a male face for physical dominance / looksmax potential on a 0.0–1.0 scale.
-Evaluate ONLY what is visible. If no clear face, return 0.5.
+You are scoring video clip frames for CINEMATIC QUALITY on a 0.0–1.0 scale.
+Evaluate the technical and aesthetic quality of the footage itself.
 
 Scoring criteria:
-- Jawline definition and sharpness (0–0.25)
-- Hunter eyes / orbital rim / canthal tilt (0–0.25)
-- Facial symmetry (0–0.20)
-- Bone structure / cheekbones / brow ridge (0–0.20)
-- Overall mog potential vs average male (0–0.10)
+- Lighting quality: dramatic, contrast-rich, cinematic lighting = high; flat, blown-out, harsh overhead = low (0–0.25)
+- Motion and sharpness: crisp motion blur or sharp freeze = high; blurry, unfocused, shaky = low (0–0.20)
+- Composition: tight face fill, rule of thirds, dynamic framing = high; awkward crop, excessive headroom, dead space = low (0–0.20)
+- Visual punch: crushed blacks, teal/orange palette, strong depth/contrast = high; washed out, grey, low contrast = low (0–0.20)
+- Energy and impact: high-motion, dramatic cut point, impact frame = high; static, no visual interest = low (0–0.15)
 
 Output ONLY a valid JSON object, nothing else:
 {{"mog_score": <float 0.0-1.0>, "dominant_trait": "<one word>", "notes": "<10 words max>"}}
 
 Examples:
-{{"mog_score": 0.92, "dominant_trait": "jawline", "notes": "sharp jaw, hunter eyes, exceptional bone structure"}}
-{{"mog_score": 0.41, "dominant_trait": "recessed", "notes": "weak chin, flat face, poor bone projection"}}
-{{"mog_score": 0.5, "dominant_trait": "average", "notes": "no clear face visible or average features"}}
+{{"mog_score": 0.91, "dominant_trait": "lighting", "notes": "dramatic rim light, crushed blacks, teal grade"}}
+{{"mog_score": 0.43, "dominant_trait": "flat", "notes": "blown out overhead light, no contrast, dead composition"}}
+{{"mog_score": 0.72, "dominant_trait": "composition", "notes": "decent framing, moderate contrast, average lighting"}}
 """
 
 
@@ -219,20 +219,28 @@ def _call_claude_mog_score(frame_paths: list[Path]) -> dict:
     except (json.JSONDecodeError, AttributeError):
         raw = result.stdout.strip()
 
-    if raw.startswith("```"):
-        raw = "\n".join(line for line in raw.splitlines() if not line.startswith("```")).strip()
+    # Strip all markdown fences and collect every JSON object in the response.
+    # The model may return one object per frame — we average the scores.
+    import re as _re
+    clean = _re.sub(r"```[a-z]*", "", raw).strip()
 
-    try:
-        data = json.loads(raw)
-        if isinstance(data, dict) and "mog_score" in data:
-            score = float(data["mog_score"])
-            return {
-                "mog_score": round(max(0.0, min(1.0, score)), 3),
-                "dominant_trait": str(data.get("dominant_trait", "unknown")),
-                "notes": str(data.get("notes", "")),
-            }
-    except (json.JSONDecodeError, ValueError, TypeError):
-        pass
+    candidates = []
+    for m in _re.finditer(r'\{[^{}]+\}', clean):
+        try:
+            obj = json.loads(m.group())
+            if isinstance(obj, dict) and "mog_score" in obj:
+                candidates.append(obj)
+        except (json.JSONDecodeError, ValueError):
+            pass
+
+    if candidates:
+        avg_score = sum(float(c["mog_score"]) for c in candidates) / len(candidates)
+        best = max(candidates, key=lambda c: float(c["mog_score"]))
+        return {
+            "mog_score": round(max(0.0, min(1.0, avg_score)), 3),
+            "dominant_trait": str(best.get("dominant_trait", "unknown")),
+            "notes": str(best.get("notes", "")),
+        }
 
     return {"mog_score": 0.5, "dominant_trait": "unknown", "notes": "parse failed"}
 
