@@ -769,9 +769,59 @@
       ],
       "rank": 0.5,
       "ingest_timestamp": "2026-03-26T22:14:55.453489+00:00"
+    },
+    {
+      "clip_id": "marlon3edxtz_7612474595563638029_#real #looks #aura #edit #marlon \uff5c ib @e_c44cc8b6_scene000",
+      "source_video_id": "marlon3edxtz_7612474595563638029_#real #looks #aura #edit #marlon \uff5c ib @e_c44cc8b6",
+      "scene_index": 0,
+      "start_sec": 0.0,
+      "end_sec": 21.9,
+      "duration_sec": 21.9,
+      "file": "library/clips/marlon3edxtz_7612474595563638029_#real #looks #aura #edit #marlon \uff5c ib @e_c44cc8b6_scene000.mp4",
+      "thumbnail": "library/assets/thumbnails/marlon3edxtz_7612474595563638029_#real #looks #aura #edit #marlon \uff5c ib @e_c44cc8b6_scene000.jpg",
+      "tags": [
+        "selfie_camera_direct",
+        "face_closeup_direct",
+        "talking_head_vlog",
+        "warm_indoor_lighting",
+        "aura_edit",
+        "talking_head_direct",
+        "face_closeup_push",
+        "street_walk",
+        "lifestyle_broll",
+        "outfit_reveal",
+        "high_energy_cut"
+      ],
+      "rank": 0.5,
+      "ingest_timestamp": "2026-03-27T02:15:09.885743+00:00"
+    },
+    {
+      "clip_id": "marlon3edxtz_7612474595563638029_#real #looks #aura #edit #marlon \uff5c ib @e_c44cc8b6_scene002",
+      "source_video_id": "marlon3edxtz_7612474595563638029_#real #looks #aura #edit #marlon \uff5c ib @e_c44cc8b6",
+      "scene_index": 2,
+      "start_sec": 22.167,
+      "end_sec": 23.4,
+      "duration_sec": 1.233,
+      "file": "library/clips/marlon3edxtz_7612474595563638029_#real #looks #aura #edit #marlon \uff5c ib @e_c44cc8b6_scene002.mp4",
+      "thumbnail": "library/assets/thumbnails/marlon3edxtz_7612474595563638029_#real #looks #aura #edit #marlon \uff5c ib @e_c44cc8b6_scene002.jpg",
+      "tags": [
+        "selfie_camera_direct",
+        "face_closeup_direct",
+        "talking_head_vlog",
+        "warm_indoor_lighting",
+        "aura_edit",
+        "talking_head_direct",
+        "face_closeup_push",
+        "street_walk",
+        "lifestyle_broll",
+        "outfit_reveal",
+        "high_energy_cut"
+      ],
+      "rank": 0.5,
+      "ingest_timestamp": "2026-03-27T02:15:10.134392+00:00"
     }
   ],
   "version": "1.0",
-  "last_updated": "2026-03-26T22:15:30.693932+00:00",
-  "total_clips": 34
+  "last_updated": "2026-03-27T02:15:57.845460+00:00",
+  "total_clips": 36
 }
