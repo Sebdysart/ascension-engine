@@ -1,0 +1,20 @@
+[
+  {
+    "name": "gen_756373424660_144bpm",
+    "dry_run": true,
+    "bpm": 144,
+    "grade": "unknown"
+  },
+  {
+    "name": "gen_seq_144bpm",
+    "dry_run": true,
+    "bpm": 144,
+    "grade": "Desaturated"
+  },
+  {
+    "name": "gen_gold_136bpm",
+    "dry_run": true,
+    "bpm": 136,
+    "grade": "WarmGold"
+  }
+]
