@@ -81,12 +81,12 @@ Scoring criteria:
 - Overall mog potential vs average male (0–0.10)
 
 Output ONLY a valid JSON object, nothing else:
-{"mog_score": <float 0.0-1.0>, "dominant_trait": "<one word>", "notes": "<10 words max>"}
+{{"mog_score": <float 0.0-1.0>, "dominant_trait": "<one word>", "notes": "<10 words max>"}}
 
 Examples:
-{"mog_score": 0.92, "dominant_trait": "jawline", "notes": "sharp jaw, hunter eyes, exceptional bone structure"}
-{"mog_score": 0.41, "dominant_trait": "recessed", "notes": "weak chin, flat face, poor bone projection"}
-{"mog_score": 0.5, "dominant_trait": "average", "notes": "no clear face visible or average features"}
+{{"mog_score": 0.92, "dominant_trait": "jawline", "notes": "sharp jaw, hunter eyes, exceptional bone structure"}}
+{{"mog_score": 0.41, "dominant_trait": "recessed", "notes": "weak chin, flat face, poor bone projection"}}
+{{"mog_score": 0.5, "dominant_trait": "average", "notes": "no clear face visible or average features"}}
 """
 
 
