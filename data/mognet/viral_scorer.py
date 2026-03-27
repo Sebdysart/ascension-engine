@@ -8,7 +8,6 @@ from __future__ import annotations
 
 import logging
 import math
-from pathlib import Path
 
 import joblib
 import numpy as np
@@ -175,10 +174,10 @@ class ViralScorer:
         if self._lgbm is not None:
             lgbm_score = float(self._lgbm.predict(x)[0])
             raw_score = (xgb_score * 0.6 + lgbm_score * 0.4)
-            confidence = 0.85
+            confidence = 0.85  # ensemble path — static proxy, not a calibrated interval
         else:
             raw_score = xgb_score
-            confidence = 0.70
+            confidence = 0.70  # XGBoost-only path
 
         score = round(max(0.0, min(100.0, raw_score)), 1)
 
