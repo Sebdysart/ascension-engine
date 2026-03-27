@@ -91,6 +91,19 @@ class EngineDB:
                 pending_approvals INTEGER
             );
 
+            CREATE TABLE IF NOT EXISTS mognet_performance (
+                edit_id         TEXT PRIMARY KEY,
+                edit_path       TEXT,
+                predicted_score REAL,
+                actual_score    REAL,
+                views           INTEGER DEFAULT 0,
+                shares          INTEGER DEFAULT 0,
+                saves           INTEGER DEFAULT 0,
+                watch_pct       REAL    DEFAULT 0.0,
+                features_json   TEXT,
+                created_at      TEXT    DEFAULT (datetime('now'))
+            );
+
             CREATE INDEX IF NOT EXISTS idx_clips_video ON clips(video_id);
             CREATE INDEX IF NOT EXISTS idx_clips_track ON clips(track);
             CREATE INDEX IF NOT EXISTS idx_clips_rank ON clips(rank);
@@ -194,6 +207,49 @@ class EngineDB:
     def approve_generation(self, gen_id: str):
         self.conn.execute("UPDATE generations SET approved = 1 WHERE gen_id = ?", (gen_id,))
         self.conn.commit()
+
+    # ── MogNet performance tracking ───────────────────────────────────────────
+
+    def save_mognet_prediction(self, edit_id: str, edit_path: str,
+                                predicted_score: float, features_json: str = ""):
+        self.conn.execute(
+            "INSERT OR REPLACE INTO mognet_performance "
+            "(edit_id, edit_path, predicted_score, features_json) "
+            "VALUES (?, ?, ?, ?)",
+            (edit_id, edit_path, predicted_score, features_json)
+        )
+        self.conn.commit()
+
+    def update_mognet_actuals(self, edit_id: str, views: int, shares: int,
+                               saves: int, watch_pct: float):
+        actual_score = views * watch_pct + shares * 10 + saves * 5
+        self.conn.execute(
+            "UPDATE mognet_performance SET views=?, shares=?, saves=?, "
+            "watch_pct=?, actual_score=? WHERE edit_id=?",
+            (views, shares, saves, watch_pct, actual_score, edit_id)
+        )
+        self.conn.commit()
+
+    def get_mognet_training_rows(self) -> list[dict]:
+        """Return rows with actuals and features for retraining."""
+        rows = self.conn.execute(
+            "SELECT edit_id, features_json, actual_score, views, shares, saves, watch_pct "
+            "FROM mognet_performance "
+            "WHERE actual_score IS NOT NULL AND features_json != '' "
+            "ORDER BY created_at DESC"
+        ).fetchall()
+        return [
+            {
+                "edit_id":        r[0],
+                "features_json":  r[1],
+                "actual_score":   r[2],
+                "views":          r[3] or 0,
+                "shares":         r[4] or 0,
+                "saves":          r[5] or 0,
+                "watch_pct":      r[6] or 0.0,
+            }
+            for r in rows
+        ]
 
     # ── Health queries ────────────────────────────────────────────────────────
 

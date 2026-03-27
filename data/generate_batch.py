@@ -25,9 +25,17 @@ try:
 except ImportError:
     _NARRATIVE_ENGINE = None
 
-def _import_narrative_engine():
-    """Return narrative module tuple or None if unavailable."""
-    return _NARRATIVE_ENGINE
+# MogNet validator — imported at module level, None if not available
+try:
+    import sys as _sys_mn; _sys_mn.path.insert(0, str(__import__('pathlib').Path(__file__).resolve().parent))
+    from mognet.viral_scorer import ViralScorer as _MN_ViralScorer
+    from mognet.validator import validate_edit as _MN_validate
+    from mognet.feedback_loop import record_actual_performance as _MN_record
+    _MOGNET = (_MN_ViralScorer, _MN_validate, _MN_record)
+    del _sys_mn
+except ImportError:
+    _MOGNET = None
+
 
 ROOT    = Path(__file__).resolve().parent.parent
 GOLD    = ROOT / "input" / "gold"
@@ -35,6 +43,8 @@ OUT     = ROOT / "out"
 TMP     = ROOT / "tmp_genbatch"
 SEQ_DIR = ROOT / "library" / "sequence_templates"
 LUTS    = ROOT / "luts"
+
+_MODEL_PATH = ROOT / "data" / "mognet" / "viral_scorer.pkl"
 
 OUT.mkdir(exist_ok=True)
 TMP.mkdir(exist_ok=True)
@@ -70,6 +80,89 @@ BEAT_AUDIO = {
     "WarmGold":    GOLD / "bp4ever.ae_7542208986699844869.mp4",
     "Desaturated": GOLD / "black.pill.city_7600958206642326806.mp4",
 }
+
+
+def _load_mognet_scorer():
+    """Load or bootstrap the MogNet viral scorer. Returns None if unavailable."""
+    if _MOGNET is None:
+        return None
+    ViralScorer, _, _ = _MOGNET
+    scorer = ViralScorer()
+    if _MODEL_PATH.exists():
+        try:
+            scorer.load(str(_MODEL_PATH))
+            return scorer
+        except Exception as e:
+            print(f"  [mognet] Could not load model ({e}), bootstrapping from gold ...", flush=True)
+    # Bootstrap from gold library
+    try:
+        _data_path = str(ROOT / "data")
+        if _data_path not in sys.path:
+            sys.path.insert(0, _data_path)
+        from mognet.reference_analyzer import analyze_gold_library
+        return analyze_gold_library()
+    except Exception as e:
+        print(f"  [mognet] Bootstrap failed: {e}", flush=True)
+        return None
+
+
+def _validate_and_maybe_retry(
+    template: dict,
+    initial_result: dict,
+    scorer,
+    max_retries: int = 3,
+) -> dict:
+    """
+    Validate generated edit via MogNet. If REJECT, retry up to max_retries
+    times with parameter jitter. Returns final result with 'validation' key.
+    """
+    if scorer is None or "output" not in initial_result:
+        return initial_result
+
+    _, validate_fn, _ = _MOGNET
+    result = initial_result
+
+    for attempt in range(max_retries + 1):
+        edit_path = result.get("output", "")
+        if not edit_path or not Path(edit_path).exists():
+            break
+
+        validation = validate_fn(edit_path, scorer)
+        result["validation"] = validation
+
+        decision = validation["decision"]
+        score    = validation["viral_score"]
+
+        print(
+            f"  {'✅' if decision == 'APPROVE' else '⚠️ '} "
+            f"MogNet: {decision}  score={score:.1f}/100  "
+            f"(attempt {attempt + 1}/{max_retries + 1})",
+            flush=True,
+        )
+        if validation["warnings"]:
+            for w in validation["warnings"]:
+                print(f"       {w}", flush=True)
+        if validation["critiques"]:
+            for c in validation["critiques"]:
+                print(f"       {c}", flush=True)
+
+        if decision == "APPROVE" or attempt == max_retries:
+            break
+
+        # Jitter params for retry: vary clip count
+        print(f"  ↩️  Regenerating with adjusted params (attempt {attempt + 2}) ...", flush=True)
+        jitter_template = dict(template)
+        jitter_template["total_clips"] = template.get("total_clips", 8) + (attempt + 1) * 2
+        retry_result = generate_from_template(jitter_template, dry_run=False)
+        if "output" in retry_result:
+            result = retry_result
+
+    return result
+
+
+def _import_narrative_engine():
+    """Return narrative module tuple or None if unavailable."""
+    return _NARRATIVE_ENGINE
 
 
 def score_frame(png_bytes: bytes) -> float:
@@ -455,6 +548,25 @@ def main():
         print("[error] No templates found in", SEQ_DIR)
         sys.exit(1)
 
+    mognet_scorer = _load_mognet_scorer() if not args.dry_run else None
+    if mognet_scorer:
+        print("  ✅ MogNet ViralScorer loaded")
+    else:
+        print("  ~ MogNet not available — skipping validation")
+
+    mognet_db = None
+    if mognet_scorer:
+        try:
+            import sys as _s
+            _data_path = str(ROOT / "data")
+            if _data_path not in _s.path:
+                _s.path.insert(0, _data_path)
+            from engine_db import EngineDB as _EngineDB
+            mognet_db = _EngineDB()
+            mognet_db.init()
+        except Exception as _e:
+            print(f"  [mognet] DB init failed: {_e}", flush=True)
+
     print(f"\n  Templates selected:")
     for t in templates:
         print(f"    {t.get('vid_id','?')[:48]:50} BPM={t.get('bpm',0):3}  grade={t.get('color_grade','?')}")
@@ -462,6 +574,18 @@ def main():
     results = []
     for t in templates:
         r = generate_from_template(t, dry_run=args.dry_run)
+        if mognet_scorer and not args.dry_run:
+            r = _validate_and_maybe_retry(t, r, mognet_scorer)
+            if mognet_db:
+                try:
+                    import json as _json
+                    edit_id  = r.get("name", "unknown")
+                    pred     = r.get("validation", {}).get("viral_score", 0.0)
+                    feats    = r.get("validation", {}).get("features", {})
+                    feats_js = _json.dumps(feats) if feats else ""
+                    mognet_db.save_mognet_prediction(edit_id, r.get("output", ""), pred, feats_js)
+                except Exception as _e:
+                    print(f"  [mognet] DB save failed: {_e}", flush=True)
         results.append(r)
 
     manifest = OUT / "generate_batch_manifest.json"
@@ -478,6 +602,11 @@ def main():
         else:
             print(f"  ✓  {r['name']}")
             print(f"       BPM={r['bpm']}  grade={r['color_grade']}  cuts={r['clips_used']}  avg={r['avg_cut_sec']}s  dur={r['total_duration_sec']}s  {r['file_size_mb']}MB")
+            val = r.get("validation", {})
+            if val:
+                print(f"       MogNet: {val.get('decision','?')}  score={val.get('viral_score',0):.1f}/100")
+                for s in val.get("strengths", [])[:2]:
+                    print(f"         + {s}")
             nr = r.get("narrative", {})
             if nr.get("mode") == "narrative_arc":
                 ac = nr.get("act_cuts", {})
