@@ -288,9 +288,16 @@ export function getBrutalTimeline(
     }
   }
 
-  // Interleave clips from different sources
+  // 75/25 exploit/explore: top-ranked clips (exploit) + lower-ranked variety (explore)
+  const EXPLOIT_RATIO = 0.75;
+  const sorted = [...allClips].sort((a, b) => b.rank - a.rank);
+  const exploitCount = Math.ceil(sorted.length * EXPLOIT_RATIO);
+  const exploitClips = sorted.slice(0, exploitCount);
+  const exploreClips = sorted.slice(exploitCount);
+
+  // Interleave from different sources within exploit pool
   const bySource = new Map<string, Clip[]>();
-  for (const c of allClips) {
+  for (const c of exploitClips) {
     const src = c.source_video_id;
     if (!bySource.has(src)) bySource.set(src, []);
     bySource.get(src)!.push(c);
@@ -301,6 +308,14 @@ export function getBrutalTimeline(
   for (let i = 0; i < maxLen; i++) {
     for (const s of sources) {
       if (i < s.length) interleavedPool.push(s[i]);
+    }
+  }
+
+  // Inject explore mutations (every ~4th clip is a lower-ranked wildcard)
+  if (exploreClips.length > 0) {
+    for (let i = 3; i < interleavedPool.length; i += 4) {
+      const mutant = exploreClips[Math.floor(Math.random() * exploreClips.length)];
+      interleavedPool[i] = mutant;
     }
   }
 
