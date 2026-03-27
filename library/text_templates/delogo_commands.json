@@ -737,5 +737,119 @@
       }
     ],
     "generated_at": "2026-03-27T03:26:16.497253+00:00"
+  },
+  "bp.max5_7620998084859923725_f40352fc": {
+    "delogo_filters": [
+      "delogo=x=102:y=876:w=116:h=70",
+      "delogo=x=757:y=1319:w=80:h=96"
+    ],
+    "ffmpeg_filter_chain": "delogo=x=102:y=876:w=116:h=70,delogo=x=757:y=1319:w=80:h=96",
+    "frame_details": [
+      {
+        "frame": "every1s_0001.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0002.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0003.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0004.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0005.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0006.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0007.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0008.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0009.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0010.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0011.jpg",
+        "hits": [
+          {
+            "text": "PSL",
+            "type": "caption",
+            "confidence": 0.991,
+            "delogo": "delogo=x=431:y=242:w=219:h=120"
+          },
+          {
+            "text": "PSL",
+            "type": "watermark",
+            "confidence": 1.0,
+            "delogo": "delogo=x=102:y=876:w=116:h=70"
+          },
+          {
+            "text": "POTENTIAL",
+            "type": "caption",
+            "confidence": 1.0,
+            "delogo": "delogo=x=578:y=876:w=302:h=70"
+          },
+          {
+            "text": "True",
+            "type": "caption",
+            "confidence": 0.488,
+            "delogo": "delogo=x=765:y=943:w=116:h=60"
+          },
+          {
+            "text": "7.4",
+            "type": "caption",
+            "confidence": 0.535,
+            "delogo": "delogo=x=97:y=949:w=156:h=100"
+          },
+          {
+            "text": "Chad",
+            "type": "caption",
+            "confidence": 1.0,
+            "delogo": "delogo=x=290:y=966:w=136:h=64"
+          },
+          {
+            "text": "7.5",
+            "type": "caption",
+            "confidence": 0.711,
+            "delogo": "delogo=x=577:y=949:w=148:h=100"
+          },
+          {
+            "text": "Adam",
+            "type": "caption",
+            "confidence": 1.0,
+            "delogo": "delogo=x=764:y=992:w=144:h=64"
+          }
+        ]
+      },
+      {
+        "frame": "every1s_0012.jpg",
+        "hits": [
+          {
+            "text": "A",
+            "type": "watermark",
+            "confidence": 0.477,
+            "delogo": "delogo=x=757:y=1319:w=80:h=96"
+          }
+        ]
+      }
+    ],
+    "generated_at": "2026-03-27T04:29:17.263141+00:00"
   }
 }

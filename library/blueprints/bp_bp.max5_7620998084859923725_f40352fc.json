@@ -1,0 +1,191 @@
+{
+  "video_id": "bp.max5_7620998084859923725_f40352fc",
+  "source_creator": "bp.max5",
+  "total_duration_sec": 14.09,
+  "bpm": 96,
+  "beat_times_sec": [
+    0.07,
+    0.72,
+    1.277,
+    1.904,
+    2.531,
+    3.042,
+    3.599,
+    4.18,
+    4.83,
+    5.573,
+    6.2,
+    6.873,
+    7.57,
+    8.243,
+    8.893,
+    9.497,
+    10.077,
+    10.681,
+    11.215,
+    11.773,
+    12.33
+  ],
+  "cut_rhythm": {
+    "avg_cut_sec": 1.379,
+    "total_cuts": 9,
+    "cuts_on_beat_pct": 0.444,
+    "beat_offset_avg_ms": 138.7,
+    "cut_points": [
+      {
+        "time_sec": 0.0,
+        "duration_sec": 0.272,
+        "on_beat": true,
+        "beat_offset_ms": 70.0,
+        "tags": []
+      },
+      {
+        "time_sec": 0.272,
+        "duration_sec": 0.545,
+        "on_beat": false,
+        "beat_offset_ms": 202.5,
+        "tags": []
+      },
+      {
+        "time_sec": 0.817,
+        "duration_sec": 0.272,
+        "on_beat": false,
+        "beat_offset_ms": 97.4,
+        "tags": []
+      },
+      {
+        "time_sec": 1.09,
+        "duration_sec": 0.511,
+        "on_beat": false,
+        "beat_offset_ms": 187.1,
+        "tags": []
+      },
+      {
+        "time_sec": 1.601,
+        "duration_sec": 0.851,
+        "on_beat": false,
+        "beat_offset_ms": 303.2,
+        "tags": []
+      },
+      {
+        "time_sec": 2.452,
+        "duration_sec": 0.647,
+        "on_beat": true,
+        "beat_offset_ms": 78.7,
+        "tags": []
+      },
+      {
+        "time_sec": 3.099,
+        "duration_sec": 7.05,
+        "on_beat": true,
+        "beat_offset_ms": 57.4,
+        "tags": []
+      },
+      {
+        "time_sec": 10.15,
+        "duration_sec": 0.886,
+        "on_beat": true,
+        "beat_offset_ms": 72.8,
+        "tags": []
+      },
+      {
+        "time_sec": 11.035,
+        "duration_sec": 0.0,
+        "on_beat": false,
+        "beat_offset_ms": 179.6,
+        "tags": []
+      }
+    ]
+  },
+  "visual_grade": {
+    "color_grade": "TealOrange",
+    "description": "avg_r=100.6, avg_g=91.7, avg_b=87.4"
+  },
+  "audio": {
+    "bpm": 96,
+    "beat_times_sec": [
+      0.07,
+      0.72,
+      1.277,
+      1.904,
+      2.531,
+      3.042,
+      3.599,
+      4.18,
+      4.83,
+      5.573,
+      6.2,
+      6.873,
+      7.57,
+      8.243,
+      8.893,
+      9.497,
+      10.077,
+      10.681,
+      11.215,
+      11.773,
+      12.33
+    ],
+    "onset_times_sec": [
+      0.07,
+      0.488,
+      0.743,
+      1.231,
+      1.509,
+      2.02,
+      2.531,
+      3.019,
+      4.807,
+      5.573,
+      6.2,
+      6.478,
+      7.105,
+      9.218,
+      9.683,
+      11.192,
+      12.33
+    ],
+    "peak_moments_sec": [
+      0.952,
+      0.975,
+      0.998,
+      1.022,
+      4.017,
+      4.04,
+      4.063,
+      4.087,
+      5.039,
+      5.062,
+      5.085,
+      5.108,
+      6.06,
+      6.084,
+      6.107,
+      6.13,
+      7.082,
+      7.105,
+      7.129,
+      7.152,
+      8.104,
+      8.127,
+      8.15,
+      8.173,
+      9.125,
+      9.149,
+      9.172,
+      9.195,
+      10.147,
+      10.17,
+      10.194,
+      10.217,
+      11.215
+    ],
+    "energy_profile": "atmospheric"
+  },
+  "motion_fx": {
+    "zoom_punch": true,
+    "zoom_easing": "cubic-bezier(0.25,0.1,0.25,1)",
+    "impact_hold_ms": 120
+  },
+  "ingest_timestamp": "2026-03-27T04:29:22.676573+00:00"
+}
