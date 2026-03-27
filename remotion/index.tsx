@@ -3,6 +3,7 @@ import { VideoTemplate } from "./VideoTemplate";
 import { MogEdit } from "./compositions/MogEdit";
 import { BpRating } from "./compositions/BpRating";
 import { IronicProvocation } from "./compositions/IronicProvocation";
+import { BrutalBeatMontage, SAMPLE_EDL } from "./BrutalBeatMontage";
 import React from "react";
 
 const RemotionRoot = () => (
@@ -69,6 +70,18 @@ const RemotionRoot = () => (
         line2: "I've never seen a pretty blond",
         colorGrade: "dark_indoor",
         musicPath: "",
+      }}
+    />
+    <Composition
+      id="BrutalBeatMontage"
+      component={BrutalBeatMontage}
+      durationInFrames={450}
+      fps={30}
+      width={1080}
+      height={1920}
+      defaultProps={{
+        edl: SAMPLE_EDL,
+        audioPath: "",
       }}
     />
   </>
