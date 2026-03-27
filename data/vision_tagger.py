@@ -53,6 +53,9 @@ Tag vocabulary examples (use these styles — invent similar ones as needed):
   "talking_head_direct", "crowd_reaction", "training_montage", "posture_demo",
   "hair_styling", "grooming_ritual", "aesthetic_broll", "locker_room",
   "outdoor_natural", "dark_cinema_mood", "high_energy_cut".
+  "mog_face_closeup_push", "jawline_pop", "hunter_eyes", "bone_structure_reveal",
+  "victim_mogged_by", "pre_glowup_sideprofile", "average_guy_stare",
+  "recessed_chin_reveal", "flat_lighting_cope",
 
 Rules:
 - Output ONLY a valid JSON array, nothing else. No markdown, no explanation.
@@ -61,6 +64,29 @@ Rules:
 - Use lowercase_underscore format.
 
 Example output: ["face_closeup_push","gym_broll_slowmo","dark_cinema_mood"]
+"""
+
+_MOG_SCORE_PROMPT = """\
+Use the Read tool to read each of these image files:
+{paths}
+
+You are scoring a male face for physical dominance / looksmax potential on a 0.0–1.0 scale.
+Evaluate ONLY what is visible. If no clear face, return 0.5.
+
+Scoring criteria:
+- Jawline definition and sharpness (0–0.25)
+- Hunter eyes / orbital rim / canthal tilt (0–0.25)
+- Facial symmetry (0–0.20)
+- Bone structure / cheekbones / brow ridge (0–0.20)
+- Overall mog potential vs average male (0–0.10)
+
+Output ONLY a valid JSON object, nothing else:
+{"mog_score": <float 0.0-1.0>, "dominant_trait": "<one word>", "notes": "<10 words max>"}
+
+Examples:
+{"mog_score": 0.92, "dominant_trait": "jawline", "notes": "sharp jaw, hunter eyes, exceptional bone structure"}
+{"mog_score": 0.41, "dominant_trait": "recessed", "notes": "weak chin, flat face, poor bone projection"}
+{"mog_score": 0.5, "dominant_trait": "average", "notes": "no clear face visible or average features"}
 """
 
 
@@ -160,6 +186,72 @@ def _call_claude_cli(frame_paths: list[Path]) -> list[str]:
     return []
 
 
+def _call_claude_mog_score(frame_paths: list[Path]) -> dict:
+    """
+    Score face clips 0.0–1.0 for mog potential via Claude vision.
+    Returns dict with mog_score, dominant_trait, notes.
+    """
+    paths_str = "\n".join(f"  {p.resolve()}" for p in frame_paths)
+    prompt = _MOG_SCORE_PROMPT.format(paths=paths_str)
+
+    env = {k: v for k, v in os.environ.items() if k != "CLAUDECODE"}
+    cmd = [
+        "claude", "-p", prompt,
+        "--allowedTools", "Read",
+        "--output-format", "json",
+        "--no-session-persistence",
+        "--model", VISION_MODEL,
+    ]
+
+    try:
+        result = subprocess.run(
+            cmd, capture_output=True, text=True, timeout=120, env=env,
+        )
+    except (subprocess.TimeoutExpired, FileNotFoundError):
+        return {"mog_score": 0.5, "dominant_trait": "unknown", "notes": "scoring failed"}
+
+    if result.returncode != 0:
+        return {"mog_score": 0.5, "dominant_trait": "unknown", "notes": "scoring failed"}
+
+    try:
+        wrapper = json.loads(result.stdout)
+        raw = wrapper.get("result", "").strip()
+    except (json.JSONDecodeError, AttributeError):
+        raw = result.stdout.strip()
+
+    if raw.startswith("```"):
+        raw = "\n".join(line for line in raw.splitlines() if not line.startswith("```")).strip()
+
+    try:
+        data = json.loads(raw)
+        if isinstance(data, dict) and "mog_score" in data:
+            score = float(data["mog_score"])
+            return {
+                "mog_score": round(max(0.0, min(1.0, score)), 3),
+                "dominant_trait": str(data.get("dominant_trait", "unknown")),
+                "notes": str(data.get("notes", "")),
+            }
+    except (json.JSONDecodeError, ValueError, TypeError):
+        pass
+
+    return {"mog_score": 0.5, "dominant_trait": "unknown", "notes": "parse failed"}
+
+
+# ── Mog Track Constants ────────────────────────────────────────────────────────
+MOG_S_TIER = 0.88    # → good_parts/
+MOG_VICTIM = 0.75    # below → victim_contrast/
+# between → mid_tier/
+
+
+def classify_mog_track(mog_score: float) -> str:
+    """Return 'good_parts', 'victim_contrast', or 'mid_tier'."""
+    if mog_score >= MOG_S_TIER:
+        return "good_parts"
+    if mog_score < MOG_VICTIM:
+        return "victim_contrast"
+    return "mid_tier"
+
+
 def tag_clip_keyframes(
     keyframes_dir: Path,
     dry_run: bool = False,
@@ -225,9 +317,23 @@ def tag_clips_for_video(
     tags = tag_clip_keyframes(keyframes_dir, dry_run)
     log.info("   Tags returned: %s", tags)
 
+    # Mog scoring — use up to 3 scene frames
+    mog_result = {"mog_score": 0.5, "dominant_trait": "unknown", "notes": ""}
+    if not dry_run:
+        scene_frames = _gather_frames(keyframes_dir, max_frames=3)
+        if scene_frames:
+            mog_result = _call_claude_mog_score(scene_frames)
+            log.info("   Mog score: %.3f (%s) — track: %s",
+                     mog_result["mog_score"],
+                     mog_result["dominant_trait"],
+                     classify_mog_track(mog_result["mog_score"]))
+
     # Apply to every clip from this video
     for clip in clips:
         clip["tags"] = tags
+        clip["mog_score"] = mog_result["mog_score"]
+        clip["mog_track"] = classify_mog_track(mog_result["mog_score"])
+        clip["mog_notes"] = mog_result.get("notes", "")
         if not dry_run:
             clip_id = clip["clip_id"]
             for tag in tags:
