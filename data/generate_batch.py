@@ -14,19 +14,20 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 
-# ── Narrative engine lazy import ──────────────────────────────────────────────
+# Narrative engine — imported at module level, None if not available
+try:
+    import sys as _sys_nb; _sys_nb.path.insert(0, str(__import__('pathlib').Path(__file__).resolve().parent))
+    from narrative_engine import build_narrative as _NE_build, describe_narrative as _NE_describe, GRADE_SPEC as _NE_GRADE_SPEC
+    from hook_generator import generate_hook_spec as _NE_hook
+    from sequencer import build_narrative_sequence as _NE_sequence
+    _NARRATIVE_ENGINE = (_NE_build, _NE_describe, _NE_GRADE_SPEC, _NE_hook, _NE_sequence)
+    del _sys_nb
+except ImportError:
+    _NARRATIVE_ENGINE = None
+
 def _import_narrative_engine():
-    """Import narrative modules — returns tuple of functions or None on failure."""
-    try:
-        import sys as _sys
-        from pathlib import Path as _Path
-        _sys.path.insert(0, str(_Path(__file__).resolve().parent))
-        from narrative_engine import build_narrative, describe_narrative, GRADE_SPEC
-        from hook_generator import generate_hook_spec
-        from sequencer import build_narrative_sequence
-        return build_narrative, describe_narrative, GRADE_SPEC, generate_hook_spec, build_narrative_sequence
-    except ImportError as e:
-        return None
+    """Return narrative module tuple or None if unavailable."""
+    return _NARRATIVE_ENGINE
 
 ROOT    = Path(__file__).resolve().parent.parent
 GOLD    = ROOT / "input" / "gold"
@@ -315,7 +316,8 @@ def generate_from_template(template: dict, dry_run: bool = False) -> dict:
         victim_placements: list[int] = []
         pre_drop_silence_slots: list[dict] = []
         for a in assignments:
-            act_counts[a["act"]] = act_counts.get(a["act"], 0) + 1
+            if a["act"] in act_counts:
+                act_counts[a["act"]] += 1
             if a["is_victim"]:
                 victim_placements.append(a["slot_index"])
             if a["pre_drop_sil"] > 0:
@@ -327,6 +329,7 @@ def generate_from_template(template: dict, dry_run: bool = False) -> dict:
             "victim_placements": victim_placements,
             "pre_drop_silence": pre_drop_silence_slots,
             "total_cuts": len(assignments),
+            "hook_spec": hook_spec.to_json() if hook_spec else None,
         }
 
         print(
