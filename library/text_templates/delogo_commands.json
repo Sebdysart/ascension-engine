@@ -851,5 +851,164 @@
       }
     ],
     "generated_at": "2026-03-27T04:29:17.263141+00:00"
+  },
+  "7603357399642489869_7605682596499983629_b190a386": {
+    "delogo_filters": [
+      "delogo=x=294:y=642:w=130:h=72",
+      "delogo=x=296:y=646:w=132:h=64",
+      "delogo=x=283:y=639:w=154:h=78",
+      "delogo=x=280:y=646:w=160:h=64",
+      "delogo=x=276:y=644:w=170:h=66",
+      "delogo=x=282:y=644:w=158:h=68",
+      "delogo=x=266:y=646:w=190:h=64",
+      "delogo=x=618:y=611:w=102:h=54"
+    ],
+    "ffmpeg_filter_chain": "delogo=x=294:y=642:w=130:h=72,delogo=x=296:y=646:w=132:h=64,delogo=x=283:y=639:w=154:h=78,delogo=x=280:y=646:w=160:h=64,delogo=x=276:y=644:w=170:h=66,delogo=x=282:y=644:w=158:h=68,delogo=x=266:y=646:w=190:h=64,delogo=x=618:y=611:w=102:h=54",
+    "frame_details": [
+      {
+        "frame": "every1s_0001.jpg",
+        "hits": [
+          {
+            "text": "BRO",
+            "type": "watermark",
+            "confidence": 0.825,
+            "delogo": "delogo=x=294:y=642:w=130:h=72"
+          }
+        ]
+      },
+      {
+        "frame": "every1s_0002.jpg",
+        "hits": [
+          {
+            "text": "LOOK",
+            "type": "watermark",
+            "confidence": 0.556,
+            "delogo": "delogo=x=296:y=646:w=132:h=64"
+          }
+        ]
+      },
+      {
+        "frame": "every1s_0003.jpg",
+        "hits": [
+          {
+            "text": "CONFIDEN",
+            "type": "caption",
+            "confidence": 0.927,
+            "delogo": "delogo=x=232:y=645:w=256:h=64"
+          }
+        ]
+      },
+      {
+        "frame": "every1s_0004.jpg",
+        "hits": [
+          {
+            "text": "3",
+            "type": "caption",
+            "confidence": 0.959,
+            "delogo": "delogo=x=489:y=463:w=60:h=70"
+          },
+          {
+            "text": "HOw",
+            "type": "watermark",
+            "confidence": 0.665,
+            "delogo": "delogo=x=283:y=639:w=154:h=78"
+          }
+        ]
+      },
+      {
+        "frame": "every1s_0005.jpg",
+        "hits": [
+          {
+            "text": "MAKES",
+            "type": "watermark",
+            "confidence": 0.997,
+            "delogo": "delogo=x=280:y=646:w=160:h=64"
+          }
+        ]
+      },
+      {
+        "frame": "every1s_0006.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0007.jpg",
+        "hits": [
+          {
+            "text": "MAKES",
+            "type": "watermark",
+            "confidence": 0.818,
+            "delogo": "delogo=x=276:y=644:w=170:h=66"
+          }
+        ]
+      },
+      {
+        "frame": "every1s_0008.jpg",
+        "hits": [
+          {
+            "text": "A",
+            "type": "caption",
+            "confidence": 0.575,
+            "delogo": "delogo=x=472:y=388:w=48:h=46"
+          },
+          {
+            "text": "BEING",
+            "type": "watermark",
+            "confidence": 0.977,
+            "delogo": "delogo=x=282:y=644:w=158:h=68"
+          }
+        ]
+      },
+      {
+        "frame": "every1s_0009.jpg",
+        "hits": [
+          {
+            "text": "@OuHERS",
+            "type": "watermark",
+            "confidence": 0.55,
+            "delogo": "delogo=x=266:y=646:w=190:h=64"
+          }
+        ]
+      },
+      {
+        "frame": "every1s_0010.jpg",
+        "hits": [
+          {
+            "text": "Be kind to others",
+            "type": "caption",
+            "confidence": 0.845,
+            "delogo": "delogo=x=189:y=23:w=344:h=60"
+          }
+        ]
+      },
+      {
+        "frame": "every1s_0011.jpg",
+        "hits": [
+          {
+            "text": "Be kind to others",
+            "type": "caption",
+            "confidence": 0.985,
+            "delogo": "delogo=x=187:y=23:w=346:h=60"
+          },
+          {
+            "text": "PEN",
+            "type": "watermark",
+            "confidence": 0.985,
+            "delogo": "delogo=x=618:y=611:w=102:h=54"
+          }
+        ]
+      },
+      {
+        "frame": "every1s_0012.jpg",
+        "hits": [
+          {
+            "text": "\"Be kind to others'",
+            "type": "caption",
+            "confidence": 0.695,
+            "delogo": "delogo=x=171:y=23:w=364:h=60"
+          }
+        ]
+      }
+    ],
+    "generated_at": "2026-03-27T05:26:27.421654+00:00"
   }
 }

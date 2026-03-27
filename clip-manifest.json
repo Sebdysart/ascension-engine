@@ -1102,9 +1102,36 @@
       "mog_score": 0.76,
       "mog_track": "mid_tier",
       "mog_notes": "warm/cool cinematic grade, sharp focus, engaged expression"
+    },
+    {
+      "clip_id": "7603357399642489869_7605682596499983629_b190a386_scene000",
+      "source_video_id": "7603357399642489869_7605682596499983629_b190a386",
+      "scene_index": 0,
+      "start_sec": 0.0,
+      "end_sec": 18.0,
+      "duration_sec": 18.0,
+      "file": "library/clips/7603357399642489869_7605682596499983629_b190a386_scene000.mp4",
+      "thumbnail": "library/assets/thumbnails/7603357399642489869_7605682596499983629_b190a386_scene000.jpg",
+      "tags": [
+        "street_walk",
+        "lighting_golden",
+        "talking_head_direct",
+        "text_overlay_heavy",
+        "outdoor_natural",
+        "face_closeup_push",
+        "aesthetic_broll",
+        "tattoo_reveal",
+        "transformation_reveal"
+      ],
+      "rank": 0.5,
+      "phash": "86691d9e17c758b2",
+      "ingest_timestamp": "2026-03-27T05:26:35.531419+00:00",
+      "mog_score": 0.503,
+      "mog_track": "mid_tier",
+      "mog_notes": "tight face fill, direct eye contact, warm grading, red accent"
     }
   ],
   "version": "1.0",
-  "last_updated": "2026-03-27T04:32:09.692291+00:00",
-  "total_clips": 43
+  "last_updated": "2026-03-27T05:27:28.333747+00:00",
+  "total_clips": 44
 }
