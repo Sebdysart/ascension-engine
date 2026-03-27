@@ -163,6 +163,12 @@ def describe(slots: list[Slot], bpm: float | None = None) -> str:
 
 from dataclasses import dataclass as _dataclass
 
+# Narrative arc dependency (sibling module in data/)
+try:
+    from narrative_engine import build_narrative as _build_narrative
+except ImportError:
+    _build_narrative = None  # type: ignore
+
 
 @_dataclass
 class NarrativeAwareSlot:
@@ -202,10 +208,8 @@ def build_narrative_sequence(
 
     Backwards compatible: existing build_sequence() is unchanged.
     """
-    import sys as _sys
-    from pathlib import Path as _Path
-    _sys.path.insert(0, str(_Path(__file__).resolve().parent))
-    from narrative_engine import build_narrative
+    if _build_narrative is None:
+        raise ImportError("narrative_engine.py not found — ensure data/narrative_engine.py exists")
 
     _ACT_SECTION: dict[str, SectionType] = {
         "victim": "verse",
@@ -219,7 +223,7 @@ def build_narrative_sequence(
         "ascension": "good_parts",
     }
 
-    narrative = build_narrative(bpm=bpm, total_sec=total_sec, beats=beats or [])
+    narrative = _build_narrative(bpm=bpm, total_sec=total_sec, beats=beats or [])
 
     out: list[NarrativeAwareSlot] = []
     for ns in narrative.slots:
