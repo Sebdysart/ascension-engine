@@ -126,7 +126,51 @@ def build_edl(
     return edl
 
 
-# ── Step 4: Remotion render ───────────────────────────────────────────────────
+# ── Step 4: Remotion clip staging ────────────────────────────────────────────
+
+def stage_clips_for_remotion(edl: dict) -> dict:
+    """
+    Copy EDL clips into remotion/public/clips/ and rewrite clip_path to
+    /clips/clip_N.mp4 so Remotion's dev server can serve them via staticFile().
+
+    Returns a modified copy of the EDL with updated clip_paths.
+    Does not mutate the original.
+    """
+    import copy
+
+    # Remotion resolves publicDir relative to where node_modules/remotion is found.
+    # The worktree has no node_modules of its own, so Remotion uses the nearest
+    # ancestor that does.  Walk up from ROOT to find that project root.
+    remotion_root = ROOT
+    while remotion_root != remotion_root.parent:
+        if (remotion_root / "node_modules" / ".bin" / "remotion").exists():
+            break
+        remotion_root = remotion_root.parent
+
+    public_clips = remotion_root / "public" / "clips"
+    public_clips.mkdir(parents=True, exist_ok=True)
+
+    edl_copy = copy.deepcopy(edl)
+    for entry in edl_copy["edl"]:
+        src = Path(entry["clip_path"])
+        if not src.is_absolute():
+            # Try ROOT-relative first, then CWD-relative
+            for candidate in (ROOT / src, Path.cwd() / src):
+                if candidate.exists():
+                    src = candidate
+                    break
+        if not src.exists():
+            log.warning("stage_clips: source not found: %s", src)
+            continue
+        dest_name = f"clip_{entry['slot']:03d}{src.suffix}"
+        dest = public_clips / dest_name
+        if not dest.exists() or dest.stat().st_size != src.stat().st_size:
+            shutil.copy2(src, dest)
+        entry["clip_path"] = f"/clips/{dest_name}"
+
+    log.info("Staged %d clips → %s", len(edl_copy["edl"]), public_clips)
+    return edl_copy, public_clips
+
 
 def write_edl_props(edl: dict, out_path: Path) -> None:
     """Write EDL as JSON props file for Remotion CLI injection."""
@@ -137,6 +181,7 @@ def remotion_render(
     edl: dict,
     audio_path: Path,
     temp_output: Path,
+    public_dir: Path | None = None,
     composition_id: str = "BrutalBeatMontage",
     dry_run: bool = False,
 ) -> bool:
@@ -165,14 +210,16 @@ def remotion_render(
         "--crf=28",  # fast pass — FFmpeg will re-encode at crf18
         "--overwrite",
     ]
-
     log.info("Remotion render: %s → %s  (%d frames)", composition_id, temp_output.name, total_frames)
 
     if dry_run:
         log.info("[dry-run] would run: %s", " ".join(cmd[:6]) + " ...")
         return True
 
-    r = subprocess.run(cmd, capture_output=False, cwd=str(ROOT))
+    # Run from the Remotion project root (where node_modules lives) so that
+    # the dev server's publicDir resolves correctly.
+    render_cwd = public_dir.parent.parent if public_dir is not None else ROOT
+    r = subprocess.run(cmd, capture_output=False, cwd=str(render_cwd))
     if r.returncode != 0:
         log.warning("Remotion render failed (exit %d) — using FFmpeg fallback", r.returncode)
         return False
@@ -389,7 +436,10 @@ def generate_mog_edit(
     t0 = time.perf_counter()
     temp_mp4 = TMP_DIR / f"{name}_temp.mp4"
 
-    rendered = remotion_render(edl, audio_path, temp_mp4, dry_run=dry_run)
+    # Stage clips so Remotion's dev server can serve them via staticFile()
+    edl_for_remotion, staged_public_clips = stage_clips_for_remotion(edl)
+    rendered = remotion_render(edl_for_remotion, audio_path, temp_mp4,
+                               public_dir=staged_public_clips, dry_run=dry_run)
     if not rendered or not temp_mp4.exists():
         log.info("   Remotion unavailable — using FFmpeg concat fallback")
         rendered = ffmpeg_concat_from_edl(edl, audio_path, temp_mp4)

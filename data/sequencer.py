@@ -204,40 +204,39 @@ def assemble_edit(
     template = select_template(templates, audio_analysis)
     template_id = template.get("_name", "unknown") if template else "unknown"
 
-    # Derive beats_per_cut from template or audio
-    # beats_per_cut: how many beats per clip slot
-    template_dur = template.get("total_duration_sec", 0) if template else 0
-    template_clips = template.get("total_clips", 0) if template else 0
     tempo = audio_analysis.get("tempo", 100.0)
-    beat_interval = 60.0 / max(tempo, 1.0)
 
-    if template_dur > 0 and template_clips > 0:
-        avg_template_cut = template_dur / template_clips
-        beats_per_cut = max(1, round(avg_template_cut / beat_interval))
-    else:
-        # Fallback: 2 beats per cut (1.2-1.4s at 90-120 BPM)
-        beats_per_cut = 2
+    log.info("Assembling EDL: BPM=%.1f  template=%s", tempo, template_id)
 
-    log.info("Assembling EDL: BPM=%.1f  beats_per_cut=%d  template=%s",
-             tempo, beats_per_cut, template_id)
-
-    # Build slots from beat grid (every N beats)
+    # Build slots: cut every beat on drop/buildup, every 2 beats on verse
+    # Target: 10-13 cuts for 15s at 108-120 BPM, 0.7-1.0 cuts/sec
     slots: list[dict] = []
-    for i in range(0, len(beat_grid) - beats_per_cut, beats_per_cut):
+    i = 0
+    while i < len(beat_grid):
         start_beat = beat_grid[i]
-        end_beat   = beat_grid[i + beats_per_cut]
-        duration   = end_beat["adjusted_time"] - start_beat["adjusted_time"]
-        if duration <= 0.05:
-            continue
-        slots.append({
-            "slot":        len(slots),
-            "cut_time":    start_beat["adjusted_time"],
-            "duration":    duration,
-            "section":     start_beat["section_type"],
-            "beat_num":    start_beat["beat_num"],
-        })
-        if slots[-1]["cut_time"] + duration >= target_duration:
+        section    = start_beat["section_type"]
+
+        # Step size: dense on drops/buildups, half-time on verses
+        step = 1 if section in ("drop", "buildup") else 2
+
+        if i + step >= len(beat_grid):
             break
+
+        end_beat = beat_grid[i + step]
+        duration = end_beat["adjusted_time"] - start_beat["adjusted_time"]
+
+        if duration > 0.05:
+            slots.append({
+                "slot":     len(slots),
+                "cut_time": start_beat["adjusted_time"],
+                "duration": duration,
+                "section":  section,
+                "beat_num": start_beat["beat_num"],
+            })
+            if start_beat["adjusted_time"] + duration >= target_duration:
+                break
+
+        i += step
 
     if not slots:
         raise ValueError("No EDL slots could be built from beat grid")
@@ -317,8 +316,8 @@ def assemble_edit(
         "edl":             edl_entries,
         "stats": {
             "slot_count":       len(edl_entries),
-            "beats_per_cut":    beats_per_cut,
             "avg_cut_sec":      round(total_edl_dur / max(len(edl_entries), 1), 3),
+            "cut_rate_per_sec": round(len(edl_entries) / max(total_edl_dur, 0.001), 3),
             "transitions": {
                 t: sum(1 for e in edl_entries if e["transition"] == t)
                 for t in set(e["transition"] for e in edl_entries)
