@@ -1010,5 +1010,60 @@
       }
     ],
     "generated_at": "2026-03-27T05:26:27.421654+00:00"
+  },
+  "7563734246607602710_7618299384836476182_6cf9cc8c": {
+    "delogo_filters": [],
+    "ffmpeg_filter_chain": null,
+    "frame_details": [
+      {
+        "frame": "every1s_0001.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0003.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0005.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0007.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0009.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0011.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0013.jpg",
+        "hits": []
+      },
+      {
+        "frame": "every1s_0015.jpg",
+        "hits": []
+      },
+      {
+        "frame": "scene_0000_2.40s.jpg",
+        "hits": []
+      },
+      {
+        "frame": "scene_0002_4.87s.jpg",
+        "hits": []
+      },
+      {
+        "frame": "scene_0004_8.10s.jpg",
+        "hits": []
+      },
+      {
+        "frame": "scene_0006_10.57s.jpg",
+        "hits": []
+      }
+    ],
+    "generated_at": "2026-03-27T05:30:23.730010+00:00"
   }
 }

@@ -1,0 +1,194 @@
+{
+  "template_id": "seq_7563734246607602710_7618299384836476182_6cf9cc8c",
+  "source_video_id": "7563734246607602710_7618299384836476182_6cf9cc8c",
+  "source_creator": "7563734246607602710",
+  "bpm": 144,
+  "total_duration_sec": 16.2,
+  "total_slots": 9,
+  "avg_cut_sec": 1.533,
+  "cuts_on_beat_pct": 1.0,
+  "color_grade": "Desaturated",
+  "slots": [
+    {
+      "index": 0,
+      "start_sec": 2.4,
+      "duration_sec": 1.567,
+      "on_beat": true,
+      "is_impact": true,
+      "original_clip_id": "7563734246607602710_7618299384836476182_6cf9cc8c_scene000",
+      "preferred_tags": [
+        "face_closeup_push",
+        "dark_cinema_mood",
+        "lighting_cold",
+        "bokeh_aesthetic",
+        "character_reveal",
+        "magenta_lighting",
+        "hunter_eyes",
+        "neon_cyan_lighting",
+        "sci_fi_headset",
+        "emotional_dialogue"
+      ]
+    },
+    {
+      "index": 1,
+      "start_sec": 3.967,
+      "duration_sec": 0.9,
+      "on_beat": true,
+      "is_impact": true,
+      "original_clip_id": "7563734246607602710_7618299384836476182_6cf9cc8c_scene001",
+      "preferred_tags": [
+        "face_closeup_push",
+        "dark_cinema_mood",
+        "lighting_cold",
+        "bokeh_aesthetic",
+        "character_reveal",
+        "magenta_lighting",
+        "hunter_eyes",
+        "neon_cyan_lighting",
+        "sci_fi_headset",
+        "emotional_dialogue"
+      ]
+    },
+    {
+      "index": 2,
+      "start_sec": 4.867,
+      "duration_sec": 1.6,
+      "on_beat": true,
+      "is_impact": true,
+      "original_clip_id": "7563734246607602710_7618299384836476182_6cf9cc8c_scene002",
+      "preferred_tags": [
+        "face_closeup_push",
+        "dark_cinema_mood",
+        "lighting_cold",
+        "bokeh_aesthetic",
+        "character_reveal",
+        "magenta_lighting",
+        "hunter_eyes",
+        "neon_cyan_lighting",
+        "sci_fi_headset",
+        "emotional_dialogue"
+      ]
+    },
+    {
+      "index": 3,
+      "start_sec": 6.467,
+      "duration_sec": 1.633,
+      "on_beat": true,
+      "is_impact": true,
+      "original_clip_id": "7563734246607602710_7618299384836476182_6cf9cc8c_scene003",
+      "preferred_tags": [
+        "face_closeup_push",
+        "dark_cinema_mood",
+        "lighting_cold",
+        "bokeh_aesthetic",
+        "character_reveal",
+        "magenta_lighting",
+        "hunter_eyes",
+        "neon_cyan_lighting",
+        "sci_fi_headset",
+        "emotional_dialogue"
+      ]
+    },
+    {
+      "index": 4,
+      "start_sec": 8.1,
+      "duration_sec": 1.633,
+      "on_beat": true,
+      "is_impact": true,
+      "original_clip_id": "7563734246607602710_7618299384836476182_6cf9cc8c_scene004",
+      "preferred_tags": [
+        "face_closeup_push",
+        "dark_cinema_mood",
+        "lighting_cold",
+        "bokeh_aesthetic",
+        "character_reveal",
+        "magenta_lighting",
+        "hunter_eyes",
+        "neon_cyan_lighting",
+        "sci_fi_headset",
+        "emotional_dialogue"
+      ]
+    },
+    {
+      "index": 5,
+      "start_sec": 9.733,
+      "duration_sec": 0.833,
+      "on_beat": true,
+      "is_impact": true,
+      "original_clip_id": "7563734246607602710_7618299384836476182_6cf9cc8c_scene005",
+      "preferred_tags": [
+        "face_closeup_push",
+        "dark_cinema_mood",
+        "lighting_cold",
+        "bokeh_aesthetic",
+        "character_reveal",
+        "magenta_lighting",
+        "hunter_eyes",
+        "neon_cyan_lighting",
+        "sci_fi_headset",
+        "emotional_dialogue"
+      ]
+    },
+    {
+      "index": 6,
+      "start_sec": 10.567,
+      "duration_sec": 1.6,
+      "on_beat": true,
+      "is_impact": true,
+      "original_clip_id": "7563734246607602710_7618299384836476182_6cf9cc8c_scene006",
+      "preferred_tags": [
+        "face_closeup_push",
+        "dark_cinema_mood",
+        "lighting_cold",
+        "bokeh_aesthetic",
+        "character_reveal",
+        "magenta_lighting",
+        "hunter_eyes",
+        "neon_cyan_lighting",
+        "sci_fi_headset",
+        "emotional_dialogue"
+      ]
+    },
+    {
+      "index": 7,
+      "start_sec": 12.167,
+      "duration_sec": 0.767,
+      "on_beat": true,
+      "is_impact": true,
+      "original_clip_id": "7563734246607602710_7618299384836476182_6cf9cc8c_scene007",
+      "preferred_tags": [
+        "face_closeup_push",
+        "dark_cinema_mood",
+        "lighting_cold",
+        "bokeh_aesthetic",
+        "character_reveal",
+        "magenta_lighting",
+        "hunter_eyes",
+        "neon_cyan_lighting",
+        "sci_fi_headset",
+        "emotional_dialogue"
+      ]
+    },
+    {
+      "index": 8,
+      "start_sec": 12.933,
+      "duration_sec": 3.267,
+      "on_beat": true,
+      "is_impact": true,
+      "original_clip_id": "7563734246607602710_7618299384836476182_6cf9cc8c_scene008",
+      "preferred_tags": [
+        "face_closeup_push",
+        "dark_cinema_mood",
+        "lighting_cold",
+        "bokeh_aesthetic",
+        "character_reveal",
+        "magenta_lighting",
+        "hunter_eyes",
+        "neon_cyan_lighting",
+        "sci_fi_headset",
+        "emotional_dialogue"
+      ]
+    }
+  ],
+  "created_at": "2026-03-27T05:31:37.519673+00:00"
+}
