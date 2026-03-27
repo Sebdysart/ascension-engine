@@ -234,13 +234,16 @@ def build_narrative(
             if abs(slot.start_sec - drop_t) < 0.15:
                 slot.zoom_pulse = True
 
-    # Strategic slow-mo in Act 3
+    # Strategic slow-mo in Act 3 — evenly spaced up to slow_mo_count
     act3 = [s for s in slots if s.act == "ascension" and not s.zoom_pulse]
     placed = 0
-    for i, slot in enumerate(act3):
-        if i % 4 == 2 and placed < slow_mo_count:
-            slot.slow_mo = True
-            placed += 1
+    if act3 and slow_mo_count > 0:
+        # Space placements evenly: pick every (len/count)-th slot
+        step = max(1, len(act3) // max(1, slow_mo_count))
+        for i, slot in enumerate(act3):
+            if i % step == (step // 2) and placed < slow_mo_count:
+                slot.slow_mo = True
+                placed += 1
 
     # Ascension reveal hierarchy
     act3_all = [s for s in slots if s.act == "ascension"]

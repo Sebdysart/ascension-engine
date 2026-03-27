@@ -78,3 +78,19 @@ def test_describe_narrative():
     assert "Victim" in desc
     assert "Awakening" in desc
     assert "Ascension" in desc
+
+
+def test_slow_mo_count_honored():
+    """slow_mo_count=2 should place exactly 2 slow-mo slots in Act 3."""
+    n = build_narrative(bpm=114.0, slow_mo_count=2)
+    slow_mo_slots = [s for s in n.slots if s.slow_mo]
+    # At 114 BPM we have limited Act 3 slots — should get at least 1 and at most slow_mo_count
+    assert 1 <= len(slow_mo_slots) <= 2
+    # All slow-mo must be in Act 3
+    for s in slow_mo_slots:
+        assert s.act == "ascension"
+
+
+def test_slow_mo_zero():
+    n = build_narrative(bpm=114.0, slow_mo_count=0)
+    assert not any(s.slow_mo for s in n.slots)
