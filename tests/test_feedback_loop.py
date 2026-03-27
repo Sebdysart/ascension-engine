@@ -2,7 +2,6 @@
 import json
 import sqlite3
 import sys
-import tempfile
 from pathlib import Path
 import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "data"))
@@ -12,9 +11,8 @@ from mognet.feedback_loop import record_actual_performance, retrain_from_feedbac
 from mognet.viral_scorer import ViralScorer
 
 
-def _make_temp_db() -> EngineDB:
-    tmp = tempfile.mktemp(suffix=".db")
-    db = EngineDB(db_path=Path(tmp))
+def _make_temp_db(tmp_path) -> EngineDB:
+    db = EngineDB(db_path=tmp_path / "test.db")
     db.init()
     return db
 
@@ -41,25 +39,35 @@ def _make_dummy_features_json() -> str:
     })
 
 
-def test_record_and_retrieve(monkeypatch):
-    db = _make_temp_db()
+def test_record_and_retrieve(tmp_path, monkeypatch):
+    db = _make_temp_db(tmp_path)
     monkeypatch.setattr("mognet.feedback_loop._get_db", lambda: db)
+    # Insert a prediction row first so update_mognet_actuals has a row to UPDATE
+    db.save_mognet_prediction("edit_001", "/out/edit_001.mp4", 75.0)
     record_actual_performance("edit_001", views=50000, shares=200, saves=100, watch_pct=0.45, db=db)
     rows = db.get_mognet_training_rows()
     # No features_json yet so row won't appear in training set — that's fine
     assert isinstance(rows, list)
 
+    # Verify the row was actually written to the DB
+    row = db.conn.execute(
+        "SELECT views, watch_pct FROM mognet_performance WHERE edit_id='edit_001'"
+    ).fetchone()
+    assert row is not None
+    assert row[0] == 50000
+    assert abs(row[1] - 0.45) < 0.001
 
-def test_mognet_performance_table_exists():
-    db = _make_temp_db()
+
+def test_mognet_performance_table_exists(tmp_path):
+    db = _make_temp_db(tmp_path)
     tables = db.conn.execute(
         "SELECT name FROM sqlite_master WHERE type='table' AND name='mognet_performance'"
     ).fetchall()
     assert len(tables) == 1, "mognet_performance table not created"
 
 
-def test_save_and_retrieve_prediction():
-    db = _make_temp_db()
+def test_save_and_retrieve_prediction(tmp_path):
+    db = _make_temp_db(tmp_path)
     db.save_mognet_prediction("edit_test", "/out/test.mp4", 82.5, _make_dummy_features_json())
     row = db.conn.execute(
         "SELECT predicted_score FROM mognet_performance WHERE edit_id='edit_test'"
@@ -68,9 +76,9 @@ def test_save_and_retrieve_prediction():
     assert abs(row[0] - 82.5) < 0.1
 
 
-def test_retrain_skips_when_no_data(monkeypatch):
+def test_retrain_skips_when_no_data(tmp_path, monkeypatch):
     """retrain_from_feedback should log and return cleanly when no data."""
-    db = _make_temp_db()
+    db = _make_temp_db(tmp_path)
     scorer = ViralScorer()
     # Should not raise
     retrain_from_feedback(scorer, db=db)

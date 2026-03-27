@@ -81,10 +81,10 @@ def retrain_from_feedback(scorer, db=None):
             # We store the raw score; pass as views with watch_pct=1.0
             features_list.append(feats)
             metrics_list.append({
-                "views": int(actual),
-                "watch_pct": 1.0,
-                "shares": 0,
-                "saves": 0,
+                "views":     int(row.get("views", 0)),
+                "watch_pct": float(row.get("watch_pct", 0.0)),
+                "shares":    int(row.get("shares", 0)),
+                "saves":     int(row.get("saves", 0)),
             })
         except Exception as e:
             log.warning("Skipping malformed feedback row: %s", e)

@@ -231,14 +231,25 @@ class EngineDB:
         self.conn.commit()
 
     def get_mognet_training_rows(self) -> list[dict]:
-        """Return rows with both predicted and actual scores for retraining."""
+        """Return rows with actuals and features for retraining."""
         rows = self.conn.execute(
-            "SELECT edit_id, features_json, actual_score FROM mognet_performance "
+            "SELECT edit_id, features_json, actual_score, views, shares, saves, watch_pct "
+            "FROM mognet_performance "
             "WHERE actual_score IS NOT NULL AND features_json != '' "
             "ORDER BY created_at DESC"
         ).fetchall()
-        return [{"edit_id": r[0], "features_json": r[1], "actual_score": r[2]}
-                for r in rows]
+        return [
+            {
+                "edit_id":        r[0],
+                "features_json":  r[1],
+                "actual_score":   r[2],
+                "views":          r[3] or 0,
+                "shares":         r[4] or 0,
+                "saves":          r[5] or 0,
+                "watch_pct":      r[6] or 0.0,
+            }
+            for r in rows
+        ]
 
     # ── Health queries ────────────────────────────────────────────────────────
 
