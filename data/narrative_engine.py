@@ -130,7 +130,7 @@ def _slot_duration_for_act(act: Act, bpm: float) -> float:
         return 2.0 * half_beat
     elif act == "awakening":
         eighth = 30.0 / bpm
-        return max(0.08, min(eighth, 0.13))
+        return max(0.08, min(eighth, 0.125))
     else:
         return half_beat
 

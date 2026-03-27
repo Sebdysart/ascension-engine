@@ -167,10 +167,13 @@ const GradedClip: React.FC<{
   act: string;
   shakeIntensity: number;
   zoomPulse: boolean;
-}> = ({ src, trimStart, act, shakeIntensity, zoomPulse }) => {
+  slowMo?: boolean;
+}> = ({ src, trimStart, act, shakeIntensity, zoomPulse, slowMo = false }) => {
   const { fps } = useVideoConfig();
   const filter = ACT_GRADES[act] || ACT_GRADES.ascension;
   const isHighEnergy = shakeIntensity > 20;
+  // slow_mo: 0.5x playback rate — Remotion Video supports playbackRate prop
+  const playbackRate = slowMo ? 0.5 : 1.0;
 
   return (
     <AbsoluteFill style={{ filter }}>
@@ -180,6 +183,7 @@ const GradedClip: React.FC<{
             <Video
               src={staticFile(src)}
               startFrom={Math.round(trimStart * fps)}
+              playbackRate={playbackRate}
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
             />
           </AbsoluteFill>
@@ -236,7 +240,8 @@ export const BrutalBeatMontage: React.FC<BrutalBeatMontageProps> = ({
       {/* Act slots */}
       {slots.map((slot, i) => {
         if (!slot.clip_src) return null;
-
+        // Skip slot 0 during hook window to avoid double-render with HookZoomOut
+        if (i === 0 && hookSpec) return null;
         const fromFrame = Math.round(slot.start_sec * fps);
         const durFrames = Math.max(1, Math.round(slot.duration_sec * fps));
         if (fromFrame >= durationInFrames) return null;
@@ -250,6 +255,7 @@ export const BrutalBeatMontage: React.FC<BrutalBeatMontageProps> = ({
               act={slot.act}
               shakeIntensity={slot.shake_intensity}
               zoomPulse={slot.zoom_pulse}
+              slowMo={slot.slow_mo}
             />
           </Sequence>
         );

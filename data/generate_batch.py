@@ -404,7 +404,7 @@ def generate_from_template(template: dict, dry_run: bool = False) -> dict:
         return {"name": out_name, "error": "concat_failed"}
 
     # LUT + grain via lut_processor.py
-    lut_name = LUT_NAMES = LUT_MAP.get(grade, "neutral")
+    lut_name = LUT_MAP.get(grade, "neutral")
     lut_path = LUTS / f"{lut_name}.cube"
     print(f"  ▶ lut_processor: {lut_name}.cube + grain ...", flush=True)
     lut_args = [sys.executable, "data/lut_processor.py", "--lut", str(lut_path), str(out_raw)]
