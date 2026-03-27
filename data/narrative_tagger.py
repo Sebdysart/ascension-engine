@@ -25,6 +25,7 @@ import argparse
 import json
 import logging
 from collections import Counter
+from datetime import datetime, timezone
 from pathlib import Path
 
 _ROOT = Path(__file__).resolve().parent.parent
@@ -45,9 +46,6 @@ NARRATIVE_ROLES = {
 _DIRECT_STARE_TAGS = frozenset({
     "hunter_eyes", "direct_stare", "talking_head_direct", "eye_contact_direct",
     "mog_face_closeup_push",
-})
-_DARK_GRADE_TAGS = frozenset({
-    "dark_cinema_mood", "dark_grade", "crushed_blacks", "night_car",
 })
 _MOTION_TAGS = frozenset({
     "high_energy_cut", "motion", "gym_broll_slowmo", "training_montage",
@@ -131,8 +129,9 @@ def _write_narrative_roles_to_index(role_map: dict[str, str]) -> None:
     if _TAGS_INDEX.exists():
         try:
             index = json.loads(_TAGS_INDEX.read_text())
-        except Exception:
-            pass
+        except Exception as e:
+            log.warning("Could not parse tags index, starting fresh: %s", e)
+    index.setdefault("tags", {})
 
     for role in NARRATIVE_ROLES:
         tag_key = f"narrative_{role}"
@@ -145,7 +144,6 @@ def _write_narrative_roles_to_index(role_map: dict[str, str]) -> None:
         if clip_id not in index["tags"][tag_key]:
             index["tags"][tag_key].append(clip_id)
 
-    from datetime import datetime, timezone
     index["last_updated"] = datetime.now(timezone.utc).isoformat()
     _TAGS_INDEX.write_text(json.dumps(index, indent=2))
     log.info("Tags index updated with narrative roles — %d clips tagged", len(role_map))
@@ -156,7 +154,8 @@ def _load_manifest_clips() -> list[dict]:
         return []
     try:
         return json.loads(_CLIP_MANIFEST.read_text()).get("clips", [])
-    except Exception:
+    except Exception as e:
+        log.warning("Could not load clip manifest: %s", e)
         return []
 
 
