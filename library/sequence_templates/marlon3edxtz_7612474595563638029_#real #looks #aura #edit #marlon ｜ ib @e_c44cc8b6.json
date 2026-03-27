@@ -1,6 +1,6 @@
 {
   "vid_id": "marlon3edxtz_7612474595563638029_#real #looks #aura #edit #marlon \uff5c ib @e_c44cc8b6",
-  "generated_at": "2026-03-27T02:15:57.843976+00:00",
+  "generated_at": "2026-03-27T03:26:55.928041+00:00",
   "total_clips": 2,
   "total_duration_sec": 23.4,
   "bpm": 89,
@@ -18,19 +18,7 @@
       "start_sec": 0.0,
       "end_sec": 21.9,
       "duration_sec": 21.9,
-      "tags": [
-        "selfie_camera_direct",
-        "face_closeup_direct",
-        "talking_head_vlog",
-        "warm_indoor_lighting",
-        "aura_edit",
-        "talking_head_direct",
-        "face_closeup_push",
-        "street_walk",
-        "lifestyle_broll",
-        "outfit_reveal",
-        "high_energy_cut"
-      ],
+      "tags": [],
       "beat_anchor_sec": null,
       "transition_type": "hold",
       "rank": 0.5
@@ -41,19 +29,7 @@
       "start_sec": 22.167,
       "end_sec": 23.4,
       "duration_sec": 1.233,
-      "tags": [
-        "selfie_camera_direct",
-        "face_closeup_direct",
-        "talking_head_vlog",
-        "warm_indoor_lighting",
-        "aura_edit",
-        "talking_head_direct",
-        "face_closeup_push",
-        "street_walk",
-        "lifestyle_broll",
-        "outfit_reveal",
-        "high_energy_cut"
-      ],
+      "tags": [],
       "beat_anchor_sec": 21.85,
       "transition_type": "cut",
       "rank": 0.5
